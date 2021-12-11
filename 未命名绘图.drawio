@@ -1,67 +1,99 @@
-<mxfile host="app.diagrams.net" modified="2021-12-11T03:12:02.880Z" agent="5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36" etag="gR7ks-dn4L8B1xhomvA7" version="15.1.4" type="github">
+<mxfile host="app.diagrams.net" modified="2021-12-11T03:34:33.422Z" agent="5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36" etag="lA6FIqJG0rES-0e1zZ2o" version="15.1.4" type="github">
   <diagram id="_ejlp_syQGmcIQHLH7l8" name="第 1 页">
     <mxGraphModel dx="862" dy="477" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-5" target="ImWMzkSWUNanIZTPgBUT-6">
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-44" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-5" target="ImWMzkSWUNanIZTPgBUT-29">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-5" value="普通用户" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="120" y="140" width="80" height="80" as="geometry" />
+          <mxGeometry x="100" y="138" width="80" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-6" target="ImWMzkSWUNanIZTPgBUT-20">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-6" value="选择笔友(已入驻)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="300" y="150" width="90" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-8" target="ImWMzkSWUNanIZTPgBUT-36">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-8" value="未入驻大学生" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="305" y="450" width="80" height="80" as="geometry" />
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" target="ImWMzkSWUNanIZTPgBUT-36">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="429.9999999999999" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-15" value="填写学信网验证码，申请入驻" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="274" y="400" width="166" height="12.5" as="geometry" />
+          <mxGeometry x="274" y="390" width="166" height="12.5" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-16" value="查阅大学生资料" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="200" y="150" width="100" height="20" as="geometry" />
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-16" value="①查阅大学生资料" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="195" y="150" width="100" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-20">
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-61" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.915;entryY=1.012;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-20" target="ImWMzkSWUNanIZTPgBUT-32">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="570" y="180" as="targetPoint" />
+            <mxPoint x="540" y="70" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-20" value="邮票" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="440" y="150" width="60" height="60" as="geometry" />
+          <mxGeometry x="480" y="146.75" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-21" value="购买" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="393.5" y="140" width="40" height="20" as="geometry" />
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-23" value="④上传信件" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="540" y="90" width="80" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-23" value="上传信件" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="490" y="150" width="80" height="20" as="geometry" />
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-45" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-29">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="177.5" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-29" value="大学生" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="780" y="140" width="80" height="80" as="geometry" />
+          <mxGeometry x="307.5" y="140" width="75" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-32" target="ImWMzkSWUNanIZTPgBUT-29">
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-66" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.044;exitY=1.044;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-32" target="ImWMzkSWUNanIZTPgBUT-5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-32" value="“笃信森林”后台" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="570" y="150" width="120" height="60" as="geometry" />
+          <mxGeometry x="120" width="460" height="65" as="geometry" />
         </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-35" value="派单" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="700" y="150" width="80" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="ImWMzkSWUNanIZTPgBUT-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-36" target="ImWMzkSWUNanIZTPgBUT-6">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-36">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="220" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-36" value="“笃信森林”后台" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="285" y="290" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ImWMzkSWUNanIZTPgBUT-39" value="学生资料审核通过" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="295" y="240" width="100" height="20" as="geometry" />
+          <mxGeometry x="295" y="260" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" target="ImWMzkSWUNanIZTPgBUT-36">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="345" y="429.9999999999999" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-46" value="②成为笔友" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="395" y="140" width="65" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-47" value="未入驻大学生" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="308" y="430" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-51" value="③免费/购买" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="395" y="186.75" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-56" value="⑤线上审核/派单" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="90" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-62" value="" style="endArrow=classic;html=1;exitX=0.454;exitY=1.033;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.273;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-32" target="ImWMzkSWUNanIZTPgBUT-29">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="340" y="66" as="sourcePoint" />
+            <mxPoint x="328" y="136" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-64" value="" style="endArrow=classic;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ImWMzkSWUNanIZTPgBUT-29" target="ImWMzkSWUNanIZTPgBUT-32">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="130" as="sourcePoint" />
+            <mxPoint x="440" y="80" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="364" y="65" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-65" value="⑥大学生回复" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="365" y="90" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ImWMzkSWUNanIZTPgBUT-67" value="⑦审核通知信件已达(线上/线下)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="10" y="100" width="110" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
