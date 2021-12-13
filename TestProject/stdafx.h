@@ -52,3 +52,6 @@
 #endif
 
 
+#ifdef _DEBUG
+#pragma comment(lib,"..\\lib\\ZmBase_d.lib")
+#endif // _DEBUG
