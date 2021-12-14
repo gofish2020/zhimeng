@@ -64,6 +64,9 @@ BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON1, &CTestProjectDlg::OnBnClickedButton1)
+	ON_BN_CLICKED(IDC_BUTTON2, &CTestProjectDlg::OnBnClickedButton2)
+	ON_BN_CLICKED(IDC_BUTTON3, &CTestProjectDlg::OnBnClickedButton3)
 END_MESSAGE_MAP()
 
 
@@ -152,3 +155,27 @@ HCURSOR CTestProjectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CTestProjectDlg::OnBnClickedButton1()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	pt = new PrintThread();
+	pt->Resume();
+}
+
+
+void CTestProjectDlg::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	pt->Terminate();
+}
+
+
+void CTestProjectDlg::OnBnClickedButton3()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	pt->Terminate();
+}

@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZmBase", "ZmBase.vcxproj", "{1082AA45-B96F-46C0-8071-37197CBE93BE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "..\TestProject\TestProject.vcxproj", "{A8842C05-79C1-40CC-A871-BC504F233F5D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1082AA45-B96F-46C0-8071-37197CBE93BE} = {1082AA45-B96F-46C0-8071-37197CBE93BE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "PrintThread.h"
 
 // CTestProjectDlg 对话框
 class CTestProjectDlg : public CDialogEx
@@ -20,7 +20,7 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
-
+	PrintThread *pt;
 // 实现
 protected:
 	HICON m_hIcon;
@@ -31,4 +31,8 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedButton1();
+	afx_msg void OnBnClickedButton2();
+	afx_msg void OnBnClickedButton3();
 };

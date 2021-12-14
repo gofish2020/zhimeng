@@ -26,28 +26,12 @@ Thread::Thread()
 Thread::~Thread() 
 {
 	Terminate();
+	Wait();
 }
 
 void Thread::Resume()
 {
-	DWORD res =  ResumeThread(c_handle);
-	if (res ==-1)
-	{
-// 		LPVOID lpMsgBuf;
-// 		DWORD dw = GetLastError();
-// 
-// 		FormatMessage(
-// 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
-// 			FORMAT_MESSAGE_FROM_SYSTEM |
-// 			FORMAT_MESSAGE_IGNORE_INSERTS,
-// 			NULL,
-// 			dw,
-// 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-// 			(LPTSTR)&lpMsgBuf,
-// 			0, NULL);
-// 
-// 		LocalFree(lpMsgBuf);
-	}
+	ResumeThread(c_handle);
 }
 
 void Thread::Suspend()
@@ -58,12 +42,15 @@ void Thread::Suspend()
 void Thread::Terminate()
 {
 	isTerminate = true;
+}
+
+void Thread::Wait()
+{
 	DWORD result = WaitForSingleObject(c_handle, INFINITE);
 	if (result == WAIT_OBJECT_0)
 	{
 		CloseHandle(c_handle);
 		c_handle = nullptr;
-		OnTerminate();
 	}
 }
 
@@ -76,5 +63,6 @@ DWORD WINAPI Thread::ThreadProc(LPVOID lpvThreadParm)
 {
 	Thread *pThread = static_cast<Thread*>(lpvThreadParm);
 	pThread->OnExecute();
+	pThread->OnTerminate();
 	return 0;
 }
