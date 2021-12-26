@@ -6,7 +6,7 @@
 #include "TestProject.h"
 #include "TestProjectDlg.h"
 #include "afxdialogex.h"
-
+#include "..\include\XString.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -67,6 +67,7 @@ BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &CTestProjectDlg::OnBnClickedButton1)
 	ON_BN_CLICKED(IDC_BUTTON2, &CTestProjectDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTestProjectDlg::OnBnClickedButton3)
+	ON_BN_CLICKED(IDC_BUTTON4, &CTestProjectDlg::OnBnClickedButton4)
 END_MESSAGE_MAP()
 
 
@@ -178,4 +179,20 @@ void CTestProjectDlg::OnBnClickedButton3()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	pt->Terminate();
+}
+
+
+void CTestProjectDlg::OnBnClickedButton4()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	char *a = "123";
+
+	UnicodeString ustring(a);
+
+	char b[10] = "123";
+	UnicodeString ustring1(b);
+
+	UnicodeString ustring22('a');
+
 }

@@ -3,18 +3,18 @@
 
 namespace
 {
-	static int gc_logsbuffersize = 300;
-	static int gc_LoggerIndex = 0;
-	static const int gc_LoggerDataCount = 500;
+	static size_t gc_logsbuffersize = 300;
+	static size_t gc_LoggerIndex = 0;
+	static const size_t gc_LoggerDataCount = 500;
 	static LogData gc_LoggerData[gc_LoggerDataCount];
 };
 
 
 void Logger::SaveLogs()
 {
-	for (int i = 0; i < c_logs.size();i++)
+	for (size_t i = 0; i < c_logs.size();i++)
 	{
-		LogData *d = c_logs[i];
+		LogData *d = c_logs[i]; //打开日志文件，写入数据
 	}
 	c_logs.clear();
 }
@@ -32,20 +32,20 @@ void Logger::LogEvent(LogLevel ll, string src, string msg)
 {
 	cs.Enter();
 
-	LogData *data = &gc_LoggerData[gc_LoggerIndex]; //日志缓存空间
+	//COleDateTime t = COleDateTime(DATE(GetCurrentTime()));
+	LogData *data = &gc_LoggerData[gc_LoggerIndex]; //日志缓存空间 -- 重复利用
 	data->Level = ll;
+	data->Time = "";
 	data->Source = src;
 	data->Message = msg;
 	data->ThreadId = ::GetCurrentThreadId();
 	data->ProcessId = ::GetCurrentProcessId();
 
-	c_logs.push_back(data);
+	c_logs.push_back(data);//双端队列中保存指针
 	if (c_logs.size() > gc_logsbuffersize)
 	{
 		SaveLogs();
-		
 	}
-
 	gc_LoggerIndex++;
 	if (gc_LoggerIndex >= gc_LoggerDataCount)
 	{
@@ -72,5 +72,8 @@ void LogEvent(LogLevel ll, string src, string msg)
 
 void LogException(const std::exception & e, const char * file /*= 0*/, int line /*= 0*/)
 {
-	//LogEvent(LLERROR, "LogException", e.what() + "sss");
+	if (file == "")
+		LogEvent(LLERROR, "Exception", e.what());
+	else
+		LogEvent(LLERROR, "Exception", string(file) + ":"  + to_string(line) +  e.what());
 }

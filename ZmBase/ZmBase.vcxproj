@@ -200,10 +200,12 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="XString.cpp" />
     <ClCompile Include="ZmBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Thread.h" />
+    <ClInclude Include="..\include\XString.h" />
     <ClInclude Include="CriticalSection.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Resource.h" />
