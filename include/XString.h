@@ -1,7 +1,7 @@
 #pragma once
 #include<string>
+#include <vector>
 using namespace std;
-
 
 class AFX_EXT_CLASS UnicodeString :public wstring
 {
@@ -15,18 +15,7 @@ public:
 	UnicodeString(const wchar_t); //只重复一次
 	UnicodeString(int, const wchar_t); //重复字符
 	UnicodeString(const wstring);
-
-	/*
-		wstring to_wstring (int val);
-		wstring to_wstring (long val);
-		wstring to_wstring (long long val);
-		wstring to_wstring (unsigned val);
-		wstring to_wstring (unsigned long val);
-		wstring to_wstring (unsigned long long val);
-		wstring to_wstring (float val);
-		wstring to_wstring (double val);
-		wstring to_wstring (long double val);
-	*/
+	UnicodeString(const string);
 	UnicodeString(char);
 	UnicodeString(short);
 	UnicodeString(int);
@@ -38,16 +27,38 @@ public:
 	UnicodeString(float);
 	UnicodeString(double);
 	UnicodeString(long double);
-
 	int uprintf_s(const wchar_t *fmt, ...);
+	UnicodeString& operator=(const wstring);
+	UnicodeString& operator=(const string);
+	UnicodeString& operator=(const char*);
+	UnicodeString& operator=(const wchar_t*);
+	UnicodeString& operator=(const UnicodeString&);
+	UnicodeString& operator+=(const UnicodeString&);
+	UnicodeString operator+(const wstring);
+	UnicodeString operator+(const string);
+	UnicodeString operator+(const char*);
+	UnicodeString operator+(const wchar_t*);
+	UnicodeString operator+(const UnicodeString &);
+
+
+	size_t Len() const;
+	bool IsEmpty() const;
+	bool Contain(const UnicodeString& subStr) const;
+	UnicodeString ToUpper() const;
+	UnicodeString ToLower() const;
+	UnicodeString SubString(int index, int count) const;
+	size_t Pos(const UnicodeString& subStr) const;
+	void Split(vector<UnicodeString> &value, UnicodeString sep) const;
+	
 	
 
-
-
-	UnicodeString& operator=(const wstring);
+// 	int ToInt();
+// 	float ToFloat();
+// 	double ToDouble();
+	
 };
 
-
+extern AFX_EXT_CLASS UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep);
 
 
 class AFX_EXT_CLASS MultiString :public string

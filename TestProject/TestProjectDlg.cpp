@@ -186,13 +186,93 @@ void CTestProjectDlg::OnBnClickedButton4()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	char *a = "123";
+// 	UnicodeString(); //空字符
+// 	UnicodeString(const char*);
+// 	UnicodeString(const wchar_t*, int); //截取字符
+// 	UnicodeString(const wchar_t*); //直接截取到null
+// 	UnicodeString(const wchar_t); //只重复一次
+// 	UnicodeString(int, const wchar_t); //重复字符
+// 	UnicodeString(const wstring);
+// 	UnicodeString(const string);
+// 	UnicodeString(char);
+// 	UnicodeString(short);
+// 	UnicodeString(int);
+// 	UnicodeString(unsigned int);
+// 	UnicodeString(long);
+// 	UnicodeString(unsigned long);
+// 	UnicodeString(__int64);
+// 	UnicodeString(unsigned __int64);
+// 	UnicodeString(float);
+// 	UnicodeString(double);
+// 	UnicodeString(long double);
 
-	UnicodeString ustring(a);
 
-	char b[10] = "123";
-	UnicodeString ustring1(b);
+	char* cPoint = "123中国abc";
+	wchar_t *wPoint = L"123中国abc";
+	string str = "123中国abc";
+	wstring wstr = L"123中国abc";
 
-	UnicodeString ustring22('a');
 
+	UnicodeString a;
+	UnicodeString b(cPoint);
+	UnicodeString c(wPoint);
+	UnicodeString d(wPoint,4);
+	UnicodeString e(L'b');
+	UnicodeString f(3,L'a');
+	UnicodeString g(str);
+	UnicodeString h(wstr);
+
+	short si = 12;
+	int i = 14;
+	unsigned int ui = 15;
+	long int li = 16;
+	unsigned long int uli = 17;
+	__int64 i64 = 18;
+	unsigned __int64 ui64 = 19;
+	float fl = 1.01;
+	double db = 1.022211;
+	long double ldb = 92.19293324234;
+
+	
+	a = UnicodeString(si);
+	a = UnicodeString(i);
+	a = UnicodeString(ui);
+	a = UnicodeString(li);
+	a = UnicodeString(uli);
+	a = UnicodeString(i64);
+	a = UnicodeString(ui64);
+	a = UnicodeString(fl);
+	a = UnicodeString(db);
+	a = UnicodeString(ldb);
+	a.uprintf_s(L"%lg", ldb);
+
+
+
+// 	UnicodeString& operator=(const wstring);
+// 	UnicodeString& operator=(const string);
+// 	UnicodeString& operator=(const char*);
+// 	UnicodeString& operator=(const wchar_t*);
+// 	UnicodeString& operator=(const UnicodeString&);
+// 	UnicodeString operator+(const wstring);
+// 	UnicodeString operator+(const string);
+// 	UnicodeString operator+(const char*);
+// 	UnicodeString operator+(const wchar_t*);
+// 	UnicodeString operator+(const UnicodeString &);
+
+
+
+	a = wstr;
+	a = str;
+	a = cPoint;
+	a = wPoint;
+	a = b;
+	a = b + f;
+	a = b + wstr;
+	a = b + str;
+	a = b + cPoint;
+	a = b + wPoint;
+
+	a = "人民&中&";
+	vector<UnicodeString>result;
+	a.Split(result, L"&");
 }
