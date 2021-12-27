@@ -240,6 +240,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-*.filters
 *.exp
 *.lib
