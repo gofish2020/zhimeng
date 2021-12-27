@@ -44,18 +44,21 @@ public:
 	size_t Len() const;
 	bool IsEmpty() const;
 	bool Contain(const UnicodeString& subStr) const;
+	size_t Pos(const UnicodeString& subStr) const;
+	void Split(vector<UnicodeString> &value, UnicodeString sep) const;
 	UnicodeString ToUpper() const;
 	UnicodeString ToLower() const;
 	UnicodeString SubString(int index, int count) const;
-	size_t Pos(const UnicodeString& subStr) const;
-	void Split(vector<UnicodeString> &value, UnicodeString sep) const;
-	
-	
+	UnicodeString Replace(UnicodeString fromstr, UnicodeString tostr) const;
+	UnicodeString Trim(wchar_t marker = L' ') const;
+	UnicodeString Left(int count) const;
+	UnicodeString Right(int count) const;
 
-// 	int ToInt();
-// 	float ToFloat();
-// 	double ToDouble();
-	
+	int ToInt(int _Base = 10) const;
+ 	unsigned int ToUInt(int _Base = 10) const;
+ 	__int64 ToInt64(int _Base = 10) const;
+ 	double ToDouble() const;
+	long double ToLongDouble() const;
 };
 
 extern AFX_EXT_CLASS UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep);

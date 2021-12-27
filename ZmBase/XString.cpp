@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include <stdarg.h>
+#include <sstream>
+#include <locale>
 #include "..\include\XString.h"
-
+using namespace std;
 UnicodeString::~UnicodeString()
 {
 
@@ -252,9 +254,78 @@ void UnicodeString::Split(vector<UnicodeString> &value, UnicodeString sep) const
 		value.push_back(SubString(index, pos - index));
 }
 
+UnicodeString UnicodeString::Replace(UnicodeString fromstr, UnicodeString tostr) const
+{
+	UnicodeString str = *this;
+	int index = 0;
+	int pos = 0;
+	while (1)
+	{
+		pos = find_first_of(fromstr, index);
+		if (pos == -1)
+		{
+			break;
+		}
+		str.replace(pos, fromstr.Len(), tostr);
+		index = pos + tostr.Len();
+	}
+	return str;
+}
+
+UnicodeString UnicodeString::Trim(wchar_t marker /*= L' '*/) const
+{
+	UnicodeString str = *this;
+	int pos = str.find_last_not_of(marker);
+	if (pos != -1)
+		str = str.SubString(0, pos + 1);
+
+	pos = str.find_last_not_of(L"\0");
+	if (pos != -1)
+		str = str.SubString(0, pos + 1);
+	return str;
+}
+
+UnicodeString UnicodeString::Left(int count) const
+{
+	return SubString(0, count);
+}
+
+UnicodeString UnicodeString::Right(int count) const
+{
+	return SubString(Len() - count, count);
+}
+
+int UnicodeString::ToInt(int _Base) const
+{
+	return stoi(c_str(), nullptr, _Base);
+}
+
+unsigned int UnicodeString::ToUInt(int _Base /*= 10*/) const
+{
+	return stoi(c_str(), nullptr, _Base);
+}
+
+__int64 UnicodeString::ToInt64(int _Base /*= 10*/) const
+{
+	return stoll(c_str(), nullptr, _Base);
+}
+
+double UnicodeString::ToDouble() const
+{
+	return stod(c_str(), nullptr);
+}
+
+long double UnicodeString::ToLongDouble() const
+{
+	return stold(c_str(), nullptr);
+}
+
 UnicodeString UnicodeString::SubString(int index, int count) const
 {
-	return UnicodeString(substr(index, count));
+	int len = Len();
+	if (index < len && index >=0 && (index + count) <= len)
+		return UnicodeString(substr(index, count));
+	return L"";
 }
 
 UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep)

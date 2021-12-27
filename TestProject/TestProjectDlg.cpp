@@ -275,4 +275,21 @@ void CTestProjectDlg::OnBnClickedButton4()
 	a = "»À√Ò&÷–&";
 	vector<UnicodeString>result;
 	a.Split(result, L"&");
+
+
+
+
+	a = L"2001,sdkf";
+	int ii = a.ToInt();
+
+	a = L"40c3";
+	ii = a.ToInt(16);
+	a = L"-10010110001";
+	ii = a.ToInt(2);
+	unsigned int ssss = a.ToUInt(2);
+	a = L"0x7f";
+	ii = a.ToInt(16);
+
+	a = L"1.2";
+	double sssf = a.ToDouble();
 }
