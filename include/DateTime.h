@@ -16,7 +16,7 @@ public:
 	DateTime(const int src);
 	virtual ~DateTime();
 
-
+	bool IsEmpty();
 	int Year() const ;
 	// Month of year (1 = January)
 	int Month() const ;
@@ -32,35 +32,33 @@ public:
 	int DayOfWeek() const ;
 	// Days since start of year (1 = January 1)
 	int DayOfYear() const ;
-	DateTime GetDate();
-	DateTime GetTime();
+	DateTime GetDate() const;
+	DateTime GetTime() const;
 	static DateTime NowDate();
 	static DateTime NowDateTime();
+	static DateTime NowTime();
 	UnicodeString ToDateStr() const;
 	UnicodeString ToDateTimeStr() const;
+	UnicodeString ToTimeStr() const;
+	UnicodeString ToDateInteger() const;
+	UnicodeString ToDateTimeInteger() const;
+
+
+
+	DateTime& operator=(const UnicodeString& Src) throw();
+	DateTime& operator=(const int Src) throw();
+	DateTime operator +(const DateTime& rhs) const;
+	DateTime operator +(const double rhs) const;
+	DateTime operator +(const int rhs) const;
+	DateTime operator -(const DateTime& rhs) const;
+	DateTime operator -(const double rhs) const;
+	DateTime operator -(const int rhs) const;
+	DateTime &operator+=(const DateTime& Src);
+	DateTime &operator+=(const double Src);
+	DateTime &operator+=(const int Src);
+	DateTime &operator-=(const DateTime& Src);
+	DateTime &operator-=(const double Src);
+	DateTime &operator-=(const int Src);
+	operator UnicodeString() const;
+	operator int() const;
 };
-
-
-
-/*
-
-COleDateTime() throw();
-
-COleDateTime(_In_ const VARIANT& varSrc) throw();
-COleDateTime(_In_ DATE dtSrc) throw();
-
-COleDateTime(_In_ __time32_t timeSrc) throw();
-COleDateTime(_In_ __time64_t timeSrc) throw();
-
-COleDateTime(_In_ const SYSTEMTIME& systimeSrc) throw();
-COleDateTime(_In_ const FILETIME& filetimeSrc) throw();
-
-COleDateTime(
-_In_ int nYear,
-_In_ int nMonth,
-_In_ int nDay,
-_In_ int nHour,
-_In_ int nMin,
-_In_ int nSec) throw();
-COleDateTime(_In_ WORD wDosDate, _In_ WORD wDosTime) throw();
-*/

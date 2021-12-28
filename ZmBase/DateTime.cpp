@@ -56,6 +56,11 @@ DateTime::~DateTime()
 {
 }
 
+bool DateTime::IsEmpty()
+{
+	return m_dt == 0;
+}
+
 int DateTime::Year() const
 {
 	return GetYear();
@@ -96,13 +101,13 @@ int DateTime::DayOfYear() const
 	return GetDayOfYear();
 }
 
-DateTime DateTime::GetDate()
+DateTime DateTime::GetDate() const
 {
 	int d = m_dt;
 	return DateTime(d);
 }
 
-DateTime DateTime::GetTime()
+DateTime DateTime::GetTime() const
 {
 	int d = m_dt;
 	DATE time = m_dt - d;
@@ -111,20 +116,103 @@ DateTime DateTime::GetTime()
 
 DateTime DateTime::NowDate()
 {
-	GetCurrentTime();
+	DATE d = COleDateTime::GetCurrentTime().m_dt;
+	int t = (int)d;
+	return t;
 }
 
 DateTime DateTime::NowDateTime()
 {
-	return DateTime(GetCurrentTime());
+	return COleDateTime::GetCurrentTime();
+}
+
+DateTime DateTime::NowTime()
+{
+	DATE d = COleDateTime::GetCurrentTime().m_dt;
+	int t = (int)d;
+	return d-t;
 }
 
 UnicodeString DateTime::ToDateStr() const
 {
-
+	if ( m_dt == 0)
+	{
+		return L"";
+	}
+	return Format(L"%Y-%m-%d").GetString();
 }
 
 UnicodeString DateTime::ToDateTimeStr() const
 {
+	if (m_dt == 0)
+	{
+		return L"";
+	}
+	return Format(L"%Y-%m-%d %H:%M:%S").GetString();
+}
 
+UnicodeString DateTime::ToTimeStr() const
+{
+	if (m_dt == 0)
+	{
+		return L"";
+	}
+	return Format(L"%H:%M:%S").GetString();
+}
+
+UnicodeString DateTime::ToDateInteger() const
+{
+	UnicodeString temp;
+	temp.uprintf_s(L"%04d%02d%02d", Year(), Month(), Day());
+	return temp;
+}
+
+UnicodeString DateTime::ToDateTimeInteger() const
+{
+	UnicodeString temp;
+	temp.uprintf_s(L"%04d%02d%02d%02d%02d%02d", Year(), Month(), Day(),Hour(),Minute(),Second());
+	return temp;
+}
+
+DateTime DateTime::operator+(const int rhs) const
+{
+	return this->m_dt + rhs;
+}
+
+DateTime DateTime::operator+(const double rhs) const
+{
+	return this->m_dt + rhs;
+}
+
+DateTime DateTime::operator+(const DateTime& rhs) const
+{
+	return this->m_dt + rhs.m_dt;
+}
+
+DateTime& DateTime::operator=(const int Src) throw()
+{
+	m_dt = Src;
+	return *this;
+}
+
+DateTime& DateTime::operator=(const UnicodeString& Src) throw()
+{
+	if (Src.Trim() == L"")
+	{
+		*this = DateTime();
+		return *this;
+	}
+	if (!ParseDateTime(Src.c_str()))
+	{
+		if (Src.ToInt() > 0 && Src.Len() == 8)
+		{
+			DateTime temp(Src.SubString(0, 4).ToInt(), Src.SubString(4, 2).ToInt(), Src.SubString(6, 2).ToInt(), 0, 0, 0);
+			*this = temp;
+		}
+		else 
+		{
+			*this = DateTime();
+		}
+	}
+	return *this;
 }

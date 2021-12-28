@@ -7,6 +7,7 @@
 #include "TestProjectDlg.h"
 #include "afxdialogex.h"
 #include "..\include\XString.h"
+#include "..\include\DateTime.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -68,6 +69,7 @@ BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON2, &CTestProjectDlg::OnBnClickedButton2)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTestProjectDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTestProjectDlg::OnBnClickedButton4)
+	ON_BN_CLICKED(IDC_BUTTON5, &CTestProjectDlg::OnBnClickedButton5)
 END_MESSAGE_MAP()
 
 
@@ -315,4 +317,17 @@ void CTestProjectDlg::OnBnClickedButton4()
 	eles.push_back("123");
 	eles.push_back("123");
 	a = Join(eles, "^");
+}
+
+
+void CTestProjectDlg::OnBnClickedButton5()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	UnicodeString a = DateTime::NowDate().ToDateTimeStr();
+	UnicodeString b = DateTime::NowDateTime().ToDateTimeStr();
+
+	DateTime c = DateTime(1990, 1, 1, 8, 0, 0);
+	DateTime ss = c + DateTime(0, 0, 0, 1, 0, 0);
+	a = ss.ToDateTimeStr();
 }

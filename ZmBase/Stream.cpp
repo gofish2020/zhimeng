@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Stream.h"
+#include "..\include\Stream.h"
 
 
 Stream::Stream()

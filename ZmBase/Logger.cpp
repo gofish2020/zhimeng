@@ -30,7 +30,7 @@ Logger* Logger::Instance()
 
 void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 {
-	cs.Enter();
+	cs.Locked();
 
 	//COleDateTime t = COleDateTime(DATE(GetCurrentTime()));
 	LogData *data = &gc_LoggerData[gc_LoggerIndex]; //日志缓存空间 -- 重复利用
@@ -51,7 +51,7 @@ void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 	{
 		gc_LoggerIndex = 0;
 	}
-	cs.Leave();
+	cs.UnLocked();
 }
 
 
