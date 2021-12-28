@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="include">
-      <UniqueIdentifier>{75409ff0-2ac1-46cc-9209-3f57b71a55ca}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,20 +27,31 @@
     <ClCompile Include="Thread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CriticalSection.cpp">
+    <ClCompile Include="Logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
+    <ClCompile Include="CriticalSection.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="XString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Stream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DateTime.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ZmBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+    <None Include="ZmBase.def">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="res\ZmBase.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -54,25 +62,26 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Thread.h">
-      <Filter>include</Filter>
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CriticalSection.h">
+    <ClInclude Include="ZmBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CriticalSection.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\XString.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ZmBase.def">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="res\ZmBase.rc2">
-      <Filter>资源文件</Filter>
-    </None>
+    <ClInclude Include="..\include\Stream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DateTime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ZmBase.rc">

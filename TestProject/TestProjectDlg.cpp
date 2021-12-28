@@ -292,4 +292,27 @@ void CTestProjectDlg::OnBnClickedButton4()
 
 	a = L"1.2";
 	double sssf = a.ToDouble();
+
+	a = L"123&中华&abc&GGG&";
+	int len = a.Len();
+	bool isempty = a.IsEmpty();
+	int pos = a.Pos("&");
+	vector<UnicodeString>res;
+	a.Split(res, "&");
+	UnicodeString upper = a.ToUpper();
+	UnicodeString lower = a.ToLower();
+	UnicodeString substr = a.SubString(4, 2);
+	UnicodeString replacestr = a.Replace("&", "|");
+	a = L"123&中华&abc&GGG&   ";
+	a = a.Trim();
+	UnicodeString leftstr = a.Left(3);
+	UnicodeString rightstr = a.Right(4);
+
+
+	vector<UnicodeString>eles;
+	eles.push_back("123");
+	eles.push_back("123");
+	eles.push_back("123");
+	eles.push_back("123");
+	a = Join(eles, "^");
 }

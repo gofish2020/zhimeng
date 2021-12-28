@@ -10,12 +10,12 @@ CriticalSection::~CriticalSection()
 {
 }
 
-void CriticalSection::Enter()
+void CriticalSection::Locked()
 {
 	CCriticalSection::Lock();
 }
 
-void CriticalSection::Leave()
+void CriticalSection::UnLocked()
 {
 	CCriticalSection::Unlock();
 }

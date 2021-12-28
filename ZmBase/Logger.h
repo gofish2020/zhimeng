@@ -1,8 +1,8 @@
 #pragma once
-#include <string>
 #include <deque>
 #include <queue>
 #include "CriticalSection.h"
+#include "..\include\XString.h"
 using namespace std;
 
 enum LogLevel	{ LLINFO, LLERROR,LLWARN };
@@ -11,9 +11,9 @@ enum LogLevel	{ LLINFO, LLERROR,LLWARN };
 struct LogData
 {
 	LogLevel Level;  // 消息级别
-	string Time;   // 消息发生时间
-	string Source; // 消息源
-	string Message; // 事件内容
+	UnicodeString Time;   // 消息发生时间
+	UnicodeString Source; // 消息源
+	UnicodeString Message; // 事件内容
 	DWORD ProcessId;//进程ID
 	DWORD ThreadId;   // 线程ID
 };
@@ -22,7 +22,7 @@ class AFX_EXT_CLASS Logger
 {
 public:
 	static Logger* Instance();
-	void LogEvent(LogLevel ll, string src, string msg);
+	void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg);
 
 private:
 	void SaveLogs();
@@ -35,7 +35,7 @@ private:
 };
 
 
-extern AFX_EXT_CLASS void LogEvent(LogLevel ll,string src, string msg);
+extern AFX_EXT_CLASS void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg);
 extern AFX_EXT_CLASS void LogException(const std::exception & e, const char * file = 0, int line = 0);
 
 //外部实际调用函数

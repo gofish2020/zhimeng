@@ -6,7 +6,7 @@ class CriticalSection :public CCriticalSection
 public:
 	CriticalSection();
 	virtual ~CriticalSection();
-	void Enter();
-	void Leave();
+	void Locked();
+	void UnLocked();
 };
 

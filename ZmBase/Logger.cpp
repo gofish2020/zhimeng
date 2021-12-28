@@ -28,7 +28,7 @@ Logger* Logger::Instance()
 }
 
 
-void Logger::LogEvent(LogLevel ll, string src, string msg)
+void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 {
 	cs.Enter();
 
@@ -65,7 +65,7 @@ Logger::~Logger()
 }
 
 //---------------------
-void LogEvent(LogLevel ll, string src, string msg)
+void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 {
 	Logger::Instance()->LogEvent(ll, src, msg);
 }
@@ -75,5 +75,5 @@ void LogException(const std::exception & e, const char * file /*= 0*/, int line 
 	if (file == "")
 		LogEvent(LLERROR, "Exception", e.what());
 	else
-		LogEvent(LLERROR, "Exception", string(file) + ":"  + to_string(line) +  e.what());
+		LogEvent(LLERROR, "Exception", UnicodeString(file) + ":"  + UnicodeString(line) +  e.what());
 }

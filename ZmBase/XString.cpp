@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include <stdarg.h>
-#include <sstream>
-#include <locale>
+#include <cctype>
+#include <algorithm>
 #include "..\include\XString.h"
 using namespace std;
 UnicodeString::~UnicodeString()
@@ -212,14 +212,14 @@ bool UnicodeString::IsEmpty() const
 UnicodeString UnicodeString::ToUpper() const
 {
 	UnicodeString temp = *this;
-	_wcsupr_s(const_cast<wchar_t*>(temp.c_str()),temp.Len());
+	transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
 	return temp;
 }
 
 UnicodeString UnicodeString::ToLower() const
 {
 	UnicodeString temp = *this;
-	_wcslwr_s(const_cast<wchar_t*>(temp.c_str()),temp.Len());
+	transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 	return temp;
 }
 
