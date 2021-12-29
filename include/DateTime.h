@@ -1,3 +1,9 @@
+/*
+date:2021/12/29
+coder:nash
+desc:日期、时间类
+*/
+
 #pragma once
 #include "..\include\XString.h"
 

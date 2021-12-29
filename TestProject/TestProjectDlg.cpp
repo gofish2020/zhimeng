@@ -8,6 +8,7 @@
 #include "afxdialogex.h"
 #include "..\include\XString.h"
 #include "..\include\DateTime.h"
+#include "..\include\Stream.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -70,6 +71,7 @@ BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON3, &CTestProjectDlg::OnBnClickedButton3)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTestProjectDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CTestProjectDlg::OnBnClickedButton5)
+	ON_BN_CLICKED(IDC_BUTTON6, &CTestProjectDlg::OnBnClickedButton6)
 END_MESSAGE_MAP()
 
 
@@ -422,4 +424,20 @@ void CTestProjectDlg::OnBnClickedButton5()
 	operator int() const;
 	
 	*/
+}
+
+
+void CTestProjectDlg::OnBnClickedButton6()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	int aaa = sizeof(wchar_t);
+	char str[7] = { 'a','b','d','&','1','2','3' };
+
+	UnicodeString us = L"abd&123";
+	MemoryStream ms;
+	ms.Write((void*)us.c_str(),us.Len() *2 );
+	ms.SetCursor(0);
+	wchar_t sss[10] = {'\0'};
+	ms.Read(sss, 10);
 }
