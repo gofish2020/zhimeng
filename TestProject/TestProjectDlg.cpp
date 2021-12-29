@@ -324,10 +324,102 @@ void CTestProjectDlg::OnBnClickedButton5()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	UnicodeString a = DateTime::NowDate().ToDateTimeStr();
-	UnicodeString b = DateTime::NowDateTime().ToDateTimeStr();
+// 	UnicodeString a = DateTime::NowDate().ToDateTimeStr();
+// 	UnicodeString b = DateTime::NowDateTime().ToDateTimeStr();
+// 
+// 	DateTime c = DateTime(1990, 1, 1, 8, 0, 0);
+// 	DateTime ss = c + DateTime(0, 0, 0, 1, 0, 0);
+// 	a = ss.ToDateTimeStr();
 
-	DateTime c = DateTime(1990, 1, 1, 8, 0, 0);
-	DateTime ss = c + DateTime(0, 0, 0, 1, 0, 0);
-	a = ss.ToDateTimeStr();
+
+	UnicodeString curNow = DateTime::NowDateTime().ToDateStr();
+	UnicodeString curNowInteger = DateTime::NowDateTime().ToDateTimeInteger();
+
+	DateTime a;
+	DateTime b(L"2021-02-01");
+	DateTime c(b);
+	DateTime d(__time64_t(1640743993)); //2021-12-29 10:13:13
+	DateTime e(2021, 2, 2, 1, 1, 1);
+
+	__time64_t ssss = d.UnixTimeStamp();
+
+	int year = d.Year();
+	int month = d.Month();
+	int day = d.Day();
+	int hour = d.Hour();
+	int minu = d.Minute();
+	int second = d.Second();
+	int dayofweek = d.DayOfWeek();
+	int dayofyear = d.DayOfYear();
+
+
+	UnicodeString res;
+
+	DateTime r = d + 1;
+	res = r.ToDateTimeStr();
+	DateTime r1 = d + 10.25;
+	res = r1.ToDateTimeStr();
+	DateTime r2 = d + e;
+	res = r2.ToDateTimeStr();
+
+
+	res = UnicodeString(d);
+	/*
+	DateTime();
+	DateTime(const DateTime& src);
+	DateTime(DATE src);
+	DateTime(__time32_t src);
+	DateTime(__time64_t src);
+	DateTime(const SYSTEMTIME& systimeSrc);
+	DateTime(const FILETIME& filetimeSrc);
+	DateTime( int nYear,int nMonth,int nDay,int nHour,int nMin,int nSec);
+	DateTime(const int src);
+	virtual ~DateTime();
+
+	bool IsEmpty();
+	int Year() const ;
+	// Month of year (1 = January)
+	int Month() const ;
+	// Day of month (1-31)
+	int Day() const ;
+	// Hour in day (0-23)
+	int Hour() const ;
+	// Minute in hour (0-59)
+	int Minute() const ;
+	// Second in minute (0-59)
+	int Second() const ;
+	// Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
+	int DayOfWeek() const ;
+	// Days since start of year (1 = January 1)
+	int DayOfYear() const ;
+	DateTime GetDate() const;
+	DateTime GetTime() const;
+	static DateTime NowDate();
+	static DateTime NowDateTime();
+	static DateTime NowTime();
+	UnicodeString ToDateStr() const;
+	UnicodeString ToDateTimeStr() const;
+	UnicodeString ToTimeStr() const;
+	UnicodeString ToDateInteger() const;
+	UnicodeString ToDateTimeInteger() const;
+
+	DateTime& operator=(const UnicodeString& Src) throw();
+	DateTime& operator=(const int Src) throw();
+	DateTime operator +(const DateTime& rhs) const;
+	DateTime operator +(const double rhs) const;
+	DateTime operator +(const int rhs) const;
+	DateTime operator-(const DateTime& rhs) const;
+	DateTime operator-(const double rhs) const;
+	DateTime operator-(const int rhs) const;
+	DateTime &operator+=(const DateTime& Src);
+	DateTime &operator+=(const double Src);
+	DateTime &operator+=(const int Src);
+	DateTime &operator-=(const DateTime& Src);
+	DateTime &operator-=(const double Src);
+	DateTime &operator-=(const int Src);
+
+	operator UnicodeString() const;
+	operator int() const;
+	
+	*/
 }

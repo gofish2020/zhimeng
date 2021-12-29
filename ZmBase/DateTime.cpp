@@ -52,6 +52,31 @@ DateTime::DateTime(const int src):COleDateTime((DATE)src)
 
 }
 
+DateTime::DateTime(const UnicodeString& Src)
+{
+	if (Src.Trim() == L"")
+	{
+		*this = DateTime();
+	}
+	if (!ParseDateTime(Src.c_str()))
+	{
+		if (Src.ToInt() > 0 && Src.Len() == 8)
+		{
+			
+			*this = DateTime(Src.SubString(0, 4).ToInt(), Src.SubString(4, 2).ToInt(), Src.SubString(6, 2).ToInt(), 0, 0, 0);
+		}
+		else
+		{
+			*this = DateTime();
+		}
+	}
+}
+
+DateTime::DateTime(const COleDateTime& src):COleDateTime(src)
+{
+	
+}
+
 DateTime::~DateTime()
 {
 }
@@ -174,9 +199,68 @@ UnicodeString DateTime::ToDateTimeInteger() const
 	return temp;
 }
 
+__time64_t DateTime::UnixTimeStamp() const
+{
+	SYSTEMTIME stLocal;
+	GetAsSystemTime(stLocal);
+	CTime cTime(stLocal);
+	return cTime.GetTime();
+}
+
+DateTime DateTime::operator-(const DateTime& rhs) const
+{
+	return m_dt - rhs.m_dt;
+}
+
+DateTime DateTime::operator-(const int rhs) const
+{
+	return m_dt - rhs;
+}
+
+DateTime & DateTime::operator-=(const DateTime& Src)
+{
+	m_dt -= Src.m_dt;
+	return *this;
+}
+
+DateTime & DateTime::operator-=(const double Src)
+{
+	m_dt -= Src;
+	return *this;
+}
+
+DateTime & DateTime::operator-=(const int Src)
+{
+	m_dt -= Src;
+	return *this;
+}
+
+DateTime & DateTime::operator+=(const int Src)
+{
+	m_dt += Src;
+	return *this;
+}
+
+DateTime & DateTime::operator+=(const double Src)
+{
+	m_dt += Src;
+	return *this;
+}
+
+DateTime& DateTime::operator+=(const DateTime& Src)
+{
+	m_dt += Src.m_dt;
+	return *this;
+}
+
 DateTime DateTime::operator+(const int rhs) const
 {
 	return this->m_dt + rhs;
+}
+
+DateTime DateTime::operator-(const double rhs) const
+{
+	return m_dt - rhs;
 }
 
 DateTime DateTime::operator+(const double rhs) const
@@ -193,6 +277,16 @@ DateTime& DateTime::operator=(const int Src) throw()
 {
 	m_dt = Src;
 	return *this;
+}
+
+DateTime::operator UnicodeString() const
+{
+	return this->ToDateTimeStr();
+}
+
+DateTime::operator int() const
+{
+	return (int)m_dt;
 }
 
 DateTime& DateTime::operator=(const UnicodeString& Src) throw()
