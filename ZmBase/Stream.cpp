@@ -25,6 +25,7 @@ MemoryStream::~MemoryStream()
 }
 
 
+
 void MemoryStream::Free()
 {
 	if (_pMemory)
@@ -32,6 +33,9 @@ void MemoryStream::Free()
 		free(_pMemory);
 		_pMemory = nullptr;
 	}
+	_cap = 0;
+	_size = 0;
+	_cursor = 0;
 }
 
 void MemoryStream::Zero()
@@ -48,6 +52,11 @@ void MemoryStream::Seek(size_t offset, SeekDirection & direction)
 		SetCursor(GetCursor() + offset);
 	else if (direction == SeekDirection::SeekEnd)
 		SetCursor(GetSize() - offset);
+}
+
+void MemoryStream::Skip(size_t byteNums)
+{
+	SetCursor(GetCursor() + byteNums);
 }
 
 void MemoryStream::SetCursor(size_t cursor)
@@ -78,7 +87,6 @@ void MemoryStream::SetSize(size_t size)
 		if (_pMemory == nullptr)
 			throw std::exception("SetSize 内存分配错误");
 	}
-	
 	_size = size;
 	SetCursor(GetCursor());
 }
@@ -93,22 +101,58 @@ char* MemoryStream::Memory()
 	return (char*)_pMemory;
 }
 
+template<typename T>
+MemoryStream& MemoryStream::operator<<(const T data)
+{
+	size_t count = sizeof(data);
+	Write(reinterpret_cast<BYTE*>(&data), count);
+	return *this;
+}
+
+template<typename T>
+MemoryStream& MemoryStream::operator>>(T &data)
+{
+	size_t count = sizeof(data);
+	Read(reinterpret_cast<BYTE*>(&data), count);
+	return *this;
+}
+
+MemoryStream& MemoryStream::operator<<(const UnicodeString& src)
+{
+	size_t count = src.Len() * 2;
+	Write(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), count);
+	return *this;
+}
+
+MemoryStream& MemoryStream::operator>>(UnicodeString& src)
+{
+	size_t len = src.Len();//存储空间
+	if (len == 0)
+	{
+		src = L"";
+		return *this;
+	}
+	Read(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), len * 2);
+	return *this;
+}
+
 size_t MemoryStream::Write(_In_ void* src, size_t count)
 {
-	size_t maxCursor = _cursor + count;//写入数据
-	if (maxCursor > GetSize())//超出size
-		SetSize(maxCursor);
-	memcpy(Memory() + _cursor, src, count);
-	SetCursor(maxCursor);
+	size_t maxSize = GetCursor() + count;//写入数据
+	if (maxSize > GetSize())//超出size
+		SetSize(maxSize);
+	memcpy(Memory() + GetCursor(), src, count);
+	SetCursor(maxSize);
 	return count;
 }
 
 size_t MemoryStream::Read(_Out_ void* dest, size_t count)
 {
-	size_t maxCursor = _cursor + count; //读出数据
-	if (maxCursor > GetSize())
-		count = GetSize() - _cursor;
-	memcpy(dest, Memory() + _cursor, count);
+	size_t maxSize = GetCursor() + count; //读出数据
+	if (maxSize > GetSize())
+		count = GetSize() - GetCursor();
+	memcpy(dest, Memory() + GetCursor(), count);
+	SetCursor(GetCursor() + count);
 	return count;
 }
 
@@ -119,6 +163,36 @@ FileStream::FileStream()
 }
 
 FileStream::~FileStream()
+{
+
+}
+///////////////////共享内存类///////////////////
+ShareMemoryStream::ShareMemoryStream(DWORD losize,UnicodeString Name)
+{
+	SECURITY_ATTRIBUTES sa;
+	SECURITY_DESCRIPTOR sd;
+	InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
+	SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE);
+	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+	sa.bInheritHandle = TRUE;
+	sa.lpSecurityDescriptor = &sd;
+	c_handle = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0, losize, Name.c_str());
+	if (c_handle == nullptr)
+	{
+		UnicodeString err = "CreateFileMapping failed ";
+		throw std::exception(string(err).c_str());
+	}
+
+	FSize = (UINT32 *)MapViewOfFile(c_handle, FILE_MAP_WRITE | FILE_MAP_READ, 0, 0, 0);
+	if (FSize == NULL)
+	{
+		//错误处理
+		UnicodeString msg = L"MapViewOfFile() failed with error :" + Name;
+		throw std::exception(string(msg).c_str());
+	}
+}
+
+ShareMemoryStream::~ShareMemoryStream()
 {
 
 }

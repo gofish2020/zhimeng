@@ -39,3 +39,59 @@ public:
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedButton6();
 };
+
+
+
+class A {
+public:
+	A();
+	virtual ~A();
+
+	virtual int sub()
+	{
+		return 1;
+	}
+
+	int  gg()
+	{
+		return 55;
+	}
+	virtual int Print()
+	{
+		gg();
+		return sub();
+	}
+
+	int read()
+	{
+		return Print();
+	}
+};
+
+
+
+
+class MyC :public A
+{
+public:
+	MyC();
+	~MyC();
+
+	virtual int Print()
+	{
+		return A::Print();
+	}
+
+	virtual int sub()
+	{
+		return 2;
+	}
+
+	int  gg()
+	{
+		return 55;
+	}
+private:
+
+};
+

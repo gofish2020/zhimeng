@@ -39,7 +39,7 @@ public:
 	UnicodeString operator+(const char*);
 	UnicodeString operator+(const wchar_t*);
 	UnicodeString operator+(const UnicodeString &);
-
+	operator string();
 
 	size_t Len() const;
 	bool IsEmpty() const;

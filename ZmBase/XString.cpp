@@ -13,7 +13,26 @@ UnicodeString::UnicodeString():wstring()
 {
 }
 
+UnicodeString::operator string()
+{
 
+	string result = "";
+	int len = Len();
+	if (len == 0)
+	{
+		return result;
+	}
+	int convertResult = WideCharToMultiByte(CP_ACP, 0, (wchar_t*)(this->c_str()), len, 0, 0, 0, 0);
+	if (convertResult > 0)
+	{
+		char *buffer = new char[convertResult + 1];
+		memset(buffer, 0, convertResult + 1);
+		WideCharToMultiByte(CP_ACP, 0, const_cast<wchar_t*>(this->c_str()), len, buffer, convertResult, 0, 0);
+		result = buffer;
+		delete[] buffer;
+	}
+	return result;
+}
 UnicodeString::UnicodeString(const char* src)
 {
 	if (src == nullptr)

@@ -190,6 +190,8 @@ void CTestProjectDlg::OnBnClickedButton4()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
+	UnicodeString msg = L"123中说的11ff";
+	string  ssfdsf = string(msg);
 // 	UnicodeString(); //空字符
 // 	UnicodeString(const char*);
 // 	UnicodeString(const wchar_t*, int); //截取字符
@@ -440,4 +442,30 @@ void CTestProjectDlg::OnBnClickedButton6()
 	ms.SetCursor(0);
 	wchar_t sss[10] = {'\0'};
 	ms.Read(sss, 10);
+
+
+
+	MyC mc;
+	mc.read();
+	int aaaa = mc.Print();
+}
+
+A::A()
+{
+
+}
+
+A::~A()
+{
+
+}
+
+
+
+MyC::MyC()
+{
+}
+
+MyC::~MyC()
+{
 }

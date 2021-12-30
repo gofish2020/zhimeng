@@ -1,11 +1,12 @@
 #pragma once
-
-
+#include "..\include\XString.h"
 class AFX_EXT_CLASS Stream
 {
 public:
 	Stream();
 	virtual ~Stream();
+	virtual size_t Write(_In_ void* src, size_t count) = 0;
+	virtual size_t Read(_Out_ void* dest, size_t count)= 0;
 };
 
 
@@ -23,7 +24,8 @@ public:
 
 	void Free(); //释放空间
 	void Zero(); //分配的空间初始化为0
-	void Seek(size_t offset, SeekDirection & direction);
+	void Seek(size_t offset, SeekDirection& direction);
+	void Skip(size_t byteNums); //游标跳跃byteNums字节
 	void SetCursor(size_t cursor); //设置游标位置
 	size_t GetCursor();
 	void SetSize(size_t size);
@@ -32,13 +34,20 @@ public:
 
 	size_t Write(_In_ void* src, size_t count);
 	size_t Read(_Out_ void* dest, size_t count);
+
+	MemoryStream& operator<<(const UnicodeString& src);
+	MemoryStream& operator>>(UnicodeString& src);
+
+	template<typename T> 
+	MemoryStream& operator<< (const T data);
+	template<typename T>
+	MemoryStream& operator>>(T &data);
 private:
 	size_t _step;	//扩容步长
 	size_t _size;	//数据大小
 	size_t _cap;	//容量大小
 	size_t _cursor;//游标
 	void* _pMemory;	//头指针
-
 };
 
 class AFX_EXT_CLASS FileStream :public Stream
@@ -48,3 +57,12 @@ public:
 	virtual ~FileStream();
 };
 
+
+class AFX_EXT_CLASS ShareMemoryStream : public Stream
+{
+public:
+	ShareMemoryStream(DWORD losize, UnicodeString Name);
+	virtual ~ShareMemoryStream();
+private:
+	HANDLE c_handle;
+};
