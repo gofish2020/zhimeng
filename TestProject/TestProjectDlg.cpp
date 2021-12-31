@@ -9,6 +9,8 @@
 #include "..\include\XString.h"
 #include "..\include\DateTime.h"
 #include "..\include\Stream.h"
+#include "..\include\utils.h"
+#include "..\include\Logger.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -429,25 +431,63 @@ void CTestProjectDlg::OnBnClickedButton5()
 }
 
 
+void TestError()
+{
+	
+	Painc("1111");
+	
+}
+
 void CTestProjectDlg::OnBnClickedButton6()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	int aaa = sizeof(wchar_t);
-	char str[7] = { 'a','b','d','&','1','2','3' };
 
-	UnicodeString us = L"abd&123";
-	MemoryStream ms;
-	ms.Write((void*)us.c_str(),us.Len() *2 );
-	ms.SetCursor(0);
-	wchar_t sss[10] = {'\0'};
-	ms.Read(sss, 10);
+	ShareMemoryStream sms("nash-share", 2);
+	sms << L"a";
 
 
+	UnicodeString result(1, L'\0');
+	sms.SetCursor(0);
+	sms >> result;
 
-	MyC mc;
-	mc.read();
-	int aaaa = mc.Print();
+
+
+// 	UINT32 c[10];
+// 	for (int i = 0; i < 10;i++)
+// 	{
+// 		*(c + i) = i;
+// 	}
+// 	UINT32 *ss = c + sizeof(UINT32);
+// 	UINT32 a = *(c + sizeof(UINT32));
+// 	int aaa = sizeof(wchar_t);
+// 	char str[7] = { 'a','b','d','&','1','2','3' };
+// 
+// 	UnicodeString us = L"abd&123";
+// 	MemoryStream ms;
+// 	ms.Write((void*)us.c_str(),us.Len() *2 );
+// 	ms.SetCursor(0);
+// 	wchar_t sss[10] = {'\0'};
+// 	ms.Read(sss, 10);
+// 
+// 	MyC mc;
+// 	mc.read();
+// 	int aaaa = mc.Print();
+
+	try
+	{
+		TestError();
+	}
+	catch (const std::exception& e)
+	{
+		LOGEXCEPTION(e);
+	}
+	catch (...)
+	{
+	}
+
+	UnicodeString err = GetLastErrorStr("GetLastErrorStr","sdefsdfds");
+	
 }
 
 A::A()

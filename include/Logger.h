@@ -1,7 +1,6 @@
 #pragma once
 #include <deque>
-#include <queue>
-#include "CriticalSection.h"
+#include "..\include\CriticalSection.h"
 #include "..\include\XString.h"
 using namespace std;
 

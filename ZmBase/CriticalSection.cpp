@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "CriticalSection.h"
+#include "..\include\CriticalSection.h"
 
 CriticalSection::CriticalSection()
 {

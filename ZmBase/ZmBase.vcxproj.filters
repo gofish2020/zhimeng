@@ -42,6 +42,9 @@
     <ClCompile Include="DateTime.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ZmBase.def">
@@ -67,12 +70,6 @@
     <ClInclude Include="ZmBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CriticalSection.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\XString.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -80,6 +77,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\DateTime.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Logger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CriticalSection.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

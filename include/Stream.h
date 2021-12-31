@@ -61,8 +61,30 @@ public:
 class AFX_EXT_CLASS ShareMemoryStream : public Stream
 {
 public:
-	ShareMemoryStream(DWORD losize, UnicodeString Name);
+	ShareMemoryStream(UnicodeString Name, DWORD losize);
+	ShareMemoryStream(UnicodeString Name);
 	virtual ~ShareMemoryStream();
+
+	virtual size_t Write(_In_ void* src, size_t count);
+	virtual size_t Read(_Out_ void* dest, size_t count);
+
+
+	ShareMemoryStream& operator<<(const UnicodeString& wstr);
+	ShareMemoryStream& operator>>(UnicodeString& wstr);
+
+	size_t GetCursor();
+	void SetCursor(size_t cursor);
+	size_t GetSize();
+	void SetSize(size_t size);
+
+	char* Memory();
+	UnicodeString ShareName();
 private:
 	HANDLE c_handle;
+	UINT32* pSize;
+	UINT32* pCursor;
+	char* pMemory;
+	bool c_IsCreator;
+	UnicodeString c_ShareName;
+
 };
