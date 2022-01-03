@@ -160,12 +160,85 @@ size_t MemoryStream::Read(_Out_ void* dest, size_t count)
 ///////////////////文件类///////////////////
 FileStream::FileStream()
 {
+	pfstream = new fstream();
+}
 
+FileStream::FileStream(UnicodeString fileName, int mode, int prot)
+{
+	pfstream = new fstream(fileName.c_str(), mode, prot);
+	if (!pfstream->is_open())
+		Painc("new fstream failed");
+}
+
+void FileStream::Open(UnicodeString fileName, int mode, int prot )
+{
+	pfstream->open(fileName.c_str(), mode, prot);
+	if (!pfstream->is_open())
+		Painc("pfstream->open failed");
+	
+}
+
+void FileStream::Close()
+{
+	if (pfstream)
+	{
+		pfstream->flush();
+		pfstream->close();
+		delete pfstream;
+		pfstream = nullptr;
+	}
+		
+}
+
+void FileStream::Seek(size_t offset, SeekDirection direction)
+{
+	pfstream->seekp(offset,direction);
+}
+
+size_t FileStream::GetCursor()
+{
+	return pfstream->tellp();
+}
+
+void FileStream::SetCursor(size_t Pos)
+{
+	Seek(Pos, SeekBegin);
+}
+
+
+size_t FileStream::GetSize()
+{
+	int tempPos = pfstream->tellp();
+	Seek(0, SeekEnd);
+	int size = pfstream->tellp();
+	Seek(tempPos, SeekBegin);
+	return size;
+}
+
+void FileStream::SetSize(size_t size)
+{
+	//Seek(size, SeekBegin);
+}
+
+size_t FileStream::Write(_In_ void* src, size_t count)
+{
+	pfstream->write((char*)src, count);
+	return count;
+}
+
+size_t FileStream::Read(_Out_ void* dest, size_t count)
+{
+	 pfstream->read((char*)dest, count);
+	 return count;
 }
 
 FileStream::~FileStream()
 {
-
+	if (pfstream != nullptr)
+	{
+		delete pfstream;
+		pfstream = nullptr;
+	}
 }
 ///////////////////共享内存类///////////////////
 ShareMemoryStream::ShareMemoryStream(UnicodeString Name, DWORD losize)

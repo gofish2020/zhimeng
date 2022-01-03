@@ -443,6 +443,33 @@ void CTestProjectDlg::OnBnClickedButton6()
 	// TODO: 在此添加控件通知处理程序代码
 
 
+	char aaa[20] = { 0 };
+	FileStream fs;
+	fs.Open("d:\\2.log", fmOpenRead, _SH_SECURE);
+	//fs.SetCursor(1);
+	//int pos1 = fs.GetCursor();
+	//fs.Write("aa", 2);
+	//fs.Close();
+
+	//int size = fs.GetSize();
+	int pos = fs.GetCursor();
+	fs.SetCursor(2);
+	
+	pos = fs.GetCursor();
+	pos = fs.GetCursor();
+	fs.Read(aaa, 2);
+	fs.SetCursor(5 );
+	pos = fs.GetCursor();
+	pos = fs.GetCursor();
+	fs.Read(aaa, 2);
+	//fs.Seek(0, SeekEnd);
+	fs.Write("aa", 2);
+	pos = fs.GetCursor();
+	pos = fs.GetCursor();
+	fs.Close();
+	fs.Read(aaa, 20);
+	return;
+
 	ShareMemoryStream sms("nash-share", 2);
 	sms << L"a";
 
@@ -452,6 +479,11 @@ void CTestProjectDlg::OnBnClickedButton6()
 	sms >> result;
 
 
+
+	UnicodeString sss(1, L'\0');
+	ShareMemoryStream copyShare("nash-share");
+	copyShare.SetCursor(0);
+	copyShare >> sss;
 
 // 	UINT32 c[10];
 // 	for (int i = 0; i < 10;i++)
