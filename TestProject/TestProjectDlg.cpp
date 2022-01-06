@@ -437,9 +437,28 @@ void TestError()
 	Painc("1111");
 	
 }
-
+/*
+extern AFX_EXT_CLASS bool FileExist(const UnicodeString& file);
+extern AFX_EXT_CLASS bool CreateDir(const UnicodeString& dirpath);
+extern AFX_EXT_CLASS bool RemoveEmptyDir(const UnicodeString& dirpath);
+extern AFX_EXT_CLASS bool DeleteDir(const UnicodeString& dirpath);
+extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
+*/
 void CTestProjectDlg::OnBnClickedButton6()
 {
+
+	UnicodeString filePaht = L"D:\\1.log";
+	bool isOk = FileExist(filePaht);
+	UnicodeString dir = L"D:\\nash-yu";
+	isOk = DirectoryExist(dir);
+	isOk = CreateDir(dir);
+	isOk = DirectoryExist(dir);
+	isOk = RemoveEmptyDir(dir);
+	isOk = DeleteDir(dir);
+	
+
+
+	return;
 	// TODO: 在此添加控件通知处理程序代码
 
 	FileStream fs1;

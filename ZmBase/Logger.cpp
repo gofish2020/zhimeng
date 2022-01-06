@@ -16,6 +16,7 @@ void Logger::SaveLogs()
 	UnicodeString fileName;
 	fileName.uprintf_s(L"%04d%02d%02d.log", d.Year(), d.Month(), d.Day());
 	FileStream fs;
+
 	fs.Open(L"D:\\" + fileName, fmOpenWrite,_SH_DENYNO);
 	for (size_t i = 0; i < c_logs.size();i++)
 	{

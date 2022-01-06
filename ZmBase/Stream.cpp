@@ -225,8 +225,7 @@ void FileStream::SetSize(size_t size)
 
 size_t FileStream::Write(_In_ void* src, size_t count)
 {
-	int a = _mode & Fileout;
-	if (a == (int)Fileout) //包含写属性
+	if (Fileout == _mode & Fileout) //包含写属性
 	{
 		pfstream->write((char*)src, count);
 		return count;
@@ -236,7 +235,7 @@ size_t FileStream::Write(_In_ void* src, size_t count)
 
 size_t FileStream::Read(_Out_ void* dest, size_t count)
 {
-	if ( _mode & Filein == Filein) //包含读属性
+	if (Filein == _mode & Filein  ) //包含读属性
 	{
 		int res = pfstream->read((char*)dest, count).gcount();
 		if (pfstream->eof())
