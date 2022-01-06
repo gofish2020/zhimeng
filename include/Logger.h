@@ -2,11 +2,12 @@
 #include <deque>
 #include "..\include\CriticalSection.h"
 #include "..\include\XString.h"
+#include "..\include\DateTime.h"
 using namespace std;
 
 enum LogLevel	{ LLINFO, LLERROR,LLWARN };
 
-//! 日志信息结构
+//! 日志数据结构
 struct LogData
 {
 	LogLevel Level;  // 消息级别

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\include\Logger.h"
-
+#include "..\include\Stream.h"
 namespace
 {
 	static size_t gc_logsbuffersize = 300;
@@ -12,9 +12,16 @@ namespace
 
 void Logger::SaveLogs()
 {
+	DateTime d = DateTime::NowDate();
+	UnicodeString fileName;
+	fileName.uprintf_s(L"%04d%02d%02d.log", d.Year(), d.Month(), d.Day());
+	FileStream fs;
+	fs.Open(L"D:\\" + fileName, fmOpenWrite,_SH_DENYNO);
 	for (size_t i = 0; i < c_logs.size();i++)
 	{
 		LogData *d = c_logs[i]; //打开日志文件，写入数据
+		UnicodeString temp = UnicodeString(d->Level) + L"," + d->Time + L"," + UnicodeString(d->ProcessId) + L"," + UnicodeString(d->ThreadId) + L"," + d->Source + L"," + d->Message + L"\n";
+		fs << temp;
 	}
 	c_logs.clear();
 }
@@ -32,15 +39,13 @@ void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 {
 	cs.Locked();
 
-	//COleDateTime t = COleDateTime(DATE(GetCurrentTime()));
 	LogData *data = &gc_LoggerData[gc_LoggerIndex]; //日志缓存空间 -- 重复利用
 	data->Level = ll;
-	data->Time = "";
+	data->Time = DateTime::NowDateTime().ToDateTimeStr();
 	data->Source = src;
 	data->Message = msg;
 	data->ThreadId = ::GetCurrentThreadId();
 	data->ProcessId = ::GetCurrentProcessId();
-
 	c_logs.push_back(data);//双端队列中保存指针
 	if (c_logs.size() > gc_logsbuffersize)
 	{

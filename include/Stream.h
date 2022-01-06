@@ -65,11 +65,10 @@ enum FileMode
 	Filebinary = _IOSbinary//二进制打开文件
 };
 
-static const int fmCreate = Fileout; //创建（新）文件，如果已存在文件，原文件将被清空，不存在文件（创建新文件）
-static const int fmOpenRead = Filein;//只读方式打开文件 -- 文件必须存在（通过指定游标，读取对应位置的数据）
-static const int fmOpenWrite = Fileout | File_Nocreate ; // 在原文件的尾部写入数据（如果原文件不存在，报错）（只能在文件尾部写入，不能写入到指定的位置）
-static const int fmOpenReadWriteBeg = Filein | Fileout  ; // 文件必须存在，否则报错,游标位于文件头（可在任意的位置写入和读取）
-static const int fmOpenReadWriteEnd = Filein | Fileout | Fileapp; // 文件必须存在，否则报错，游标位于文件尾（可在任意的位置写入和读取）
+static const int fmOpenNew = Fileout; //创建新文件，游标位于首部
+static const int fmOpenRead = Filein | Fileapp ;//不存在创建文件，存在直接打开文件，游标位于首部，【只能读取】
+static const int fmOpenWrite = Fileout | Fileapp | Fileate; // 不存在创建文件，存在直接打开文件，游标位于尾部，【只能写入】
+static const int fmOpenReadWrite = Filein | Fileout | Fileapp | Fileate; // 不存在创建、存在打开文件，游标位于尾部【可在任意的位置写入和读取】
 
 //int prot 属性设定
 #define _SH_DENYRW      0x10    //!其他的应用程序不能打开该文件
@@ -96,9 +95,12 @@ public:
 
 	virtual size_t Write(_In_ void* src, size_t count);
 	virtual size_t Read(_Out_ void* dest, size_t count);
+
+	FileStream& operator<< (const UnicodeString& wstr);
+	FileStream& operator>> (UnicodeString& wstr);
 private:
 	fstream* pfstream;
-
+	int _mode;
 	size_t _cursor;
 };
 

@@ -39,7 +39,7 @@ public:
 	UnicodeString operator+(const char*);
 	UnicodeString operator+(const wchar_t*);
 	UnicodeString operator+(const UnicodeString &);
-	operator string();
+	operator string(); //unicode 2 mutil-byte
 
 	size_t Len() const;
 	bool IsEmpty() const;
@@ -59,6 +59,8 @@ public:
  	__int64 ToInt64(int _Base = 10) const;
  	double ToDouble() const;
 	long double ToLongDouble() const;
+	string Toutf8() const;// unicode 2 utf8
+	void utf8(const char * str); //utf8 2 unicode
 };
 
 extern AFX_EXT_CLASS UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep);

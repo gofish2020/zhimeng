@@ -168,6 +168,7 @@ FileStream::FileStream(UnicodeString fileName, int mode, int prot)
 	pfstream = new fstream(fileName.c_str(), mode, prot);
 	if (!pfstream->is_open())
 		Painc("new fstream failed");
+	_mode = mode;
 }
 
 void FileStream::Open(UnicodeString fileName, int mode, int prot )
@@ -175,7 +176,7 @@ void FileStream::Open(UnicodeString fileName, int mode, int prot )
 	pfstream->open(fileName.c_str(), mode, prot);
 	if (!pfstream->is_open())
 		Painc("pfstream->open failed");
-	
+	_mode = mode;
 }
 
 void FileStream::Close()
@@ -197,7 +198,9 @@ void FileStream::Seek(size_t offset, SeekDirection direction)
 
 size_t FileStream::GetCursor()
 {
-	return pfstream->tellp();
+	int a = pfstream->tellg();//读取
+	int b = pfstream->tellp();
+	return b; //写入
 }
 
 void FileStream::SetCursor(size_t Pos)
@@ -222,23 +225,44 @@ void FileStream::SetSize(size_t size)
 
 size_t FileStream::Write(_In_ void* src, size_t count)
 {
-	pfstream->write((char*)src, count);
-	return count;
+	int a = _mode & Fileout;
+	if (a == (int)Fileout) //包含写属性
+	{
+		pfstream->write((char*)src, count);
+		return count;
+	}
+	return 0; //do nothing
 }
 
 size_t FileStream::Read(_Out_ void* dest, size_t count)
 {
-	 pfstream->read((char*)dest, count);
-	 return count;
+	if ( _mode & Filein == Filein) //包含读属性
+	{
+		int res = pfstream->read((char*)dest, count).gcount();
+		if (pfstream->eof())
+			pfstream->clear();
+		return res;
+	}
+	return count;
+}
+
+FileStream& FileStream::operator<<( const UnicodeString& wstr)
+{
+	*pfstream << wstr.Toutf8().c_str();
+	return *this;
+}
+
+FileStream& FileStream::operator>>(UnicodeString& wstr)
+{
+	string temp;
+	std::getline(*pfstream, temp);
+	wstr.utf8(temp.c_str());
+	return *this;
 }
 
 FileStream::~FileStream()
 {
-	if (pfstream != nullptr)
-	{
-		delete pfstream;
-		pfstream = nullptr;
-	}
+	Close();
 }
 ///////////////////共享内存类///////////////////
 ShareMemoryStream::ShareMemoryStream(UnicodeString Name, DWORD losize)

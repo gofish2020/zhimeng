@@ -339,6 +339,36 @@ long double UnicodeString::ToLongDouble() const
 	return stold(c_str(), nullptr);
 }
 
+string UnicodeString::Toutf8() const
+{
+	string result = "";
+	int len = Len();
+	if (len == 0)
+		return result;
+	int convertResult = WideCharToMultiByte(CP_UTF8, 0, (wchar_t*)(this->c_str()), len, 0, 0, 0, 0);
+	if (convertResult > 0)
+	{
+		char *buffer = new char[convertResult + 1];
+		memset(buffer, 0, convertResult + 1);
+		WideCharToMultiByte(CP_UTF8, 0, (wchar_t*)(this->c_str()), len, buffer, convertResult, 0, 0);
+		result = buffer;
+		delete[] buffer;
+	}
+	return result;
+}
+
+void UnicodeString::utf8(const char * src)
+{
+	if (src == nullptr)
+		return;
+	int convertResult = MultiByteToWideChar(CP_UTF8, 0, src, (int)strlen(src), nullptr, 0);
+	if (convertResult > 0)
+	{
+		resize(convertResult);
+		MultiByteToWideChar(CP_UTF8, 0, src, (int)strlen(src), (wchar_t*)(this->c_str()), convertResult);
+	}
+}
+
 UnicodeString UnicodeString::SubString(int index, int count) const
 {
 	int len = Len();

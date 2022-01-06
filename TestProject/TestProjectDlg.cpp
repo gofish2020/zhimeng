@@ -442,17 +442,40 @@ void CTestProjectDlg::OnBnClickedButton6()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
+	FileStream fs1;
+	fs1.Open("d:\\20220106.log", fmOpenRead);
+	fs1.SetCursor(0);
+	UnicodeString aa;
+	fs1 >> aa;
+
+
+	for (int i = 0; i < 500;i++)
+	{
+		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");
+	}
 
 	char aaa[20] = { 0 };
 	FileStream fs;
-	fs.Open("d:\\2.log", fmOpenRead, _SH_SECURE);
+	fs.Open("d:\\2.log", fmOpenReadWrite | Filebinary, _SH_DENYNO);
+	int pos = fs.GetCursor();
+	fs.Read(aaa, 2);
+	fs.Seek(0, SeekBegin);
+	pos = fs.GetCursor();
+	fs.Read(aaa, 2);
+	pos = fs.GetCursor();
+	fs.Write("aa", 2);
+	fs.Seek(0, SeekBegin);
+	pos = fs.GetCursor();
+	fs.Read(aaa, 2);
+	pos = fs.GetCursor();
+	fs.Close();
 	//fs.SetCursor(1);
 	//int pos1 = fs.GetCursor();
 	//fs.Write("aa", 2);
 	//fs.Close();
 
 	//int size = fs.GetSize();
-	int pos = fs.GetCursor();
+	//int pos = fs.GetCursor();
 	fs.SetCursor(2);
 	
 	pos = fs.GetCursor();
