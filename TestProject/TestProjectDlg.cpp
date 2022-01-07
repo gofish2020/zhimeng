@@ -62,6 +62,7 @@ CTestProjectDlg::CTestProjectDlg(CWnd* pParent /*=NULL*/)
 void CTestProjectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_edit1);
 }
 
 BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
@@ -447,14 +448,25 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	for (int i = 0; i < 500; i++)
+	{
+		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");
+	}
+
+	return;
+
+// 	UnicodeString path = GetApplicationFullName();
+// 	return;
+	bool adfasdf = CreateDir(L"D:\\hello\\hello");
+	DeleteDir(L"D:\\hello");
+	vector<UnicodeString> res;
+	TraverselFiles(L"D:\\hello",res,L"exe",true);
+	TraverselFiles(L"D:\\hello", res, L"exe", false);
+	TraverselFiles(L"D:\\hello", res,L"",false);
+
 	UnicodeString filePaht = L"D:\\1.log";
 	bool isOk = FileExist(filePaht);
-	UnicodeString dir = L"D:\\nash-yu";
-	isOk = DirectoryExist(dir);
-	isOk = CreateDir(dir);
-	isOk = DirectoryExist(dir);
-	isOk = RemoveEmptyDir(dir);
-	isOk = DeleteDir(dir);
+
 	
 
 
@@ -468,10 +480,7 @@ void CTestProjectDlg::OnBnClickedButton6()
 	fs1 >> aa;
 
 
-	for (int i = 0; i < 500;i++)
-	{
-		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");
-	}
+	
 
 	char aaa[20] = { 0 };
 	FileStream fs;

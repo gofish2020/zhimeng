@@ -32,6 +32,8 @@ private:
 	static Logger* s_Logger;
 	Logger();
 	virtual ~Logger();
+
+	UnicodeString logPath;
 };
 
 

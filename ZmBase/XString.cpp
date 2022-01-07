@@ -171,8 +171,8 @@ UnicodeString& UnicodeString::operator=(const wchar_t* src)
 int UnicodeString::uprintf_s(const wchar_t *fmt,...)
 {
 	va_list _val;
-	va_start(_val, fmt);
-	int _len = _scwprintf(fmt, _val);
+	va_start(_val, fmt); 
+	int _len = _vscwprintf(fmt, _val);
 	wstring wstr(_len + 1 ,L'\0'); 
 	_vsnwprintf_s((wchar_t*)wstr.c_str(), _len + 1, _TRUNCATE, fmt, _val);
 	va_end(_val);
@@ -260,7 +260,7 @@ void UnicodeString::Split(vector<UnicodeString> &value, UnicodeString sep) const
 	int pos = 0;
 	while (1)
 	{
-		pos = find_first_of(sep, index);
+		pos = find(sep, index);
 		if (pos == -1)
 		{
 			pos = Len();
@@ -280,7 +280,7 @@ UnicodeString UnicodeString::Replace(UnicodeString fromstr, UnicodeString tostr)
 	int pos = 0;
 	while (1)
 	{
-		pos = find_first_of(fromstr, index);
+		pos = find(fromstr, index);
 		if (pos == -1)
 		{
 			break;

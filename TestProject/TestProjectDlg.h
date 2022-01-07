@@ -4,6 +4,7 @@
 
 #pragma once
 #include "PrintThread.h"
+#include "afxwin.h"
 
 // CTestProjectDlg ¶Ô»°¿ò
 class CTestProjectDlg : public CDialogEx
@@ -38,6 +39,7 @@ public:
 	afx_msg void OnBnClickedButton4();
 	afx_msg void OnBnClickedButton5();
 	afx_msg void OnBnClickedButton6();
+	CEdit m_edit1;
 };
 
 

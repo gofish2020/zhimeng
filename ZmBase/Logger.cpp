@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\include\Logger.h"
 #include "..\include\Stream.h"
+#include "..\include\utils.h"
 namespace
 {
 	static size_t gc_logsbuffersize = 300;
@@ -14,10 +15,9 @@ void Logger::SaveLogs()
 {
 	DateTime d = DateTime::NowDate();
 	UnicodeString fileName;
-	fileName.uprintf_s(L"%04d%02d%02d.log", d.Year(), d.Month(), d.Day());
+	fileName.uprintf_s(L"%s%04d%02d%02d.log",logPath.c_str(),d.Year(),d.Month(),d.Day());
 	FileStream fs;
-
-	fs.Open(L"D:\\" + fileName, fmOpenWrite,_SH_DENYNO);
+	fs.Open(fileName, fmOpenWrite,_SH_DENYNO);
 	for (size_t i = 0; i < c_logs.size();i++)
 	{
 		LogData *d = c_logs[i]; //打开日志文件，写入数据
@@ -48,7 +48,7 @@ void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 	data->ThreadId = ::GetCurrentThreadId();
 	data->ProcessId = ::GetCurrentProcessId();
 	c_logs.push_back(data);//双端队列中保存指针
-	if (c_logs.size() > gc_logsbuffersize)
+	if (c_logs.size() >= gc_logsbuffersize)
 	{
 		SaveLogs();
 	}
@@ -63,11 +63,23 @@ void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 
 Logger::Logger()
 {
+	UnicodeString fileName = ExtractFileName(GetApplicationFullName(), true);
+	logPath = ExtractFilePath(GetApplicationFullName()) + L"\\logs\\";
+	CreateDir(logPath);
+	logPath = logPath + fileName;
 }
 
 Logger::~Logger()
 {
-	SaveLogs();
+	try
+	{
+		SaveLogs();
+	}
+	catch (const std::exception&)
+	{
+
+	}
+	
 }
 
 //---------------------
