@@ -393,6 +393,18 @@ UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep)
 	return temp;
 }
 
+extern AFX_EXT_CLASS UnicodeString operator+(const char* src, const UnicodeString& dest)
+{
+	UnicodeString temp(src);
+	return temp + dest;
+}
+
+extern AFX_EXT_CLASS UnicodeString operator+(const wchar_t* src, const UnicodeString& dest)
+{
+	UnicodeString temp(src);
+	return temp + dest;
+}
+
 /////////////////////////////////////////////////////////
 
 MultiString::MultiString()

@@ -119,7 +119,7 @@ public:
 	ShareMemoryStream& operator<<(const UnicodeString& wstr);
 	/*
 		这里的wstr必须要先分配存储空间 
-		UnicodeString wstr(10,L'\0');//分配10字符的存储空间
+		UnicodeString wstr(10,L'\0');//分配10字符的存储空间,表示读取10个字符
 	*/
 	ShareMemoryStream& operator>>(UnicodeString& wstr);
 

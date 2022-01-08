@@ -195,6 +195,7 @@
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Mutex.cpp" />
+    <ClCompile Include="Snowflake.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -212,6 +213,7 @@
     <ClInclude Include="..\include\DateTime.h" />
     <ClInclude Include="..\include\Logger.h" />
     <ClInclude Include="..\include\Mutex.h" />
+    <ClInclude Include="..\include\Snowflake.h" />
     <ClInclude Include="..\include\Stream.h" />
     <ClInclude Include="..\include\Thread.h" />
     <ClInclude Include="..\include\utils.h" />

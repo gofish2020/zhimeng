@@ -3,6 +3,21 @@
 #include "..\include\Logger.h"
 #include <exception>
 #include <direct.h>
+
+
+
+
+
+
+
+
+
+
+extern void CreateGUID()
+{
+
+}
+
 extern AFX_EXT_CLASS void ThrowError(UnicodeString err)
 {
 	throw std::exception(string(err).c_str());

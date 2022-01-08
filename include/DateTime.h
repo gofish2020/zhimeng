@@ -51,7 +51,8 @@ public:
 	UnicodeString ToTimeStr() const;
 	UnicodeString ToDateInteger() const;
 	UnicodeString ToDateTimeInteger() const;
-	__time64_t UnixTimeStamp() const;
+	__time64_t UnixTimeStamp() const; //√Î
+	__time64_t UnixMSec() const; //∫¡√Î
 
 	DateTime& operator=(const UnicodeString& Src) throw();
 	DateTime& operator=(const int Src) throw();

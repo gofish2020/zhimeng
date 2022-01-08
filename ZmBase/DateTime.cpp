@@ -207,6 +207,14 @@ __time64_t DateTime::UnixTimeStamp() const
 	return cTime.GetTime();
 }
 
+__time64_t DateTime::UnixMSec() const
+{
+	SYSTEMTIME stLocal;
+	GetAsSystemTime(stLocal);
+	CTime cTime(stLocal);
+	return cTime.GetTime()*1000 + stLocal.wMilliseconds;
+}
+
 DateTime DateTime::operator-(const DateTime& rhs) const
 {
 	return m_dt - rhs.m_dt;

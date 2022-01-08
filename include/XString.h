@@ -66,8 +66,12 @@ public:
 	
 };
 
+//用指定分隔符拼接
 extern AFX_EXT_CLASS UnicodeString Join(vector<UnicodeString> elems, UnicodeString sep);
 
+//运算符重载，支持【指针和UnicodeString】的拼接
+extern AFX_EXT_CLASS UnicodeString operator+(const char* src,const UnicodeString& dest);
+extern AFX_EXT_CLASS UnicodeString operator+(const wchar_t* src, const UnicodeString& dest);
 
 class AFX_EXT_CLASS MultiString :public string
 {

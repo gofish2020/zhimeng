@@ -29,6 +29,11 @@ Thread::~Thread()
 	Wait();
 }
 
+void Thread::RegisterNotifition(ThreadNotifition *event)
+{
+	c_ThreadNotifition = event;
+}
+
 void Thread::Resume()
 {
 	ResumeThread(c_handle);
@@ -63,6 +68,6 @@ DWORD WINAPI Thread::ThreadProc(LPVOID lpvThreadParm)
 {
 	Thread *pThread = static_cast<Thread*>(lpvThreadParm);
 	pThread->OnExecute();
-	pThread->OnTerminate();
+	pThread->c_ThreadNotifition->OnTerminate();
 	return 0;
 }

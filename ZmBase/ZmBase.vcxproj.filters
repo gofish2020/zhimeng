@@ -48,6 +48,9 @@
     <ClCompile Include="Mutex.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Snowflake.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ZmBase.def">
@@ -92,6 +95,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Mutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Snowflake.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
