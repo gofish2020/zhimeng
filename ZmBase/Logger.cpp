@@ -27,12 +27,10 @@ void Logger::SaveLogs()
 	c_logs.clear();
 }
 
-Logger* Logger::s_Logger = nullptr;
+Logger Logger::s_Logger;
 Logger* Logger::Instance()
 {
-	if (s_Logger == nullptr)
-		s_Logger = new Logger();
-	return s_Logger;
+	return &s_Logger;
 }
 
 

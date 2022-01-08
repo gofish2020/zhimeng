@@ -23,16 +23,14 @@ class AFX_EXT_CLASS Logger
 public:
 	static Logger* Instance();
 	void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg);
-
 private:
 	void SaveLogs();
 private:
 	std::deque<LogData*>c_logs;
 	CriticalSection cs;
-	static Logger* s_Logger;
+	static Logger s_Logger; //static Logger *s_Logger 这种形式，否则析构函数在进程退出，不会自动调用 good job~~
 	Logger();
 	virtual ~Logger();
-
 	UnicodeString logPath;
 };
 
