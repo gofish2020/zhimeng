@@ -19,7 +19,7 @@ Snowflake::Snowflake(INT64 workerid )
 	CMaxWorker = 0x3ff;
 
 	lastTimeStamp = -1;
-	CTimeStampMax = -1 ^ (-1 << 41);//最多占用41位
+	CTimeStampMax = (INT64(-1) << 41) ^ INT64(-1)  ;//最多占用41位
 
 	c_workerid = workerid;
 	c_sequence = 0;
@@ -33,7 +33,7 @@ Snowflake::~Snowflake()
 INT64 Snowflake::NextId()
 {
 	cs.Locked();
-	INT64 now = DateTime::NowDateTime().UnixMSec(); //毫秒
+	INT64 now = DateTime::NowUnixMSecond(); //毫秒
 	if (now == lastTimeStamp)
 	{
 		c_sequence = (c_sequence + 1) & CSequenceMask;
@@ -41,7 +41,7 @@ INT64 Snowflake::NextId()
 		{
 			for (;;)
 			{
-				now = DateTime::NowDateTime().UnixMSec();
+				now = DateTime::NowUnixMSecond();
 				if (now > lastTimeStamp)
 				{
 					break;
@@ -67,6 +67,7 @@ INT64 Snowflake::NextId()
 		return 0;
 	}
 
+	//最高位不使用，为0
 	now = (now - c_Epoch) << CTimeStampShift | c_workerid << CWorkerIdShift | c_sequence;
 	cs.UnLocked();
 	return now;

@@ -46,13 +46,14 @@ public:
 	static DateTime NowDate();
 	static DateTime NowDateTime();
 	static DateTime NowTime();
+	static __time64_t NowUnixMSecond() ; //获取当前时间经过的（毫秒）
 	UnicodeString ToDateStr() const;
 	UnicodeString ToDateTimeStr() const;
 	UnicodeString ToTimeStr() const;
 	UnicodeString ToDateInteger() const;
 	UnicodeString ToDateTimeInteger() const;
 	__time64_t UnixTimeStamp() const; //秒
-	__time64_t UnixMSec() const; //毫秒
+	
 
 	DateTime& operator=(const UnicodeString& Src) throw();
 	DateTime& operator=(const int Src) throw();

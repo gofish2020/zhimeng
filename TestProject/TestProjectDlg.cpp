@@ -448,6 +448,9 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+
+	INT64 GUID = CreateGUID();
+	return;
 	for (int i = 0; i < 500; i++)
 	{
 		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");

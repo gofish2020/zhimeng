@@ -3,19 +3,12 @@
 #include "..\include\Logger.h"
 #include <exception>
 #include <direct.h>
+#include "..\include\Snowflake.h"
 
 
-
-
-
-
-
-
-
-
-extern void CreateGUID()
+extern INT64 CreateGUID()
 {
-
+	return GetSnowflake()->NextId();
 }
 
 extern AFX_EXT_CLASS void ThrowError(UnicodeString err)

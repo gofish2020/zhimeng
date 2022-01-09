@@ -148,7 +148,9 @@ DateTime DateTime::NowDate()
 
 DateTime DateTime::NowDateTime()
 {
-	return COleDateTime::GetCurrentTime();
+	_SYSTEMTIME sysTime;
+	GetLocalTime(&sysTime);
+	return DateTime(sysTime);
 }
 
 DateTime DateTime::NowTime()
@@ -156,6 +158,14 @@ DateTime DateTime::NowTime()
 	DATE d = COleDateTime::GetCurrentTime().m_dt;
 	int t = (int)d;
 	return d-t;
+}
+
+__time64_t DateTime::NowUnixMSecond()
+{
+	_SYSTEMTIME sysTime;
+	GetLocalTime(&sysTime);
+	CTime cTime(sysTime);
+	return cTime.GetTime() * 1000 + sysTime.wMilliseconds;
 }
 
 UnicodeString DateTime::ToDateStr() const
@@ -207,13 +217,7 @@ __time64_t DateTime::UnixTimeStamp() const
 	return cTime.GetTime();
 }
 
-__time64_t DateTime::UnixMSec() const
-{
-	SYSTEMTIME stLocal;
-	GetAsSystemTime(stLocal);
-	CTime cTime(stLocal);
-	return cTime.GetTime()*1000 + stLocal.wMilliseconds;
-}
+
 
 DateTime DateTime::operator-(const DateTime& rhs) const
 {
