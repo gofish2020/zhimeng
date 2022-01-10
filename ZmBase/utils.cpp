@@ -11,6 +11,11 @@ extern INT64 CreateGUID()
 	return GetSnowflake()->NextId();
 }
 
+extern AFX_EXT_CLASS UnicodeString CreateGUIDStr()
+{
+	return UnicodeString(CreateGUID());
+}
+
 extern AFX_EXT_CLASS void ThrowError(UnicodeString err)
 {
 	throw std::exception(string(err).c_str());

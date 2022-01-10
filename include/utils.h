@@ -4,6 +4,7 @@
 
 
 extern AFX_EXT_CLASS INT64 CreateGUID();
+extern AFX_EXT_CLASS UnicodeString CreateGUIDStr();
 
 extern AFX_EXT_CLASS void ThrowError(UnicodeString err);
 extern AFX_EXT_CLASS UnicodeString GetLastErrorStr(UnicodeString funcname, UnicodeString desc = L"");
