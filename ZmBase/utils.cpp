@@ -8,7 +8,7 @@
 
 extern INT64 CreateGUID()
 {
-	return GetSnowflake()->NextId();
+	return Snowflake::GetSnowflake()->NextId();
 }
 
 extern AFX_EXT_CLASS UnicodeString CreateGUIDStr()

@@ -7,11 +7,14 @@ desc:飘雪算法，生成guid
 #include "..\include\CriticalSection.h"
 class Snowflake
 {
+
 public:
-	Snowflake(INT64 workerid);//取值范围[0,0x3ff]占用CWorkerIdBits位（10位）
+	static Snowflake* GetSnowflake(INT64 workid = 1);
+private:
+	Snowflake(INT64 workerid);//取值范围[0,0x3ff]占用CWorkerIdBits位（10位） //只能通过下面提供的外部函数接口，创建Snowflake对象
 	virtual ~Snowflake();
+public:
 	INT64 NextId();
-	
 private:
 	CriticalSection cs;
 	int CWorkerIdBits; //workerid占的位数
@@ -30,4 +33,5 @@ private:
 	INT64 lastTimeStamp;
 };
 
-extern Snowflake* GetSnowflake(INT64 workid = 1);
+
+

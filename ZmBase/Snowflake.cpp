@@ -76,7 +76,7 @@ INT64 Snowflake::NextId()
 
 map<INT64, Snowflake*>snowMap;
 
-extern Snowflake* GetSnowflake(INT64 workid)
+Snowflake* Snowflake::GetSnowflake(INT64 workid)
 {
 	if (workid > 0x3ff || workid < 0 )
 	{
