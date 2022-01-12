@@ -72,6 +72,7 @@ BOOL CTestProjectApp::InitInstance()
 
 	CTestProjectDlg dlg;
 	m_pMainWnd = &dlg;
+	AfxGetApp()->m_pMainWnd;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
