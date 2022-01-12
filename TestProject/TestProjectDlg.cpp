@@ -11,6 +11,7 @@
 #include "..\include\Stream.h"
 #include "..\include\utils.h"
 #include "..\include\Logger.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -110,7 +111,7 @@ BOOL CTestProjectDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -330,7 +331,14 @@ void CTestProjectDlg::OnBnClickedButton4()
 void CTestProjectDlg::OnBnClickedButton5()
 {
 	// TODO: 在此添加控件通知处理程序代码
-
+	UpdateData(true);
+	if (mu.Create(L"xiaobaitu", false)){
+		mu.Wait();
+		SetDlgItemText(IDC_EDIT1, L"your text");
+		mu.Release();
+	}
+	UpdateData(FALSE);
+	return;
 // 	UnicodeString a = DateTime::NowDate().ToDateTimeStr();
 // 	UnicodeString b = DateTime::NowDateTime().ToDateTimeStr();
 // 
@@ -445,10 +453,23 @@ extern AFX_EXT_CLASS bool RemoveEmptyDir(const UnicodeString& dirpath);
 extern AFX_EXT_CLASS bool DeleteDir(const UnicodeString& dirpath);
 extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 */
+
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	
+	if (mu.Create(L"xiaobaitu"))
+	{
+		mu.Wait();
+		Sleep(5000);
+		mu.Release();
+	}
+	
 
+
+
+
+	return;
 	INT64 GUID = CreateGUID();
 	return;
 	for (int i = 0; i < 500; i++)
@@ -576,22 +597,3 @@ void CTestProjectDlg::OnBnClickedButton6()
 	
 }
 
-A::A()
-{
-
-}
-
-A::~A()
-{
-
-}
-
-
-
-MyC::MyC()
-{
-}
-
-MyC::~MyC()
-{
-}

@@ -2,6 +2,7 @@
 #include "..\include\Mutex.h"
 #include "..\include\Logger.h"
 #include "..\include\utils.h"
+
 Mutex::Mutex()
 {
 	c_mutex = nullptr;
@@ -10,27 +11,28 @@ Mutex::Mutex()
 
 Mutex::~Mutex()
 {
-	UnLocked();
+	Close();
 }
 
-bool Mutex::Locked(UnicodeString name)
+int Mutex::Create(UnicodeString name, bool isClosed /*= true */)
 {
 	try
 	{
 		c_mutex = CreateMutex(nullptr, false, name.c_str());
 		if (c_mutex == nullptr)
 		{
-			LOGERROR(L"Mutex::Locked",GetLastErrorStr("CreateMutex"));
-			return false;
+			LOGERROR(L"Mutex::Open",GetLastErrorStr("CreateMutex"));
+			return 0;
 		}
 		else
 		{
 			if ( GetLastError() == ERROR_ALREADY_EXISTS )
 			{
-				return false;
+				return 2;
 			}
 		}
-		return true;
+		c_isClose = isClosed;
+		return 1;
 	}
 	catch (const std::exception& e)
 	{
@@ -38,16 +40,33 @@ bool Mutex::Locked(UnicodeString name)
 	}
 	catch (...)
 	{
-		LOGERROR("Mutex::Locked", "未知的异常错误");
+		LOGERROR("Mutex::Open", "未知的异常错误");
+	}
+	return 0;
+}
+
+bool Mutex::Wait()
+{
+	DWORD d = WaitForSingleObject(c_mutex, INFINITE);
+	if (WAIT_OBJECT_0 == d)
+	{
+		return true;
 	}
 	return false;
 }
 
-void Mutex::UnLocked()
+int Mutex::Release()
 {
-	if (c_mutex != nullptr)
+	return ReleaseMutex(c_mutex);
+}
+
+int Mutex::Close()
+{
+	int ret = 1;
+	if (c_mutex != nullptr && c_isClose)
 	{
-		CloseHandle(c_mutex);
+		ret = CloseHandle(c_mutex);
 		c_mutex = nullptr;
 	}
+	return ret;
 }

@@ -1,11 +1,10 @@
 /*
-author:nash
+coder:nash
 date:2022/1/6
 desc:跨进程互斥锁
 
 https://docs.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-createmutexa
 
-https://blog.csdn.net/lwx309025167/article/details/78252015?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&utm_relevant_index=2
 */
 
 #pragma once
@@ -16,10 +15,11 @@ class AFX_EXT_CLASS Mutex
 public:
 	Mutex();
 	virtual ~Mutex();
-	bool Open(UnicodeString name,bool );
-	bool Wait();
-	bool Release();
-	void Close();
+	int Create(UnicodeString name,bool isClosed = true); //0 失败 1 成功 2 已存在
+	bool Wait(); //拥有mutex
+	int Release();//释放拥有权
+	int Close();
 private:
 	HANDLE c_mutex;
+	bool c_isClose;
 };
