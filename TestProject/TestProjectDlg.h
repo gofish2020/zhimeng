@@ -99,3 +99,50 @@ private:
 
 };
 
+
+
+struct Mys {
+	int a;
+	int b;
+};
+
+
+struct Myss {
+	int m;
+};
+
+class MyC1 :public Myss,public Mys  {
+public:
+	int c;
+	void Init() {
+		memset(this, 0, sizeof(Mys));
+	}
+};
+
+
+
+
+class Base {
+public:
+	int a;
+	int b;
+	void real() {
+		Sum(1);
+
+
+	};
+	virtual void Sum(int x ) {};
+};
+
+
+class product :virtual public Base { 
+public:
+	int m;
+	int n;
+	//virtual void Sub(int x) {};
+	virtual void Sum(int x) {};
+
+	void real() {
+		Sum(1);
+	};
+};

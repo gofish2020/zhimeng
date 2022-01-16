@@ -454,9 +454,24 @@ extern AFX_EXT_CLASS bool DeleteDir(const UnicodeString& dirpath);
 extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 */
 
+
+
+
+
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	COleVariant csa;
+	Base * ba = new product();
+	ba->real();
+
+	MyC1 fd;
+	fd.c = 1;
+	fd.a = 2;
+	fd.b = 3;
+	fd.m = 4;
+	fd.Init();
+	return;
 	
 	if (mu.Create(L"xiaobaitu"))
 	{
