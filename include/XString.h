@@ -16,7 +16,9 @@ public:
 	UnicodeString(const wstring);
 	UnicodeString(const string);
 	UnicodeString(char);
+	UnicodeString(BYTE b);
 	UnicodeString(short);
+	UnicodeString(unsigned short us);
 	UnicodeString(int);
 	UnicodeString(unsigned int);
 	UnicodeString(long);
@@ -29,8 +31,23 @@ public:
 	int uprintf_s(const wchar_t *fmt, ...);
 	UnicodeString& operator=(const wstring);
 	UnicodeString& operator=(const string);
+	UnicodeString& operator=(const wchar_t src);
 	UnicodeString& operator=(const char*);
 	UnicodeString& operator=(const wchar_t*);
+	UnicodeString& operator=(const char&);
+	UnicodeString& operator=(const BYTE&);
+	UnicodeString& operator=(const short&);
+	UnicodeString& operator=(const unsigned short&);
+	UnicodeString& operator=(const int&);
+	UnicodeString& operator=(const unsigned int&);
+	UnicodeString& operator=(const long&);
+	UnicodeString& operator=(const unsigned long&);
+	UnicodeString& operator=(const __int64&);
+	UnicodeString& operator=(const unsigned __int64&);
+	UnicodeString& operator=(const float&);
+	UnicodeString& operator=(const double&);
+	
+
 	UnicodeString& operator=(const UnicodeString&);
 	UnicodeString& operator+=(const UnicodeString&);
 	UnicodeString operator+(const wstring);

@@ -11,7 +11,7 @@
 #include "..\include\Stream.h"
 #include "..\include\utils.h"
 #include "..\include\Logger.h"
-
+#include "..\include\XVariant.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -456,159 +456,244 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 
 
 
-
+// XVariant& operator =(const XVariant& src); //如果有自定义类型，需要修改该函数
+// XVariant& operator =(const UnicodeString& src);
+// XVariant& operator =(const string& src);
+// XVariant& operator =(const DateTime& src);
+// XVariant& operator=(char src);
+// XVariant& operator=(BYTE src);
+// XVariant& operator =(wchar_t src);
+// XVariant& operator =(bool src);
+// XVariant& operator =(int src);
+// XVariant& operator =(short src);
+// XVariant& operator =(long src);
+// XVariant& operator =(__int64 src);
+// XVariant& operator =(unsigned int src);
+// XVariant& operator =(unsigned short src);
+// XVariant& operator =(unsigned long src);
+// XVariant& operator =(unsigned __int64 src);
+// XVariant& operator =(float fltSrc);
+// XVariant& operator =(double dblSrc);
+// XVariant& operator =(char* src);
+// XVariant& operator =(BYTE* src);
+// XVariant& operator =(int* src);
+// XVariant& operator =(long* src);
+// XVariant& operator =(float* src);
+// XVariant& operator =(double* src);
+// XVariant& operator =(void *src);
 
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
-	COleVariant csa;
-	Base * ba = new product();
-	ba->real();
-
-	MyC1 fd;
-	fd.c = 1;
-	fd.a = 2;
-	fd.b = 3;
-	fd.m = 4;
-	fd.Init();
-	return;
-	
-	if (mu.Create(L"xiaobaitu"))
-	{
-		mu.Wait();
-		Sleep(5000);
-		mu.Release();
-	}
-	
-
-
+	UnicodeString usss1(char(64));
+	UnicodeString usss2(short(-1));
+	UnicodeString usss(BYTE(-1));
+	UnicodeString sdf(unsigned short(-1));
 
 
 	return;
-	INT64 GUID = CreateGUID();
-	return;
-	for (int i = 0; i < 500; i++)
-	{
-		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");
-	}
+	DateTime dd = DateTime::NowDateTime();
+	XVariant a;
+	a = dd;
+	UnicodeString ustr = L"123中";
+	a = ustr;
+	string sstr = "重点123";
+	a = sstr;
+	char c = 'z';
+	a = c;
+
+	BYTE b = 0x89;
+	a = b;
+
+	wchar_t wc = L'中';
+	a = wc;
+	bool bl = true;
+	a = bl;
+	int i = 90;
+	a = i;
+	short si = 88;
+	a = si;
+
+	long ll = 888;
+	a = ll;
+	__int64 _i = 123;
+	a = _i;
+	unsigned int ui = 123;
+	a = ui;
+	unsigned short us = 14343;
+	a = us;
+	unsigned long ul = 34343;
+	a = ul;
+	unsigned __int64 u_i = 234324;
+	a = u_i;
+	float ff = 1.002;
+	a = ff;
+	double db = 1.2201;
+	a = db;
+
+	a = &ff;
+	a = ustr.c_str();
+	a = sstr.c_str();
+	// XVariant& operator =(int src);
+	// XVariant& operator =(short src);
+	// XVariant& operator =(long src);
+	// XVariant& operator =(__int64 src);
+	// XVariant& operator =(unsigned int src);
+	// XVariant& operator =(unsigned short src);
+	// XVariant& operator =(unsigned long src);
+	// XVariant& operator =(unsigned __int64 src);
+	// XVariant& operator =(float fltSrc);
+	// XVariant& operator =(double dblSrc);
 
 	return;
-
-// 	UnicodeString path = GetApplicationFullName();
+// 	COleVariant csa;
+// 	Base * ba = new product();
+// 	ba->real();
+// 
+// 	MyC1 fd;
+// 	fd.c = 1;
+// 	fd.a = 2;
+// 	fd.b = 3;
+// 	fd.m = 4;
+// 	fd.Init();
 // 	return;
-	bool adfasdf = CreateDir(L"D:\\hello\\hello");
-	DeleteDir(L"D:\\hello");
-	vector<UnicodeString> res;
-	TraverselFiles(L"D:\\hello",res,L"exe",true);
-	TraverselFiles(L"D:\\hello", res, L"exe", false);
-	TraverselFiles(L"D:\\hello", res,L"",false);
-
-	UnicodeString filePaht = L"D:\\1.log";
-	bool isOk = FileExist(filePaht);
-
-	
-
-
-	return;
-	// TODO: 在此添加控件通知处理程序代码
-
-	FileStream fs1;
-	fs1.Open("d:\\20220106.log", fmOpenRead);
-	fs1.SetCursor(0);
-	UnicodeString aa;
-	fs1 >> aa;
-
-
-	
-
-	char aaa[20] = { 0 };
-	FileStream fs;
-	fs.Open("d:\\2.log", fmOpenReadWrite | Filebinary, _SH_DENYNO);
-	int pos = fs.GetCursor();
-	fs.Read(aaa, 2);
-	fs.Seek(0, SeekBegin);
-	pos = fs.GetCursor();
-	fs.Read(aaa, 2);
-	pos = fs.GetCursor();
-	fs.Write("aa", 2);
-	fs.Seek(0, SeekBegin);
-	pos = fs.GetCursor();
-	fs.Read(aaa, 2);
-	pos = fs.GetCursor();
-	fs.Close();
-	//fs.SetCursor(1);
-	//int pos1 = fs.GetCursor();
-	//fs.Write("aa", 2);
-	//fs.Close();
-
-	//int size = fs.GetSize();
-	//int pos = fs.GetCursor();
-	fs.SetCursor(2);
-	
-	pos = fs.GetCursor();
-	pos = fs.GetCursor();
-	fs.Read(aaa, 2);
-	fs.SetCursor(5 );
-	pos = fs.GetCursor();
-	pos = fs.GetCursor();
-	fs.Read(aaa, 2);
-	//fs.Seek(0, SeekEnd);
-	fs.Write("aa", 2);
-	pos = fs.GetCursor();
-	pos = fs.GetCursor();
-	fs.Close();
-	fs.Read(aaa, 20);
-	return;
-
-	ShareMemoryStream sms("nash-share", 2);
-	sms << L"a";
-
-
-	UnicodeString result(1, L'\0');
-	sms.SetCursor(0);
-	sms >> result;
-
-
-
-	UnicodeString sss(1, L'\0');
-	ShareMemoryStream copyShare("nash-share");
-	copyShare.SetCursor(0);
-	copyShare >> sss;
-
-// 	UINT32 c[10];
-// 	for (int i = 0; i < 10;i++)
+// 	
+// 	if (mu.Create(L"xiaobaitu"))
 // 	{
-// 		*(c + i) = i;
+// 		mu.Wait();
+// 		Sleep(5000);
+// 		mu.Release();
 // 	}
-// 	UINT32 *ss = c + sizeof(UINT32);
-// 	UINT32 a = *(c + sizeof(UINT32));
-// 	int aaa = sizeof(wchar_t);
-// 	char str[7] = { 'a','b','d','&','1','2','3' };
+// 	
 // 
-// 	UnicodeString us = L"abd&123";
-// 	MemoryStream ms;
-// 	ms.Write((void*)us.c_str(),us.Len() *2 );
-// 	ms.SetCursor(0);
-// 	wchar_t sss[10] = {'\0'};
-// 	ms.Read(sss, 10);
 // 
-// 	MyC mc;
-// 	mc.read();
-// 	int aaaa = mc.Print();
-
-	try
-	{
-		TestError();
-	}
-	catch (const std::exception& e)
-	{
-		LOGEXCEPTION(e);
-	}
-	catch (...)
-	{
-	}
-
-	UnicodeString err = GetLastErrorStr("GetLastErrorStr","sdefsdfds");
+// 
+// 
+// 	return;
+// 	INT64 GUID = CreateGUID();
+// 	return;
+// 	for (int i = 0; i < 500; i++)
+// 	{
+// 		LOGINFO("中国", "dsfjlsjflsdjflsdl好浪费是代理发号施令 色调分离123123123");
+// 	}
+// 
+// 	return;
+// 
+// // 	UnicodeString path = GetApplicationFullName();
+// // 	return;
+// 	bool adfasdf = CreateDir(L"D:\\hello\\hello");
+// 	DeleteDir(L"D:\\hello");
+// 	vector<UnicodeString> res;
+// 	TraverselFiles(L"D:\\hello",res,L"exe",true);
+// 	TraverselFiles(L"D:\\hello", res, L"exe", false);
+// 	TraverselFiles(L"D:\\hello", res,L"",false);
+// 
+// 	UnicodeString filePaht = L"D:\\1.log";
+// 	bool isOk = FileExist(filePaht);
+// 
+// 	
+// 
+// 
+// 	return;
+// 	// TODO: 在此添加控件通知处理程序代码
+// 
+// 	FileStream fs1;
+// 	fs1.Open("d:\\20220106.log", fmOpenRead);
+// 	fs1.SetCursor(0);
+// 	UnicodeString aa;
+// 	fs1 >> aa;
+// 
+// 
+// 	
+// 
+// 	char aaa[20] = { 0 };
+// 	FileStream fs;
+// 	fs.Open("d:\\2.log", fmOpenReadWrite | Filebinary, _SH_DENYNO);
+// 	int pos = fs.GetCursor();
+// 	fs.Read(aaa, 2);
+// 	fs.Seek(0, SeekBegin);
+// 	pos = fs.GetCursor();
+// 	fs.Read(aaa, 2);
+// 	pos = fs.GetCursor();
+// 	fs.Write("aa", 2);
+// 	fs.Seek(0, SeekBegin);
+// 	pos = fs.GetCursor();
+// 	fs.Read(aaa, 2);
+// 	pos = fs.GetCursor();
+// 	fs.Close();
+// 	//fs.SetCursor(1);
+// 	//int pos1 = fs.GetCursor();
+// 	//fs.Write("aa", 2);
+// 	//fs.Close();
+// 
+// 	//int size = fs.GetSize();
+// 	//int pos = fs.GetCursor();
+// 	fs.SetCursor(2);
+// 	
+// 	pos = fs.GetCursor();
+// 	pos = fs.GetCursor();
+// 	fs.Read(aaa, 2);
+// 	fs.SetCursor(5 );
+// 	pos = fs.GetCursor();
+// 	pos = fs.GetCursor();
+// 	fs.Read(aaa, 2);
+// 	//fs.Seek(0, SeekEnd);
+// 	fs.Write("aa", 2);
+// 	pos = fs.GetCursor();
+// 	pos = fs.GetCursor();
+// 	fs.Close();
+// 	fs.Read(aaa, 20);
+// 	return;
+// 
+// 	ShareMemoryStream sms("nash-share", 2);
+// 	sms << L"a";
+// 
+// 
+// 	UnicodeString result(1, L'\0');
+// 	sms.SetCursor(0);
+// 	sms >> result;
+// 
+// 
+// 
+// 	UnicodeString sss(1, L'\0');
+// 	ShareMemoryStream copyShare("nash-share");
+// 	copyShare.SetCursor(0);
+// 	copyShare >> sss;
+// 
+// // 	UINT32 c[10];
+// // 	for (int i = 0; i < 10;i++)
+// // 	{
+// // 		*(c + i) = i;
+// // 	}
+// // 	UINT32 *ss = c + sizeof(UINT32);
+// // 	UINT32 a = *(c + sizeof(UINT32));
+// // 	int aaa = sizeof(wchar_t);
+// // 	char str[7] = { 'a','b','d','&','1','2','3' };
+// // 
+// // 	UnicodeString us = L"abd&123";
+// // 	MemoryStream ms;
+// // 	ms.Write((void*)us.c_str(),us.Len() *2 );
+// // 	ms.SetCursor(0);
+// // 	wchar_t sss[10] = {'\0'};
+// // 	ms.Read(sss, 10);
+// // 
+// // 	MyC mc;
+// // 	mc.read();
+// // 	int aaaa = mc.Print();
+// 
+// 	try
+// 	{
+// 		TestError();
+// 	}
+// 	catch (const std::exception& e)
+// 	{
+// 		LOGEXCEPTION(e);
+// 	}
+// 	catch (...)
+// 	{
+// 	}
+// 
+// 	UnicodeString err = GetLastErrorStr("GetLastErrorStr","sdefsdfds");
 	
 }
 

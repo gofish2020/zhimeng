@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "..\include\XString.h"
 using namespace std;
+
+//  https://www.cnblogs.com/bodboy/p/7780373.html
 UnicodeString::~UnicodeString()
 {
 
@@ -11,6 +13,16 @@ UnicodeString::~UnicodeString()
 
 UnicodeString::UnicodeString():wstring()
 {
+}
+
+UnicodeString::UnicodeString(BYTE b)
+{
+	uprintf_s(L"%hhu", b);
+}
+
+UnicodeString::UnicodeString(unsigned short us)
+{
+	uprintf_s(L"%hu", us);
 }
 
 UnicodeString::operator string()
@@ -179,6 +191,78 @@ int UnicodeString::uprintf_s(const wchar_t *fmt,...)
 	wstr.resize(_len);
 	*this = wstr;
 	return _len;
+}
+
+UnicodeString& UnicodeString::operator=(const char& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+
+UnicodeString& UnicodeString::operator=(const BYTE& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+
+
+UnicodeString& UnicodeString::operator=(const short& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+
+UnicodeString& UnicodeString::operator=(const unsigned short& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const int& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const unsigned int& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const long& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const unsigned long& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const __int64& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const unsigned __int64& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const float& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+UnicodeString& UnicodeString::operator=(const double& src)
+{
+	*this = UnicodeString(src);
+	return *this;
+}
+
+
+UnicodeString& UnicodeString::operator=(const wchar_t src)
+{
+	*this = UnicodeString(1, src);
+	return *this;
 }
 
 UnicodeString UnicodeString::operator+(const wchar_t* src)
