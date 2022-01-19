@@ -6,6 +6,7 @@ desc:
 */
 #include "..\include\XString.h"
 #include "..\include\DateTime.h"
+#include "..\include\Stream.h"
 
 /* 
 
@@ -138,7 +139,6 @@ class AFX_EXT_CLASS XVariant: public COleVariant
 {
 public:
 	~XVariant();
-
 	XVariant();
 	XVariant(const VARIANT& varSrc);
 	XVariant(LPCVARIANT pSrc);
@@ -186,8 +186,11 @@ public:
 	bool IsNull() const;
 	VARTYPE Type() const;
 
+	static void VrArrayToStream(vector<XVariant> &src, MemoryStream &dest);
+	static void StreamToVrArray(MemoryStream &src,vector<XVariant> &dest );
 
-	XVariant& operator =(const XVariant& src); //如果有自定义类型，需要修改该函数
+	XVariant& operator =(const XVariant& src); //如果有自定义类型，需要修改该函数,负责数据的copy操作
+
 	XVariant& operator =(const UnicodeString& src);
 	XVariant& operator =(const string& src);
 	XVariant& operator =(const DateTime& src);
@@ -214,28 +217,30 @@ public:
 	XVariant& operator =(double* src);
 	XVariant& operator =(void *src);
 
-	operator UnicodeString() const;
-
-// 	operator wchar_t*();
-// 	operator DateTime() const;
-// 	operator bool() const;
-// 	operator BYTE() const;
-// 	operator char() const;
-// 	operator double() const;
-// 	operator float() const;
-// 	operator int() const;
-// 	operator short() const;
-// 	operator long() const;
-// 	operator unsigned int() const;
-// 	operator unsigned short() const;
-// 	operator unsigned long() const;
-// 	operator void*();
-
+	operator UnicodeString() const;  //只转化了基本类型到UnicodeString
+ 	operator wchar_t*() ; //这里有修改内部变量，不用const进行限定
+ 	operator DateTime() const;
+	operator bool() const;
+	operator BYTE() const;
+	operator char() const;
+	operator double() const;
+	operator float() const;
+	operator int() const;
+	operator short() const;
+	operator long() const;
+	operator unsigned int() const;
+	operator unsigned short() const;
+	operator unsigned long() const;
+	operator void*();
+private:
+	UnicodeString Variant2UnicodeString() const;
 private:
 
 	VARTYPE _type;
 	union {
 		wchar_t wch;
 	};
+
+	UnicodeString c_UnicodeString;
 };
 

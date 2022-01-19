@@ -78,7 +78,9 @@ public:
 	int ToInt(int _Base = 10) const;
  	unsigned int ToUInt(int _Base = 10) const;
  	__int64 ToInt64(int _Base = 10) const;
+	unsigned __int64 ToUInt64(int _Base = 10) const;
  	double ToDouble() const;
+	double ToFloat() const;
 	long double ToLongDouble() const;
 	
 };

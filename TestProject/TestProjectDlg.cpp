@@ -485,6 +485,13 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+
+	char ccc = -1;
+	BYTE bbbb = 0xff;
+	BYTE ffdf = ccc;
+	unsigned long llll = (unsigned long)ccc;
+	long lll2l = (long)bbbb;
+	return;
 	UnicodeString usss1(char(64));
 	UnicodeString usss2(short(-1));
 	UnicodeString usss(BYTE(-1));

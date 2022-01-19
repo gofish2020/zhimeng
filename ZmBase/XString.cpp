@@ -413,11 +413,20 @@ __int64 UnicodeString::ToInt64(int _Base /*= 10*/) const
 	return stoll(c_str(), nullptr, _Base);
 }
 
+unsigned __int64 UnicodeString::ToUInt64(int _Base /*= 10*/) const
+{
+	return stoull(c_str(), nullptr, _Base);
+}
+
 double UnicodeString::ToDouble() const
 {
 	return stod(c_str(), nullptr);
 }
 
+double UnicodeString::ToFloat() const
+{
+	return stof(c_str(), nullptr);
+}
 long double UnicodeString::ToLongDouble() const
 {
 	return stold(c_str(), nullptr);

@@ -317,6 +317,117 @@ VARTYPE XVariant::Type() const
 	return vt;
 }
 
+void XVariant::VrArrayToStream(vector<XVariant> &src, MemoryStream &dest)
+{
+	for (int i = 0; i < src.size();i++)
+	{
+		UINT16 tp = src[i].Type();
+		switch (tp)
+		{
+		case VT_I1:
+		{
+			dest << tp;
+			dest << V_I1(&src[i]);
+			break;
+		}
+		case VT_I2:
+		{
+			dest << tp;
+			dest << V_I2(&src[i]);
+			break;
+		}
+		case VT_I4:
+		{
+			dest << tp;
+			dest << V_I4(&src[i]);
+			break;
+		}
+		case VT_I8:
+		{
+			dest << tp;
+			dest << V_I8(&src[i]);
+			break;
+		}
+		case VT_BOOL:
+		{
+			dest << tp;
+			dest << V_BOOL(&src[i]);
+			break;
+		}
+		case VT_UI1:
+		{
+			dest << tp;
+			dest << V_UI1(&src[i]);
+			break;
+		}
+		case VT_UI2:
+		{
+			dest << tp;
+			dest << V_UI2(&src[i]);
+			break;
+		}
+		case VT_UI4:
+		{
+			dest << tp;
+			dest << V_UI4(&src[i]);
+			break;
+		}
+		case VT_UI8:
+		{
+			dest << tp;
+			dest << V_UI8(&src[i]);
+			break;
+		}
+		case VT_R4:
+		{
+			dest << tp;
+			dest << V_R4(&src[i]);
+			break;
+		}
+		case VT_R8:
+		{
+			dest << tp;
+			dest << V_R8(&src[i]);
+			break;
+		}
+		case VT_BSTR:
+		{
+			dest << tp;
+			UnicodeString temp = UnicodeString(V_BSTR(&src[i]));
+			dest << UINT32(temp.length());
+			dest << temp;
+			break;
+		}
+		case VT_DATE:
+		{
+			dest << tp;
+			dest << V_DATE(&src[i]);
+			break;
+		}
+		}
+	}
+}
+
+void XVariant::StreamToVrArray(MemoryStream &src, vector<XVariant> &dest)
+{
+	while (src.GetCursor() < src.GetSize())
+	{
+		UINT16 type = 0;
+		src >> type;
+		switch (type)
+		{
+		case VT_BOOL:
+		{
+			XVariant temp;
+			src >> V_BOOL(&temp);
+			dest.push_back(temp);
+		}
+		default:
+			break;
+		}
+	}
+}
+
 XVariant& XVariant::operator=(const wchar_t* src)
 {
 	*this = XVariant(src);
@@ -490,6 +601,459 @@ XVariant::~XVariant()
 
 XVariant::operator UnicodeString() const
 {
+	UnicodeString result = Variant2UnicodeString();
+
+	return result;
+}
+
+
+XVariant::operator wchar_t*() 
+{
+	c_UnicodeString = Variant2UnicodeString();
+	return const_cast<wchar_t*>(c_UnicodeString.c_str());
+}
+
+XVariant::operator DateTime() const
+{
+	if (VT_DATE ==  V_VT(this))
+	{
+		return DateTime(V_DATE(this));
+	}
+	return DateTime();
+}
+
+XVariant::operator bool() const
+{
+	if (VT_BOOL == V_VT(this))
+	{
+		if (V_BOOL(this) == VARIANT_TRUE)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+
+XVariant::operator BYTE() const
+{
+	if (VT_UI1 == V_VT(this))
+	{
+		return V_UI1(this);
+	}
+	//强制类型转化
+	XVariant varDest;
+	varDest.ChangeType(VT_UI1, (COleVariant*)this);
+	return V_UI1(&varDest);
+}
+
+
+XVariant::operator char() const
+{
+	if (VT_I1 == V_VT(this))
+	{
+		return V_I1(this);
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_I1, (COleVariant*)this);
+	return V_I1(&varDest);
+}
+
+
+XVariant::operator double() const
+{
+	switch (V_VT(this))
+	{
+	case VT_R8:
+		return (double)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1.0 : 0.0;
+	case VT_I1:
+		return (double)V_I1(this);
+	case VT_I2:
+		return (double)V_I2(this);
+	case VT_I4:
+		return (double)V_I4(this);
+	case VT_I8:
+		return (double)V_I8(this);
+	case VT_UI1:
+		return (double)V_UI1(this);
+	case VT_UI2:
+		return (double)V_UI2(this);
+	case VT_UI4:
+		return (double)V_UI4(this);
+	case VT_UI8:
+		return (double)V_UI8(this);
+	case VT_INT:
+		return (double)V_INT(this);
+	case VT_UINT:
+		return (double)V_UINT(this);
+	case VT_R4:
+		return (double)V_R4(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToDouble();
+	}
+
+	XVariant varDest;
+	varDest.ChangeType(VT_R8, (COleVariant*)this);
+	return V_R8(&varDest);
+}
+
+
+XVariant::operator float() const
+{
+	switch (V_VT(this))
+	{
+	case VT_R4:
+		return (double)V_R4(this);
+	case VT_R8:
+		return (double)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1.0 : 0.0;
+	case VT_I1:
+		return (double)V_I1(this);
+	case VT_I2:
+		return (double)V_I2(this);
+	case VT_I4:
+		return (double)V_I4(this);
+	case VT_I8:
+		return (double)V_I8(this);
+	case VT_UI1:
+		return (double)V_UI1(this);
+	case VT_UI2:
+		return (double)V_UI2(this);
+	case VT_UI4:
+		return (double)V_UI4(this);
+	case VT_UI8:
+		return (double)V_UI8(this);
+	case VT_INT:
+		return (double)V_INT(this);
+	case VT_UINT:
+		return (double)V_UINT(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToFloat();
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_R4, (COleVariant*)this);
+	return V_R4(&varDest);
+}
+
+
+XVariant::operator int() const
+{
+	switch (V_VT(this))
+	{
+	case VT_INT:
+		return V_INT(this);
+	case VT_R4:
+		return (int)V_R4(this);
+	case VT_R8:
+		return (int)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (int)V_I1(this);
+	case VT_I2:
+		return (int)V_I2(this);
+	case VT_I4:
+		return (int)V_I4(this);
+	case VT_I8:
+		return (int)V_I8(this);
+	case VT_UI1:
+		return (int)V_UI1(this);
+	case VT_UI2:
+		return (int)V_UI2(this);
+	case VT_UI4:
+		return (int)V_UI4(this);
+	case VT_UI8:
+		return (int)V_UI8(this);
+	case VT_UINT:
+		return (int)V_UINT(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToInt();
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_I4, (COleVariant*)this);
+	return V_I4(&varDest);
+}
+
+
+XVariant::operator short() const
+{
+	switch (V_VT(this))
+	{
+	case VT_INT:
+		return (short)V_INT(this);
+	case VT_R4:
+		return (short)V_R4(this);
+	case VT_R8:
+		return (short)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (short)V_I1(this);
+	case VT_I2:
+		return V_I2(this);
+	case VT_I4:
+		return (short)V_I4(this);
+	case VT_I8:
+		return (short)V_I8(this);
+	case VT_UI1:
+		return (short)V_UI1(this);
+	case VT_UI2:
+		return (short)V_UI2(this);
+	case VT_UI4:
+		return (short)V_UI4(this);
+	case VT_UI8:
+		return (short)V_UI8(this);
+	case VT_UINT:
+		return (short)V_UINT(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToInt();
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_INT, (COleVariant*)this);
+	return V_INT(&varDest);
+}
+
+
+XVariant::operator long() const
+{
+	switch (V_VT(this))
+	{
+	case VT_I4:
+		return V_I4(this);
+	case VT_INT:
+		return (long)V_INT(this);
+	case VT_R4:
+		return (long)V_R4(this);
+	case VT_R8:
+		return (long)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (long)V_I1(this);
+	case VT_I2:
+		return (long)V_I2(this);
+	case VT_I8:
+		return (long)V_I8(this);
+	case VT_UI1:
+		return (long)V_UI1(this);
+	case VT_UI2:
+		return (long)V_UI2(this);
+	case VT_UI4:
+		return (long)V_UI4(this);
+	case VT_UI8:
+		return (long)V_UI8(this);
+	case VT_UINT:
+		return (long)V_UINT(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToInt();
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_INT, (COleVariant*)this);
+	return V_INT(&varDest);
+}
+
+
+
+XVariant::operator unsigned int() const
+{
+	switch (V_VT(this))
+	{
+	case VT_UINT:
+		return V_UINT(this);
+	case VT_I4:
+		return (unsigned int)V_I4(this);
+	case VT_INT:
+		return (unsigned int)V_INT(this);
+	case VT_R4:
+		return (unsigned int)V_R4(this);
+	case VT_R8:
+		return (unsigned int)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (unsigned int)V_I1(this);
+	case VT_I2:
+		return (unsigned int)V_I2(this);
+	case VT_I8:
+		return (unsigned int)V_I8(this);
+	case VT_UI1:
+		return (unsigned int)V_UI1(this);
+	case VT_UI2:
+		return (unsigned int)V_UI2(this);
+	case VT_UI4:
+		return (unsigned int)V_UI4(this);
+	case VT_UI8:
+		return (unsigned int)V_UI8(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToUInt();
+	}
+
+	XVariant varDest;
+	varDest.ChangeType(VT_UINT, (COleVariant*)this);
+	return V_UINT(&varDest);
+}
+
+
+XVariant::operator unsigned short() const
+{
+	switch (V_VT(this))
+	{
+	case VT_UI2:
+		return V_UI2(this);
+	case VT_UINT:
+		return (unsigned short)V_UINT(this);
+	case VT_I4:
+		return (unsigned short)V_I4(this);
+	case VT_INT:
+		return (unsigned short)V_INT(this);
+	case VT_R4:
+		return (unsigned short)V_R4(this);
+	case VT_R8:
+		return (unsigned short)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (unsigned short)V_I1(this);
+	case VT_I2:
+		return (unsigned short)V_I2(this);
+	case VT_I8:
+		return (unsigned short)V_I8(this);
+	case VT_UI1:
+		return (unsigned short)V_UI1(this);
+	
+	case VT_UI4:
+		return (unsigned short)V_UI4(this);
+	case VT_UI8:
+		return (unsigned short)V_UI8(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToUInt();
+	}
+
+	XVariant varDest;
+	varDest.ChangeType(VT_UI2, (COleVariant*)this);
+	return V_UI2(&varDest);
+}
+
+XVariant::operator unsigned long() const
+{
+	switch (V_VT(this))
+	{
+	case VT_UI4:
+		return V_UI4(this);
+	case VT_UI2:
+		return (unsigned long)V_UI2(this);
+	case VT_UINT:
+		return (unsigned long)V_UINT(this);
+	case VT_I4:
+		return (unsigned long)V_I4(this);
+	case VT_INT:
+		return (unsigned long)V_INT(this);
+	case VT_R4:
+		return (unsigned long)V_R4(this);
+	case VT_R8:
+		return (unsigned long)V_R8(this);
+	case VT_NULL:
+		return 0;
+	case VT_CY:
+	{
+		double x = this->cyVal.int64;
+		x /= 10000;
+		return x;
+	}
+	case VT_BOOL:
+		return (V_BOOL(this) == VARIANT_TRUE) ? 1 : 0;
+	case VT_I1:
+		return (unsigned long)V_I1(this);
+	case VT_I2:
+		return (unsigned long)V_I2(this);
+	case VT_I8:
+		return (unsigned long)V_I8(this);
+	case VT_UI1:
+		return (unsigned long)V_UI1(this);
+	case VT_UI8:
+		return (unsigned long)V_UI8(this);
+	case VT_BSTR:
+		UnicodeString temp = V_BSTR(this);
+		return temp.ToUInt64();
+	}
+	XVariant varDest;
+	varDest.ChangeType(VT_UI4, (COleVariant*)this);
+	return V_UI4(&varDest);
+}
+
+XVariant::operator void*()
+{
+	return this->byref;
+}
+
+UnicodeString XVariant::Variant2UnicodeString() const
+{
 	VARTYPE vt = V_VT(this);
 	UnicodeString result = L"";
 	switch (vt)
@@ -539,7 +1103,7 @@ XVariant::operator UnicodeString() const
 	case VT_DATE:
 		result = DateTime(V_DATE(this)).ToDateTimeStr();
 		break;
-	case  VT_BOOL:
+	case VT_BOOL:
 	{
 		if (V_BOOL(this) == VARIANT_TRUE)
 			return "true";
@@ -550,9 +1114,11 @@ XVariant::operator UnicodeString() const
 	case VT_BSTR:
 		result = UnicodeString(V_BSTR(this));
 		break;
+	case VT_ERROR:
+		result = L"Error:" + UnicodeString((LONG)V_ERROR(this));
+		break;
 	default:
 		break;
 	}
-
 	return result;
 }
