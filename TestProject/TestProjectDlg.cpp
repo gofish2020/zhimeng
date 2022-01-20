@@ -485,6 +485,23 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	vector<XVariant>li;
+
+	li.push_back((int)12);
+	li.push_back(L"ÖÐ¹úÈËÄØ");
+	li.push_back(DateTime(L"2012-02-01"));
+	li.push_back(true);
+	li.push_back('a');
+	li.push_back((BYTE)128);
+
+	MemoryStream ms;
+	XVariant::VrArrayToStream(li, ms);
+	ms.SetCursor(0);
+	vector<XVariant>ree;
+	XVariant::StreamToVrArray(ms, ree);
+
+
+
 
 	char ccc = -1;
 	BYTE bbbb = 0xff;

@@ -102,40 +102,13 @@ char* MemoryStream::Memory()
 	return (char*)_pMemory;
 }
 
-template<typename T>
-MemoryStream& MemoryStream::operator<<(const T data)
-{
-	size_t count = sizeof(data);
-	Write(reinterpret_cast<BYTE*>(&data), count);
-	return *this;
-}
 
-template<typename T>
-MemoryStream& MemoryStream::operator>>(T &data)
-{
-	size_t count = sizeof(data);
-	Read(reinterpret_cast<BYTE*>(&data), count);
-	return *this;
-}
 
-MemoryStream& MemoryStream::operator<<(const UnicodeString& src)
-{
-	size_t count = src.Len() * 2;
-	Write(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), count);
-	return *this;
-}
 
-MemoryStream& MemoryStream::operator>>(UnicodeString& src)
-{
-	size_t len = src.Len();//´æ´¢¿Õ¼ä
-	if (len == 0)
-	{
-		src = L"";
-		return *this;
-	}
-	Read(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), len * 2);
-	return *this;
-}
+
+
+
+
 
 size_t MemoryStream::Write(_In_ void* src, size_t count)
 {

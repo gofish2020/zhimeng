@@ -37,14 +37,41 @@ public:
 
 	size_t Write(_In_ void* src, size_t count);
 	size_t Read(_Out_ void* dest, size_t count);
+	
+	MemoryStream& operator<<(const UnicodeString& src)
+	{
+		size_t count = src.Len() * 2;
+		Write(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), count);
+		return *this;
+	}
 
-	MemoryStream& operator<<(const UnicodeString& src);
-	MemoryStream& operator>>(UnicodeString& src);
+	MemoryStream& operator>>(UnicodeString& src)
+	{
+		size_t len = src.Len();//存储空间
+		if (len == 0)
+		{
+			src = L"";
+			return *this;
+		}
+		Read(reinterpret_cast<BYTE*>(const_cast<wchar_t*>(src.c_str())), len * 2);
+		return *this;
+	}
 
-	template<typename T> 
-	MemoryStream& operator<< (const T data);
 	template<typename T>
-	MemoryStream& operator>>(T &data);
+	MemoryStream& operator<<(T data)
+	{
+		size_t count = sizeof(data);
+		Write(reinterpret_cast<BYTE*>(&data), count);
+		return *this;
+	}
+
+	template<typename T>
+	MemoryStream& operator>>(T &data)
+	{
+		size_t count = sizeof(data);
+		Read(reinterpret_cast<BYTE*>(&data), count);
+		return *this;
+	}
 private:
 	size_t _step;	//扩容步长
 	size_t _size;	//数据大小

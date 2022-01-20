@@ -324,6 +324,18 @@ void XVariant::VrArrayToStream(vector<XVariant> &src, MemoryStream &dest)
 		UINT16 tp = src[i].Type();
 		switch (tp)
 		{
+		case VT_INT:
+		{
+			dest << tp;
+			dest << V_INT(&src[i]);
+			break;
+		}
+		case VT_UINT: 
+		{
+			dest << tp;
+			dest << V_UINT(&src[i]);
+			break;
+		}
 		case VT_I1:
 		{
 			dest << tp;
@@ -410,20 +422,139 @@ void XVariant::VrArrayToStream(vector<XVariant> &src, MemoryStream &dest)
 
 void XVariant::StreamToVrArray(MemoryStream &src, vector<XVariant> &dest)
 {
+	XVariant temp;
 	while (src.GetCursor() < src.GetSize())
 	{
 		UINT16 type = 0;
-		src >> type;
+		src >> type; //¶ÁÈ¡ÀàÐÍ
+		
 		switch (type)
 		{
+		case VT_INT:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_INT(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_UINT:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_UINT(&temp);
+			dest.push_back(temp);
+			break;
+		}
 		case VT_BOOL:
 		{
-			XVariant temp;
+			temp.Clear();
+			V_VT(&temp) = type;
 			src >> V_BOOL(&temp);
 			dest.push_back(temp);
-		}
-		default:
 			break;
+		}
+		case VT_I1:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_I1(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_I2:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_I2(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_I4:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_I4(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_I8:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_I8(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_UI1:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_UI1(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_UI2:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_UI2(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_UI4:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_UI4(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_UI8:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_UI8(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_R4:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_R4(&temp);
+			dest.push_back(temp);
+			break;
+		}
+
+		case VT_R8:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_R8(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_DATE:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			src >> V_DATE(&temp);
+			dest.push_back(temp);
+			break;
+		}
+		case VT_BSTR:
+		{
+			temp.Clear();
+			V_VT(&temp) = type;
+			UINT32 size = 0;
+			src >> size;
+			UnicodeString tempStr(size,0);
+			src >> tempStr;
+			temp = tempStr;
+			dest.push_back(temp);
+			break;
+		}
 		}
 	}
 }
