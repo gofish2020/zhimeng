@@ -57,6 +57,7 @@ public:
 	UnicodeString operator+(const UnicodeString &);
 
 	//×Ö·û¼¯×ª»»
+	operator char();
 	operator string(); //unicode 2 mutil-byte
 	string Toutf8() const;// unicode 2 utf8
 	void utf8(const char * str); //utf8 2 unicode

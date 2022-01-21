@@ -69,6 +69,51 @@
 // 	} 	__VARIANT_NAME_1;
 // };
 
+static const wchar_t gc_SectionSeparator = L'=';
+static const wchar_t gc_ItemSeparator = L'|';
+static const wchar_t gc_PackSeparator = L';';
+
+
+enum LIVariantType
+{
+	ivtInteger = 0,
+	ivtUInteger,
+	ivtShort,
+	ivtUShort,
+	ivtLong,
+	ivtULong,
+	ivtLongLong,
+	ivtULongLong,
+	ivtChar,
+	ivtByte,
+	ivtFloat,
+	ivtDouble,
+	ivtDateTime,
+	ivtString,
+	ivtBool
+};
+
+
+static const UnicodeString gc_IVariantTypes[] =
+{
+	"INTEGER",
+	"UINTEGER",
+	"SHORT",
+	"USHORT",
+	"LONG",
+	"ULONG",
+	"LONGLONG",
+	"ULONGLONG",
+	"CHAR",
+	"BYTE",
+	"FLOAT",
+	"DOUBLE",
+	"DATETIME",
+	"STRING",
+	"BOOL"
+};
+
+
 XVariant::XVariant():_type(0),COleVariant()
 {
 
@@ -545,16 +590,212 @@ void XVariant::StreamToVrArray(MemoryStream &src, vector<XVariant> &dest)
 		}
 		case VT_BSTR:
 		{
-			temp.Clear();
-			V_VT(&temp) = type;
 			UINT32 size = 0;
 			src >> size;
 			UnicodeString tempStr(size,0);
 			src >> tempStr;
+
+
+
+//			dest.push_back(XVariant(tempStr));
+
+
+			temp.Clear();
+			//V_VT(&temp) = type;//这里不能设置temp的类型，否则报错
 			temp = tempStr;
 			dest.push_back(temp);
 			break;
 		}
+		}
+	}
+}
+
+
+void XVariant::VrArrayToString(vector<XVariant> &src, UnicodeString &dest)
+{
+	for (int i = 0; i < src.size();i++)
+	{
+		UINT16 type = src[i].Type();
+		switch (type)
+		{
+		case  VT_BOOL:
+		{
+			dest += gc_IVariantTypes[ivtBool] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_INT:
+		{
+			dest += gc_IVariantTypes[ivtInteger] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_UINT:
+		{
+			dest += gc_IVariantTypes[ivtUInteger] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_I1:
+		{
+			dest += gc_IVariantTypes[ivtChar] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_UI1:
+		{
+			dest += gc_IVariantTypes[ivtByte] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_I2:
+		{
+			dest += gc_IVariantTypes[ivtShort] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_UI2:
+		{
+			dest += gc_IVariantTypes[ivtUShort] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_I4:
+		{
+			dest += gc_IVariantTypes[ivtLong] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_UI4:
+		{
+			dest += gc_IVariantTypes[ivtULong] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+
+		case VT_I8:
+		{
+			dest += gc_IVariantTypes[ivtLongLong] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_UI8:
+		{
+			dest += gc_IVariantTypes[ivtULongLong] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_R4:
+		{
+			dest += gc_IVariantTypes[ivtFloat] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_R8:
+		{
+			dest += gc_IVariantTypes[ivtDouble] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_DATE:
+		{
+			dest += gc_IVariantTypes[ivtDateTime] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		case VT_BSTR:
+		{
+			dest += gc_IVariantTypes[ivtString] + gc_SectionSeparator + UnicodeString(src[i]);
+			dest += gc_PackSeparator;
+			break;
+		}
+		}
+	}
+}
+
+void XVariant::StringToVrArray(UnicodeString &src, vector<XVariant> &dest)
+{
+	if (src.IsEmpty())
+	{
+		return;
+	}
+	vector<UnicodeString>splitStr;
+	vector<UnicodeString>sectorStr;
+	src.Split(splitStr, gc_PackSeparator);
+	for (int i = 0; i < splitStr.size();i++)
+	{
+		UnicodeString temp = splitStr[i];
+		sectorStr.clear();
+		temp.Split(sectorStr, gc_SectionSeparator);
+		if (sectorStr.size() == 2)
+		{
+			UnicodeString typeName = sectorStr[0];
+			if (typeName == gc_IVariantTypes[ivtInteger])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToInt()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtUInteger])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToUInt()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtChar])
+			{
+				dest.push_back(XVariant(char(sectorStr[1])));
+			}
+			else if (typeName == gc_IVariantTypes[ivtByte])
+			{
+				dest.push_back(XVariant(BYTE(sectorStr[1].ToInt())));
+			}
+			else if (typeName == gc_IVariantTypes[ivtShort])
+			{
+				dest.push_back(XVariant(short(sectorStr[1].ToInt())));
+			}
+			else if (typeName == gc_IVariantTypes[ivtUShort])
+			{
+				dest.push_back(XVariant(unsigned short(sectorStr[1].ToInt())));
+			}
+			else if (typeName == gc_IVariantTypes[ivtLong])
+			{
+				dest.push_back(XVariant(long(sectorStr[1].ToInt())));
+			}
+			else if (typeName == gc_IVariantTypes[ivtULong])
+			{
+				dest.push_back(XVariant(unsigned long(sectorStr[1].ToInt())));
+			}
+			else if (typeName == gc_IVariantTypes[ivtLongLong])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToInt64()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtULongLong])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToUInt64()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtFloat])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToFloat()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtDouble])
+			{
+				dest.push_back(XVariant(sectorStr[1].ToDouble()));
+			}
+			else if (typeName == gc_IVariantTypes[ivtDateTime])
+			{
+				dest.push_back(XVariant(DateTime(sectorStr[1])));
+			}
+			else if (typeName == gc_IVariantTypes[ivtBool])
+			{
+				if (sectorStr[1] == L"true")
+				{
+					dest.push_back(XVariant(true));
+				}
+				else
+					dest.push_back(XVariant(false));
+				
+			}
+			else if (typeName == gc_IVariantTypes[ivtString])
+			{
+				dest.push_back(XVariant(sectorStr[1]));
+			}
 		}
 	}
 }

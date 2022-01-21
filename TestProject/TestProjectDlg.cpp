@@ -485,13 +485,29 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+// 	BYTE by = 256;
+// 	stoi(L"a", nullptr, 10);
+
+	int iii =  atoi("a");
+
+
+	XVariant a;
+	UnicodeString tempStr = L"中国人呢";
+	a.Clear();
+	V_VT(&a) = VT_BSTR;
+	a = tempStr;
+	UnicodeString ustr = L"123中";
+	a = ustr;
+
+
 	vector<XVariant>li;
 
 	li.push_back((int)12);
+	li.push_back((float)2.0);
 	li.push_back(L"中国人呢");
 	li.push_back(DateTime(L"2012-02-01"));
 	li.push_back(true);
-	li.push_back('a');
+	li.push_back(char(97));
 	li.push_back((BYTE)128);
 
 	MemoryStream ms;
@@ -500,64 +516,67 @@ void CTestProjectDlg::OnBnClickedButton6()
 	vector<XVariant>ree;
 	XVariant::StreamToVrArray(ms, ree);
 
+	UnicodeString dest;
+	XVariant::VrArrayToString(li, dest);
+	vector<XVariant>vvv;
+	XVariant::StringToVrArray(dest, vvv);
 
 
 
-	char ccc = -1;
-	BYTE bbbb = 0xff;
-	BYTE ffdf = ccc;
-	unsigned long llll = (unsigned long)ccc;
-	long lll2l = (long)bbbb;
-	return;
-	UnicodeString usss1(char(64));
-	UnicodeString usss2(short(-1));
-	UnicodeString usss(BYTE(-1));
-	UnicodeString sdf(unsigned short(-1));
-
-
-	return;
-	DateTime dd = DateTime::NowDateTime();
-	XVariant a;
-	a = dd;
-	UnicodeString ustr = L"123中";
-	a = ustr;
-	string sstr = "重点123";
-	a = sstr;
-	char c = 'z';
-	a = c;
-
-	BYTE b = 0x89;
-	a = b;
-
-	wchar_t wc = L'中';
-	a = wc;
-	bool bl = true;
-	a = bl;
-	int i = 90;
-	a = i;
-	short si = 88;
-	a = si;
-
-	long ll = 888;
-	a = ll;
-	__int64 _i = 123;
-	a = _i;
-	unsigned int ui = 123;
-	a = ui;
-	unsigned short us = 14343;
-	a = us;
-	unsigned long ul = 34343;
-	a = ul;
-	unsigned __int64 u_i = 234324;
-	a = u_i;
-	float ff = 1.002;
-	a = ff;
-	double db = 1.2201;
-	a = db;
-
-	a = &ff;
-	a = ustr.c_str();
-	a = sstr.c_str();
+// 	char ccc = -1;
+// 	BYTE bbbb = 0xff;
+// 	BYTE ffdf = ccc;
+// 	unsigned long llll = (unsigned long)ccc;
+// 	long lll2l = (long)bbbb;
+// 	return;
+// 	UnicodeString usss1(char(64));
+// 	UnicodeString usss2(short(-1));
+// 	UnicodeString usss(BYTE(-1));
+// 	UnicodeString sdf(unsigned short(-1));
+// 
+// 
+// 	return;
+// 	DateTime dd = DateTime::NowDateTime();
+// 	XVariant a;
+// 	a = dd;
+// 	
+// 	string sstr = "重点123";
+// 	a = sstr;
+// 	char c = 'z';
+// 	a = c;
+// 
+// 	BYTE b = 0x89;
+// 	a = b;
+// 
+// 	wchar_t wc = L'中';
+// 	a = wc;
+// 	bool bl = true;
+// 	a = bl;
+// 	int i = 90;
+// 	a = i;
+// 	short si = 88;
+// 	a = si;
+// 
+// 	long ll = 888;
+// 	a = ll;
+// 	__int64 _i = 123;
+// 	a = _i;
+// 	unsigned int ui = 123;
+// 	a = ui;
+// 	unsigned short us = 14343;
+// 	a = us;
+// 	unsigned long ul = 34343;
+// 	a = ul;
+// 	unsigned __int64 u_i = 234324;
+// 	a = u_i;
+// 	float ff = 1.002;
+// 	a = ff;
+// 	double db = 1.2201;
+// 	a = db;
+// 
+// 	a = &ff;
+// 	a = ustr.c_str();
+// 	a = sstr.c_str();
 	// XVariant& operator =(int src);
 	// XVariant& operator =(short src);
 	// XVariant& operator =(long src);

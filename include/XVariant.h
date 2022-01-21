@@ -188,6 +188,9 @@ public:
 
 	static void VrArrayToStream(vector<XVariant> &src, MemoryStream &dest);
 	static void StreamToVrArray(MemoryStream &src,vector<XVariant> &dest );
+	static void VrArrayToString(vector<XVariant> &src, UnicodeString &dest);
+	static void StringToVrArray(UnicodeString &src, vector<XVariant> &dest);
+
 
 	XVariant& operator =(const XVariant& src); //如果有自定义类型，需要修改该函数,负责数据的copy操作
 

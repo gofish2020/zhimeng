@@ -398,6 +398,15 @@ UnicodeString UnicodeString::Right(int count) const
 	return SubString(Len() - count, count);
 }
 
+UnicodeString::operator char()
+{
+	if (IsEmpty())
+	{
+		return 0;
+	}
+	return string(*this).c_str()[0];
+}
+
 int UnicodeString::ToInt(int _Base) const
 {
 	return stoi(c_str(), nullptr, _Base);
