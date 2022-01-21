@@ -54,6 +54,9 @@
     <ClCompile Include="XVariant.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ProcessChan.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ZmBase.def">
@@ -104,6 +107,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\XVariant.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ProcessChan.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
