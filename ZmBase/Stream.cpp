@@ -288,10 +288,10 @@ ShareMemoryStream::~ShareMemoryStream()
 {
 	try
 	{
+		UnmapViewOfFile(pSize);
 		if (c_IsCreator)
 		{
 			//创建者负责销毁
-			UnmapViewOfFile(pSize);
 			CloseHandle(c_handle);
 		}
 	}
