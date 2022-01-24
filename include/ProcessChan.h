@@ -9,7 +9,7 @@ desc:跨进程通信（在两个进程之间发送数据包),基于共享内存和wins的系统消息
 #include "..\include\Stream.h"
 
 
-class ProcessChanNotify
+class AFX_EXT_CLASS ProcessChanNotify
 {
 public:
 	virtual void OnProcessInteger(int procId, int integer) {};
@@ -21,7 +21,7 @@ public:
 
 
 //ProcessAccept 消息接收端
-class ProcessAccept
+class AFX_EXT_CLASS ProcessAccept
 {
 public:
 	ProcessAccept(UnicodeString chanName, HWND handle, ProcessChanNotify *Chan);
@@ -33,13 +33,15 @@ private:
 
 
 //ProcessSend 消息发送端
-class ProcessSend
+class AFX_EXT_CLASS ProcessSend
 {
 public:
 	ProcessSend(UnicodeString chanName);
 	virtual ~ProcessSend();
-	void SendStream(MemoryStream &stream) {};
-	void SendInteger(int integer) {};
+	void SendStream(MemoryStream &stream);
+	void SendInteger(int integer) ;
 	void SendCommand(int command, vector<XVariant>&data) {};
-	void SendString(const UnicodeString& ustr) {};
+	void SendString(const UnicodeString& ustr) ;
+private:
+	void *c_SendObject;
 };

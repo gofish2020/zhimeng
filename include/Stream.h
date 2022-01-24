@@ -161,6 +161,7 @@ private:
 	HANDLE c_handle;
 	UINT32* pSize;
 	UINT32* pCursor;
+	UINT32* pRefCount; //引用计数
 	char* pMemory;
 	bool c_IsCreator;
 	UnicodeString c_ShareName;

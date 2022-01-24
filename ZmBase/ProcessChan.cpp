@@ -11,6 +11,7 @@
 
 static const int gc_DataMaxSize = 0x4000; // 16*1024 = 16KB
 static const int gc_DataMaxNum = 0x40; // 64个
+
 struct DataPack
 {
 	bool IsLastPack;
@@ -83,7 +84,7 @@ ProcessAcceptObject::ProcessAcceptObject(UnicodeString chanName, HWND handle, Pr
 
 ProcessAcceptObject::~ProcessAcceptObject()
 {
-	c_data->handle = nullptr;
+	c_data->handle = nullptr; //设置为空，让发送端不要再发送数据过来
 	delete c_Share;
 }
 
@@ -96,13 +97,19 @@ LRESULT ProcessAcceptObject::OnProcInteger(WPARAM wParam, LPARAM lParam)
 
 LRESULT ProcessAcceptObject::OnProcString(WPARAM wParam, LPARAM lParam)
 {
-	c_chan->OnProcessString(int(wParam), L"123");
+	//读取共享内存中的数据
+	UnicodeString ustr(c_data->pack[lParam].datasize / 2,L'0');
+	memcpy((char*)ustr.c_str(), c_data->pack[lParam].data, c_data->pack[lParam].datasize);
+	c_chan->OnProcessString(int(wParam), ustr);
+	return 0;
 }
 
 LRESULT ProcessAcceptObject::OnProcStream(WPARAM wParam, LPARAM lParam)
 {
 	MemoryStream ms;
+
 	c_chan->OnProcessStream(int(wParam), ms);
+	return 0;
 }
 
 LRESULT ProcessAcceptObject::OnProcCommand(WPARAM wParam, LPARAM lParam)
@@ -111,6 +118,7 @@ LRESULT ProcessAcceptObject::OnProcCommand(WPARAM wParam, LPARAM lParam)
 	value.push_back(123);
 	value.push_back(L"123");
 	c_chan->OnProcessCommand(int(wParam), value);
+	return 0;
 }
 
 ///////接收端对外包装的类
@@ -126,14 +134,89 @@ ProcessAccept::~ProcessAccept()
 }
 
 
+//////////////////////////// ProcessSendObject 发送端 ////////////////////////////////////
+
+class ProcessSendObject
+{
+public:
+	ProcessSendObject(UnicodeString chanName);
+	~ProcessSendObject();
+	void SendInteger(int integer);
+	void SendString(UnicodeString ustr);
+private:
+	ShareMemoryStream *c_ShareMemory;
+	ProcData* c_ProcData;
+};
+
+ProcessSendObject::ProcessSendObject(UnicodeString chanName)
+{
+	//打开共享内存
+	try
+	{
+		c_ShareMemory = new ShareMemoryStream(chanName.ToUpper());
+	}
+	catch (...)
+	{
+		c_ShareMemory = new ShareMemoryStream(chanName.ToUpper(), sizeof(ProcData));
+	}
+	c_ProcData = (ProcData*)(c_ShareMemory->Memory());
+}
+
+ProcessSendObject::~ProcessSendObject()
+{
+	delete c_ShareMemory;
+}
+
+void ProcessSendObject::SendInteger(int integer)
+{
+	if (c_ProcData->handle != nullptr)
+	{
+		PostMessage(c_ProcData->handle, WM_PROCESS_INTEGER, GetCurrentProcessId(), integer);
+	}
+}
+
+void ProcessSendObject::SendString(UnicodeString ustr)
+{
+	if (c_ProcData->handle != nullptr)
+	{
+		for (int i = 0; i < 3;i++)
+		{
+			for (int j = 0; j < gc_DataMaxSize;j++)
+			{
+				if (c_ProcData->pack[j].datasize == 0) //未被使用
+				{
+					//写入数据
+					c_ProcData->pack[j].datasize = ustr.length() * 2;
+					memcpy(c_ProcData->pack[j].data, (char*)ustr.c_str(), ustr.length() * 2);
+					PostMessage(c_ProcData->handle, WM_PROCESS_STRING, GetCurrentProcessId(), j);
+				}
+			}
+		}
+	}
+}
 
 ////////发送端对外包装的类
 ProcessSend::ProcessSend(UnicodeString chanName)
 {
-
+	c_SendObject = new ProcessSendObject(chanName);
 }
 
 ProcessSend::~ProcessSend()
 {
+	delete c_SendObject;
+}
 
+void ProcessSend::SendStream(MemoryStream &stream)
+{
+
+}
+
+void ProcessSend::SendInteger(int integer)
+{
+	((ProcessSendObject*)c_SendObject)->SendInteger(integer);
+}
+
+void ProcessSend::SendString(const UnicodeString& ustr)
+{
+	((ProcessSendObject*)c_SendObject)->SendString(ustr);
 }

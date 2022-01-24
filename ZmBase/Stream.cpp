@@ -247,7 +247,7 @@ ShareMemoryStream::ShareMemoryStream(UnicodeString Name, DWORD losize)
 	sa.nLength = sizeof(SECURITY_ATTRIBUTES);
 	sa.bInheritHandle = TRUE;
 	sa.lpSecurityDescriptor = &sd;
-	c_handle = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0, losize + 2*sizeof(UINT32), Name.c_str());
+	c_handle = CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0, losize + 3*sizeof(UINT32), Name.c_str());
 	if (c_handle == nullptr)
 	{
 		Painc(GetLastErrorStr(L"CreateFileMapping", Name));
@@ -260,7 +260,9 @@ ShareMemoryStream::ShareMemoryStream(UnicodeString Name, DWORD losize)
 	*pSize = losize;//第一个4字节为共享内存空间大小(实际有效的空间大小)
 	pCursor = pSize + 1;
 	*pCursor = 0;//第二个4字节设定游标位置
-	pMemory = reinterpret_cast<char*>(pCursor + 1); //从第8字节开始存储数据
+	pRefCount = pSize + 2; //第三个4字节，引用计数，
+	*pRefCount =  1;
+	pMemory = reinterpret_cast<char*>(pSize + 3); //从第12字节开始存储数据
 	c_IsCreator = true;
 	c_ShareName = Name;
 }
@@ -279,7 +281,9 @@ ShareMemoryStream::ShareMemoryStream(UnicodeString Name)
 		Painc(GetLastErrorStr(L"MapViewOfFile", Name));
 	}
 	pCursor = pSize + 1;
-	pMemory = reinterpret_cast<char*>(pCursor + 1); //从第8字节开始存储数据
+	pRefCount = pSize + 2;
+	*pRefCount = (*pRefCount) + 1;
+	pMemory = reinterpret_cast<char*>(pSize + 3); //从第12字节开始存储数据
 	c_IsCreator = false;
 	c_ShareName = Name;
 }
@@ -289,7 +293,8 @@ ShareMemoryStream::~ShareMemoryStream()
 	try
 	{
 		UnmapViewOfFile(pSize);
-		if (c_IsCreator)
+		*pRefCount -= 1;
+		if (*pRefCount <= 0 )
 		{
 			//创建者负责销毁
 			CloseHandle(c_handle);

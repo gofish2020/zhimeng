@@ -12,6 +12,7 @@
 #include "..\include\utils.h"
 #include "..\include\Logger.h"
 #include "..\include\XVariant.h"
+#include "..\include\ProcessChan.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -189,156 +190,162 @@ void CTestProjectDlg::OnBnClickedButton3()
 	pt->Terminate();
 }
 
-
 void CTestProjectDlg::OnBnClickedButton4()
 {
-	// TODO: 在此添加控件通知处理程序代码
 
-	UnicodeString msg = L"123中说的11ff";
-	string  ssfdsf = string(msg);
-// 	UnicodeString(); //空字符
-// 	UnicodeString(const char*);
-// 	UnicodeString(const wchar_t*, int); //截取字符
-// 	UnicodeString(const wchar_t*); //直接截取到null
-// 	UnicodeString(const wchar_t); //只重复一次
-// 	UnicodeString(int, const wchar_t); //重复字符
-// 	UnicodeString(const wstring);
-// 	UnicodeString(const string);
-// 	UnicodeString(char);
-// 	UnicodeString(short);
-// 	UnicodeString(int);
-// 	UnicodeString(unsigned int);
-// 	UnicodeString(long);
-// 	UnicodeString(unsigned long);
-// 	UnicodeString(__int64);
-// 	UnicodeString(unsigned __int64);
-// 	UnicodeString(float);
-// 	UnicodeString(double);
-// 	UnicodeString(long double);
+	ProcessChanNotify *pcn = new ProcessChanNotify;
+	ProcessAccept *pa = new ProcessAccept (L"nash", m_hWnd, pcn);
 
-
-	char* cPoint = "123中国abc";
-	wchar_t *wPoint = L"123中国abc";
-	string str = "123中国abc";
-	wstring wstr = L"123中国abc";
-
-
-	UnicodeString a;
-	UnicodeString b(cPoint);
-	UnicodeString c(wPoint);
-	UnicodeString d(wPoint,4);
-	UnicodeString e(L'b');
-	UnicodeString f(3,L'a');
-	UnicodeString g(str);
-	UnicodeString h(wstr);
-
-	short si = 12;
-	int i = 14;
-	unsigned int ui = 15;
-	long int li = 16;
-	unsigned long int uli = 17;
-	__int64 i64 = 18;
-	unsigned __int64 ui64 = 19;
-	float fl = 1.01;
-	double db = 1.022211;
-	long double ldb = 92.19293324234;
-
-	
-	a = UnicodeString(si);
-	a = UnicodeString(i);
-	a = UnicodeString(ui);
-	a = UnicodeString(li);
-	a = UnicodeString(uli);
-	a = UnicodeString(i64);
-	a = UnicodeString(ui64);
-	a = UnicodeString(fl);
-	a = UnicodeString(db);
-	a = UnicodeString(ldb);
-	a.uprintf_s(L"%lg", ldb);
-
-
-
-// 	UnicodeString& operator=(const wstring);
-// 	UnicodeString& operator=(const string);
-// 	UnicodeString& operator=(const char*);
-// 	UnicodeString& operator=(const wchar_t*);
-// 	UnicodeString& operator=(const UnicodeString&);
-// 	UnicodeString operator+(const wstring);
-// 	UnicodeString operator+(const string);
-// 	UnicodeString operator+(const char*);
-// 	UnicodeString operator+(const wchar_t*);
-// 	UnicodeString operator+(const UnicodeString &);
-
-
-
-	a = wstr;
-	a = str;
-	a = cPoint;
-	a = wPoint;
-	a = b;
-	a = b + f;
-	a = b + wstr;
-	a = b + str;
-	a = b + cPoint;
-	a = b + wPoint;
-
-	a = "人民&中&";
-	vector<UnicodeString>result;
-	a.Split(result, L"&");
-
-
-
-
-	a = L"2001,sdkf";
-	int ii = a.ToInt();
-
-	a = L"40c3";
-	ii = a.ToInt(16);
-	a = L"-10010110001";
-	ii = a.ToInt(2);
-	unsigned int ssss = a.ToUInt(2);
-	a = L"0x7f";
-	ii = a.ToInt(16);
-
-	a = L"1.2";
-	double sssf = a.ToDouble();
-
-	a = L"123&中华&abc&GGG&";
-	int len = a.Len();
-	bool isempty = a.IsEmpty();
-	int pos = a.Pos("&");
-	vector<UnicodeString>res;
-	a.Split(res, "&");
-	UnicodeString upper = a.ToUpper();
-	UnicodeString lower = a.ToLower();
-	UnicodeString substr = a.SubString(4, 2);
-	UnicodeString replacestr = a.Replace("&", "|");
-	a = L"123&中华&abc&GGG&   ";
-	a = a.Trim();
-	UnicodeString leftstr = a.Left(3);
-	UnicodeString rightstr = a.Right(4);
-
-
-	vector<UnicodeString>eles;
-	eles.push_back("123");
-	eles.push_back("123");
-	eles.push_back("123");
-	eles.push_back("123");
-	a = Join(eles, "^");
+// 	// TODO: 在此添加控件通知处理程序代码
+// 
+// 	UnicodeString msg = L"123中说的11ff";
+// 	string  ssfdsf = string(msg);
+// // 	UnicodeString(); //空字符
+// // 	UnicodeString(const char*);
+// // 	UnicodeString(const wchar_t*, int); //截取字符
+// // 	UnicodeString(const wchar_t*); //直接截取到null
+// // 	UnicodeString(const wchar_t); //只重复一次
+// // 	UnicodeString(int, const wchar_t); //重复字符
+// // 	UnicodeString(const wstring);
+// // 	UnicodeString(const string);
+// // 	UnicodeString(char);
+// // 	UnicodeString(short);
+// // 	UnicodeString(int);
+// // 	UnicodeString(unsigned int);
+// // 	UnicodeString(long);
+// // 	UnicodeString(unsigned long);
+// // 	UnicodeString(__int64);
+// // 	UnicodeString(unsigned __int64);
+// // 	UnicodeString(float);
+// // 	UnicodeString(double);
+// // 	UnicodeString(long double);
+// 
+// 
+// 	char* cPoint = "123中国abc";
+// 	wchar_t *wPoint = L"123中国abc";
+// 	string str = "123中国abc";
+// 	wstring wstr = L"123中国abc";
+// 
+// 
+// 	UnicodeString a;
+// 	UnicodeString b(cPoint);
+// 	UnicodeString c(wPoint);
+// 	UnicodeString d(wPoint,4);
+// 	UnicodeString e(L'b');
+// 	UnicodeString f(3,L'a');
+// 	UnicodeString g(str);
+// 	UnicodeString h(wstr);
+// 
+// 	short si = 12;
+// 	int i = 14;
+// 	unsigned int ui = 15;
+// 	long int li = 16;
+// 	unsigned long int uli = 17;
+// 	__int64 i64 = 18;
+// 	unsigned __int64 ui64 = 19;
+// 	float fl = 1.01;
+// 	double db = 1.022211;
+// 	long double ldb = 92.19293324234;
+// 
+// 	
+// 	a = UnicodeString(si);
+// 	a = UnicodeString(i);
+// 	a = UnicodeString(ui);
+// 	a = UnicodeString(li);
+// 	a = UnicodeString(uli);
+// 	a = UnicodeString(i64);
+// 	a = UnicodeString(ui64);
+// 	a = UnicodeString(fl);
+// 	a = UnicodeString(db);
+// 	a = UnicodeString(ldb);
+// 	a.uprintf_s(L"%lg", ldb);
+// 
+// 
+// 
+// // 	UnicodeString& operator=(const wstring);
+// // 	UnicodeString& operator=(const string);
+// // 	UnicodeString& operator=(const char*);
+// // 	UnicodeString& operator=(const wchar_t*);
+// // 	UnicodeString& operator=(const UnicodeString&);
+// // 	UnicodeString operator+(const wstring);
+// // 	UnicodeString operator+(const string);
+// // 	UnicodeString operator+(const char*);
+// // 	UnicodeString operator+(const wchar_t*);
+// // 	UnicodeString operator+(const UnicodeString &);
+// 
+// 
+// 
+// 	a = wstr;
+// 	a = str;
+// 	a = cPoint;
+// 	a = wPoint;
+// 	a = b;
+// 	a = b + f;
+// 	a = b + wstr;
+// 	a = b + str;
+// 	a = b + cPoint;
+// 	a = b + wPoint;
+// 
+// 	a = "人民&中&";
+// 	vector<UnicodeString>result;
+// 	a.Split(result, L"&");
+// 
+// 
+// 
+// 
+// 	a = L"2001,sdkf";
+// 	int ii = a.ToInt();
+// 
+// 	a = L"40c3";
+// 	ii = a.ToInt(16);
+// 	a = L"-10010110001";
+// 	ii = a.ToInt(2);
+// 	unsigned int ssss = a.ToUInt(2);
+// 	a = L"0x7f";
+// 	ii = a.ToInt(16);
+// 
+// 	a = L"1.2";
+// 	double sssf = a.ToDouble();
+// 
+// 	a = L"123&中华&abc&GGG&";
+// 	int len = a.Len();
+// 	bool isempty = a.IsEmpty();
+// 	int pos = a.Pos("&");
+// 	vector<UnicodeString>res;
+// 	a.Split(res, "&");
+// 	UnicodeString upper = a.ToUpper();
+// 	UnicodeString lower = a.ToLower();
+// 	UnicodeString substr = a.SubString(4, 2);
+// 	UnicodeString replacestr = a.Replace("&", "|");
+// 	a = L"123&中华&abc&GGG&   ";
+// 	a = a.Trim();
+// 	UnicodeString leftstr = a.Left(3);
+// 	UnicodeString rightstr = a.Right(4);
+// 
+// 
+// 	vector<UnicodeString>eles;
+// 	eles.push_back("123");
+// 	eles.push_back("123");
+// 	eles.push_back("123");
+// 	eles.push_back("123");
+// 	a = Join(eles, "^");
 }
 
 
 void CTestProjectDlg::OnBnClickedButton5()
 {
+	ProcessSend *ps = new ProcessSend(L"nash");
+	ps->SendInteger(22);
+	ps->SendString(L"中国人112abc");
 	// TODO: 在此添加控件通知处理程序代码
-	UpdateData(true);
-	if (mu.Create(L"xiaobaitu", false)){
-		mu.Wait();
-		SetDlgItemText(IDC_EDIT1, L"your text");
-		mu.Release();
-	}
-	UpdateData(FALSE);
-	return;
+// 	UpdateData(true);
+// 	if (mu.Create(L"xiaobaitu", false)) {
+// 		mu.Wait();
+// 		SetDlgItemText(IDC_EDIT1, L"your text");
+// 		mu.Release();
+// 	}
+// 	UpdateData(FALSE);
+// 	return;
 // 	UnicodeString a = DateTime::NowDate().ToDateTimeStr();
 // 	UnicodeString b = DateTime::NowDateTime().ToDateTimeStr();
 // 
@@ -346,97 +353,97 @@ void CTestProjectDlg::OnBnClickedButton5()
 // 	DateTime ss = c + DateTime(0, 0, 0, 1, 0, 0);
 // 	a = ss.ToDateTimeStr();
 
-
-	UnicodeString curNow = DateTime::NowDateTime().ToDateStr();
-	UnicodeString curNowInteger = DateTime::NowDateTime().ToDateTimeInteger();
-
-	DateTime a;
-	DateTime b(L"2021-02-01");
-	DateTime c(b);
-	DateTime d(__time64_t(1640743993)); //2021-12-29 10:13:13
-	DateTime e(2021, 2, 2, 1, 1, 1);
-
-	__time64_t ssss = d.UnixTimeStamp();
-
-	int year = d.Year();
-	int month = d.Month();
-	int day = d.Day();
-	int hour = d.Hour();
-	int minu = d.Minute();
-	int second = d.Second();
-	int dayofweek = d.DayOfWeek();
-	int dayofyear = d.DayOfYear();
-
-
-	UnicodeString res;
-
-	DateTime r = d + 1;
-	res = r.ToDateTimeStr();
-	DateTime r1 = d + 10.25;
-	res = r1.ToDateTimeStr();
-	DateTime r2 = d + e;
-	res = r2.ToDateTimeStr();
-
-
-	res = UnicodeString(d);
-	/*
-	DateTime();
-	DateTime(const DateTime& src);
-	DateTime(DATE src);
-	DateTime(__time32_t src);
-	DateTime(__time64_t src);
-	DateTime(const SYSTEMTIME& systimeSrc);
-	DateTime(const FILETIME& filetimeSrc);
-	DateTime( int nYear,int nMonth,int nDay,int nHour,int nMin,int nSec);
-	DateTime(const int src);
-	virtual ~DateTime();
-
-	bool IsEmpty();
-	int Year() const ;
-	// Month of year (1 = January)
-	int Month() const ;
-	// Day of month (1-31)
-	int Day() const ;
-	// Hour in day (0-23)
-	int Hour() const ;
-	// Minute in hour (0-59)
-	int Minute() const ;
-	// Second in minute (0-59)
-	int Second() const ;
-	// Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
-	int DayOfWeek() const ;
-	// Days since start of year (1 = January 1)
-	int DayOfYear() const ;
-	DateTime GetDate() const;
-	DateTime GetTime() const;
-	static DateTime NowDate();
-	static DateTime NowDateTime();
-	static DateTime NowTime();
-	UnicodeString ToDateStr() const;
-	UnicodeString ToDateTimeStr() const;
-	UnicodeString ToTimeStr() const;
-	UnicodeString ToDateInteger() const;
-	UnicodeString ToDateTimeInteger() const;
-
-	DateTime& operator=(const UnicodeString& Src) throw();
-	DateTime& operator=(const int Src) throw();
-	DateTime operator +(const DateTime& rhs) const;
-	DateTime operator +(const double rhs) const;
-	DateTime operator +(const int rhs) const;
-	DateTime operator-(const DateTime& rhs) const;
-	DateTime operator-(const double rhs) const;
-	DateTime operator-(const int rhs) const;
-	DateTime &operator+=(const DateTime& Src);
-	DateTime &operator+=(const double Src);
-	DateTime &operator+=(const int Src);
-	DateTime &operator-=(const DateTime& Src);
-	DateTime &operator-=(const double Src);
-	DateTime &operator-=(const int Src);
-
-	operator UnicodeString() const;
-	operator int() const;
-	
-	*/
+// 
+// 	UnicodeString curNow = DateTime::NowDateTime().ToDateStr();
+// 	UnicodeString curNowInteger = DateTime::NowDateTime().ToDateTimeInteger();
+// 
+// 	DateTime a;
+// 	DateTime b(L"2021-02-01");
+// 	DateTime c(b);
+// 	DateTime d(__time64_t(1640743993)); //2021-12-29 10:13:13
+// 	DateTime e(2021, 2, 2, 1, 1, 1);
+// 
+// 	__time64_t ssss = d.UnixTimeStamp();
+// 
+// 	int year = d.Year();
+// 	int month = d.Month();
+// 	int day = d.Day();
+// 	int hour = d.Hour();
+// 	int minu = d.Minute();
+// 	int second = d.Second();
+// 	int dayofweek = d.DayOfWeek();
+// 	int dayofyear = d.DayOfYear();
+// 
+// 
+// 	UnicodeString res;
+// 
+// 	DateTime r = d + 1;
+// 	res = r.ToDateTimeStr();
+// 	DateTime r1 = d + 10.25;
+// 	res = r1.ToDateTimeStr();
+// 	DateTime r2 = d + e;
+// 	res = r2.ToDateTimeStr();
+// 
+// 
+// 	res = UnicodeString(d);
+// 	/*
+// 	DateTime();
+// 	DateTime(const DateTime& src);
+// 	DateTime(DATE src);
+// 	DateTime(__time32_t src);
+// 	DateTime(__time64_t src);
+// 	DateTime(const SYSTEMTIME& systimeSrc);
+// 	DateTime(const FILETIME& filetimeSrc);
+// 	DateTime( int nYear,int nMonth,int nDay,int nHour,int nMin,int nSec);
+// 	DateTime(const int src);
+// 	virtual ~DateTime();
+// 
+// 	bool IsEmpty();
+// 	int Year() const ;
+// 	// Month of year (1 = January)
+// 	int Month() const ;
+// 	// Day of month (1-31)
+// 	int Day() const ;
+// 	// Hour in day (0-23)
+// 	int Hour() const ;
+// 	// Minute in hour (0-59)
+// 	int Minute() const ;
+// 	// Second in minute (0-59)
+// 	int Second() const ;
+// 	// Day of week (1 = Sunday, 2 = Monday, ..., 7 = Saturday)
+// 	int DayOfWeek() const ;
+// 	// Days since start of year (1 = January 1)
+// 	int DayOfYear() const ;
+// 	DateTime GetDate() const;
+// 	DateTime GetTime() const;
+// 	static DateTime NowDate();
+// 	static DateTime NowDateTime();
+// 	static DateTime NowTime();
+// 	UnicodeString ToDateStr() const;
+// 	UnicodeString ToDateTimeStr() const;
+// 	UnicodeString ToTimeStr() const;
+// 	UnicodeString ToDateInteger() const;
+// 	UnicodeString ToDateTimeInteger() const;
+// 
+// 	DateTime& operator=(const UnicodeString& Src) throw();
+// 	DateTime& operator=(const int Src) throw();
+// 	DateTime operator +(const DateTime& rhs) const;
+// 	DateTime operator +(const double rhs) const;
+// 	DateTime operator +(const int rhs) const;
+// 	DateTime operator-(const DateTime& rhs) const;
+// 	DateTime operator-(const double rhs) const;
+// 	DateTime operator-(const int rhs) const;
+// 	DateTime &operator+=(const DateTime& Src);
+// 	DateTime &operator+=(const double Src);
+// 	DateTime &operator+=(const int Src);
+// 	DateTime &operator-=(const DateTime& Src);
+// 	DateTime &operator-=(const double Src);
+// 	DateTime &operator-=(const int Src);
+// 
+// 	operator UnicodeString() const;
+// 	operator int() const;
+// 	
+// 	*/
 }
 
 
