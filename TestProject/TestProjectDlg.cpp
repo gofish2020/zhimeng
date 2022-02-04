@@ -196,6 +196,10 @@ void CTestProjectDlg::OnBnClickedButton4()
 	ProcessChanNotify *pcn = new ProcessChanNotify;
 	ProcessAccept *pa = new ProcessAccept (L"nash", m_hWnd, pcn);
 
+
+
+
+	delete pa;
 // 	// TODO: 在此添加控件通知处理程序代码
 // 
 // 	UnicodeString msg = L"123中说的11ff";
@@ -331,9 +335,27 @@ void CTestProjectDlg::OnBnClickedButton4()
 // 	a = Join(eles, "^");
 }
 
+struct MyStruct
+{
+	int a;
+	MemoryStream ms;
 
+};
+
+void AddData(MyStruct *mystruct)
+{
+	char cchars[] = { 1,2,3 };
+	mystruct->a = 1;
+	mystruct->ms.Write(cchars, 3);
+}
 void CTestProjectDlg::OnBnClickedButton5()
 {
+
+	
+	MyStruct *mystruct = new MyStruct;
+	AddData(mystruct);
+
+
 	ProcessSend *ps = new ProcessSend(L"nash");
 	ps->SendInteger(22);
 	ps->SendString(L"中国人112abc");

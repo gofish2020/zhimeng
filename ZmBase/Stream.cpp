@@ -293,8 +293,8 @@ ShareMemoryStream::~ShareMemoryStream()
 	try
 	{
 		UnmapViewOfFile(pSize);
-		*pRefCount -= 1;
-		if (*pRefCount <= 0 )
+		//*pRefCount -= 1;
+		if (c_IsCreator)
 		{
 			//创建者负责销毁
 			CloseHandle(c_handle);

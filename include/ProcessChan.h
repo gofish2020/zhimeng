@@ -40,7 +40,7 @@ public:
 	virtual ~ProcessSend();
 	void SendStream(MemoryStream &stream);
 	void SendInteger(int integer) ;
-	void SendCommand(int command, vector<XVariant>&data) {};
+	void SendCommand(int command, vector<XVariant>&data);
 	void SendString(const UnicodeString& ustr) ;
 private:
 	void *c_SendObject;

@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "..\include\ProcessChan.h"
 #include "..\include\utils.h"
-
+#include <map>
+#include "..\include\CriticalSection.h"
 
 #define WM_PROCESS_INTEGER      WM_USER+1//发送命令
 #define WM_PROCESS_STRING		WM_USER+2//发送字串
@@ -91,7 +92,6 @@ ProcessAcceptObject::~ProcessAcceptObject()
 LRESULT ProcessAcceptObject::OnProcInteger(WPARAM wParam, LPARAM lParam)
 {
 	c_chan->OnProcessInteger(int(wParam), int(lParam));
-
 	return 0;
 }
 
@@ -100,28 +100,140 @@ LRESULT ProcessAcceptObject::OnProcString(WPARAM wParam, LPARAM lParam)
 	//读取共享内存中的数据
 	UnicodeString ustr(c_data->pack[lParam].datasize / 2,L'0');
 	memcpy((char*)ustr.c_str(), c_data->pack[lParam].data, c_data->pack[lParam].datasize);
+	c_data->pack[lParam].datasize = 0;
 	c_chan->OnProcessString(int(wParam), ustr);
 	return 0;
 }
 
+class Cache
+{
+public:
+	Cache() {};
+	~Cache() {};
+	MemoryStream c_ms;
+	bool IsLastPack;
+	void WriteData(DataPack &dataPack)
+	{
+		IsLastPack = dataPack.IsLastPack;
+		c_ms.Write(dataPack.data, dataPack.datasize);
+	};
+};
+typedef Cache* pcacheData;
+
+//负责缓存数据
+class CacheMemory
+{
+public:
+	pcacheData Get(int procId);
+	void Del(int procId);
+	static CacheMemory *Instance();
+private:
+	CriticalSection cs;
+	CacheMemory();
+	~CacheMemory();
+	std::map<int, pcacheData> c_map;
+	static CacheMemory CachM;
+};
+
+CacheMemory CacheMemory::CachM;
+pcacheData CacheMemory::Get(int procId)
+{
+	cs.Locked();
+	pcacheData temp = nullptr;
+	std::map<int, pcacheData>::iterator it = c_map.find(procId);
+	if (it != c_map.end())
+	{
+		temp =  it->second;
+	}
+	else
+	{
+		try
+		{
+			temp = new Cache();
+			temp->IsLastPack = false;
+			c_map.insert(make_pair(procId, temp));
+		}
+		catch (...)
+		{
+
+		}
+	}
+	cs.UnLocked();
+	return temp;
+}
+
+void CacheMemory::Del(int procId)
+{
+	cs.Locked();
+	try
+	{
+		map<int, pcacheData>::iterator it = c_map.find(procId);
+		if (it != c_map.end())
+		{
+			delete it->second;
+			c_map.erase(it);
+		}
+	}
+	catch (...)
+	{
+	}
+	cs.UnLocked();
+}
+
+CacheMemory *CacheMemory::Instance()
+{
+	return &CachM;
+}
+
+CacheMemory::CacheMemory()
+{
+}
+
+CacheMemory::~CacheMemory()
+{
+	cs.Locked();
+	map<int, pcacheData>::iterator it = c_map.begin();
+	if (it != c_map.end())
+	{
+		delete it->second;
+		it++;
+	}
+	c_map.clear();
+	cs.UnLocked();
+}
+
 LRESULT ProcessAcceptObject::OnProcStream(WPARAM wParam, LPARAM lParam)
 {
-	MemoryStream ms;
-
-	c_chan->OnProcessStream(int(wParam), ms);
+	
+	CacheMemory::Instance()->Get(wParam)->WriteData(c_data->pack[lParam]);
+	if (CacheMemory::Instance()->Get(wParam)->IsLastPack == true)
+	{
+		c_data->pack[lParam].datasize = 0;
+		c_data->pack[lParam].IsLastPack = false;
+		CacheMemory::Instance()->Get(wParam)->c_ms.SetCursor(0);
+		c_chan->OnProcessStream(int(wParam), CacheMemory::Instance()->Get(wParam)->c_ms);
+		CacheMemory::Instance()->Del(wParam);
+	}
+	
 	return 0;
 }
 
 LRESULT ProcessAcceptObject::OnProcCommand(WPARAM wParam, LPARAM lParam)
 {
-	vector<XVariant>value;
-	value.push_back(123);
-	value.push_back(L"123");
-	c_chan->OnProcessCommand(int(wParam), value);
+	CacheMemory::Instance()->Get(wParam)->WriteData(c_data->pack[lParam]);
+	if (CacheMemory::Instance()->Get(wParam)->IsLastPack == true)
+	{
+		c_data->pack[lParam].datasize = 0;
+		c_data->pack[lParam].IsLastPack = false;
+		CacheMemory::Instance()->Get(wParam)->c_ms.SetCursor(0);
+		c_chan->OnProcessCommand(int(wParam), CacheMemory::Instance()->Get(wParam)->c_ms);
+		CacheMemory::Instance()->Del(wParam);
+	}
+
 	return 0;
 }
 
-///////接收端对外包装的类
+///////接收端对外包装的类/////
 ProcessAccept::ProcessAccept(UnicodeString chanName, HWND handle, ProcessChanNotify *chan)
 {
 	c_Object = new ProcessAcceptObject(chanName, handle, chan);
@@ -134,6 +246,33 @@ ProcessAccept::~ProcessAccept()
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////// ProcessSendObject 发送端 ////////////////////////////////////
 
 class ProcessSendObject
@@ -143,6 +282,8 @@ public:
 	~ProcessSendObject();
 	void SendInteger(int integer);
 	void SendString(UnicodeString ustr);
+	void SendStream(MemoryStream& stream);
+	void SendCommand(int command, vector<XVariant>&data);
 private:
 	ShareMemoryStream *c_ShareMemory;
 	ProcData* c_ProcData;
@@ -181,7 +322,7 @@ void ProcessSendObject::SendString(UnicodeString ustr)
 	{
 		for (int i = 0; i < 3;i++)
 		{
-			for (int j = 0; j < gc_DataMaxSize;j++)
+			for (int j = 0; j < gc_DataMaxNum;j++)
 			{
 				if (c_ProcData->pack[j].datasize == 0) //未被使用
 				{
@@ -189,6 +330,85 @@ void ProcessSendObject::SendString(UnicodeString ustr)
 					c_ProcData->pack[j].datasize = ustr.length() * 2;
 					memcpy(c_ProcData->pack[j].data, (char*)ustr.c_str(), ustr.length() * 2);
 					PostMessage(c_ProcData->handle, WM_PROCESS_STRING, GetCurrentProcessId(), j);
+					return;
+				}
+			}
+		}
+	}
+}
+
+void ProcessSendObject::SendStream(MemoryStream& stream)
+{
+	if (c_ProcData->handle != nullptr)
+	{
+		for (int i = 0; i < 3;i++)
+		{
+			for (int j = 0; j < gc_DataMaxNum;j++)
+			{
+				if (c_ProcData->pack[j].datasize == 0)
+				{
+					stream.SetCursor(0);
+					size_t size = stream.GetSize();
+					while (1)
+					{
+						if (size > gc_DataMaxSize)
+						{
+							c_ProcData->pack[j].datasize = gc_DataMaxSize;
+							c_ProcData->pack[j].IsLastPack = false;
+							memcpy(c_ProcData->pack[j].data, stream.Memory(), gc_DataMaxSize);
+							SendMessage(c_ProcData->handle, WM_PROCESS_STREAM, GetCurrentProcessId(), j);
+						}
+						else
+						{
+							c_ProcData->pack[j].datasize = size;
+							c_ProcData->pack[j].IsLastPack = true;
+							memcpy(c_ProcData->pack[j].data, stream.Memory(), size);
+							PostMessage(c_ProcData->handle, WM_PROCESS_STREAM, GetCurrentProcessId(), j);
+							return;
+						}
+						size -= gc_DataMaxSize;
+					}
+				}
+			}
+		}
+	}
+}
+
+void ProcessSendObject::SendCommand(int command, vector<XVariant>&data)
+{
+	if (c_ProcData->handle != nullptr)
+	{
+		for (int i = 0; i <= 3; i++)
+		{
+			for (int j = 0; j < gc_DataMaxNum; j++)
+			{
+				if (c_ProcData->pack[j].datasize == 0)
+				{
+					MemoryStream stream;
+					stream << command;
+					XVariant::VrArrayToStream(data, stream);
+					stream.SetCursor(0);
+					size_t size = stream.GetSize();
+					while (1)
+					{
+						if (size > gc_DataMaxSize)
+						{
+							c_ProcData->pack[j].datasize = gc_DataMaxSize;
+							c_ProcData->pack[j].IsLastPack = false;
+							memcpy(c_ProcData->pack[j].data, stream.Memory(), gc_DataMaxSize);
+							SendMessage(c_ProcData->handle, WM_PROCESS_COMMAND, GetCurrentProcessId(), j);
+
+						}
+						else
+						{
+							c_ProcData->pack[j].datasize = size;
+							c_ProcData->pack[j].IsLastPack = true;
+							memcpy(c_ProcData->pack[j].data, stream.Memory(), size);
+							PostMessage(c_ProcData->handle, WM_PROCESS_COMMAND, GetCurrentProcessId(), j);
+							return;
+						}
+						size -= gc_DataMaxSize;
+					}
 				}
 			}
 		}
@@ -208,12 +428,17 @@ ProcessSend::~ProcessSend()
 
 void ProcessSend::SendStream(MemoryStream &stream)
 {
-
+	((ProcessSendObject*)c_SendObject)->SendStream(stream);
 }
 
 void ProcessSend::SendInteger(int integer)
 {
 	((ProcessSendObject*)c_SendObject)->SendInteger(integer);
+}
+
+void ProcessSend::SendCommand(int command, vector<XVariant>&data)
+{
+	((ProcessSendObject*)c_SendObject)->SendCommand(command,data);
 }
 
 void ProcessSend::SendString(const UnicodeString& ustr)
