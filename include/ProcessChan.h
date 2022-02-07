@@ -15,7 +15,7 @@ public:
 	virtual void OnProcessInteger(int procId, int integer) {};
 	virtual void OnProcessString(int procId, UnicodeString ustr) {};
 	virtual void OnProcessStream(int procId, MemoryStream &stream) {};
-	virtual void OnProcessCommand(int procId, vector<XVariant>& value) {};
+	virtual void OnProcessCommand(int procId,int command, vector<XVariant>& value) {};
 };
 
 

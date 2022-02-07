@@ -110,13 +110,15 @@ class Cache
 public:
 	Cache() {};
 	~Cache() {};
-	MemoryStream c_ms;
-	bool IsLastPack;
 	void WriteData(DataPack &dataPack)
 	{
 		IsLastPack = dataPack.IsLastPack;
 		c_ms.Write(dataPack.data, dataPack.datasize);
 	};
+public:
+	MemoryStream c_ms;
+	bool IsLastPack;
+	
 };
 typedef Cache* pcacheData;
 
@@ -223,10 +225,15 @@ LRESULT ProcessAcceptObject::OnProcCommand(WPARAM wParam, LPARAM lParam)
 	CacheMemory::Instance()->Get(wParam)->WriteData(c_data->pack[lParam]);
 	if (CacheMemory::Instance()->Get(wParam)->IsLastPack == true)
 	{
+		int command;
+		CacheMemory::Instance()->Get(wParam)->c_ms >> command;
+		vector<XVariant> data;
+		XVariant::StreamToVrArray(CacheMemory::Instance()->Get(wParam)->c_ms, data);
+
 		c_data->pack[lParam].datasize = 0;
 		c_data->pack[lParam].IsLastPack = false;
 		CacheMemory::Instance()->Get(wParam)->c_ms.SetCursor(0);
-		c_chan->OnProcessCommand(int(wParam), CacheMemory::Instance()->Get(wParam)->c_ms);
+		c_chan->OnProcessCommand(int(wParam), command,data);
 		CacheMemory::Instance()->Del(wParam);
 	}
 
