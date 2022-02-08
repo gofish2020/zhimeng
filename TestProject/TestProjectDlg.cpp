@@ -13,6 +13,7 @@
 #include "..\include\Logger.h"
 #include "..\include\XVariant.h"
 #include "..\include\ProcessChan.h"
+#include "..\include\ThreadPool.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -171,8 +172,8 @@ void CTestProjectDlg::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
 
-	pt = new PrintThread();
-	pt->Resume();
+// 	pt = new PrintThread();
+// 	pt->Resume();
 }
 
 
@@ -511,9 +512,29 @@ extern AFX_EXT_CLASS bool DirectoryExist(const UnicodeString& dirpath);
 // XVariant& operator =(double* src);
 // XVariant& operator =(void *src);
 
+
+
+class TaskJob : public ThreadTask
+{
+public:
+	TaskJob() {};
+	~TaskJob() {};
+public:
+	UnicodeString TaskName() { return L"1111"; };
+	void OnExecute() {
+		LOGINFO("11111", "1123213");
+	};
+};
+
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+
+
+	ThreadPool::Instance()->SetTask(new TaskJob(), true, nullptr);
+
+
+	return;
 // 	BYTE by = 256;
 // 	stoi(L"a", nullptr, 10);
 

@@ -10,6 +10,7 @@ desc:
 
 #include "..\include\XString.h"
 #include "..\include\CriticalSection.h"
+#include "..\include\Thread.h"
 class AFX_EXT_CLASS ThreadTask
 {
 public:
@@ -22,12 +23,14 @@ class AFX_EXT_CLASS ThreadPool
 {
 
 public:
-	ThreadPool(int defaultNum = 3); //默认创建多个少空闲状态线程
+	static ThreadPool* Instance();
+private:
+	ThreadPool(); 
 	virtual ~ThreadPool();
-
-	void Bind(ThreadTask *task);
-	//void UnBind(ThreadTask *task);
-
+	static ThreadPool pool;
+public:
+	void SetTask(ThreadTask *task,bool IsRelease, ThreadNotifition *event =  nullptr);
+	
 private:
 	CriticalSection c_cris;
 	std::vector<void*>threads;

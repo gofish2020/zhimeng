@@ -108,13 +108,19 @@ void ThreadObject::SetTask(ThreadTask *task,bool IsRelease, ThreadNotifition *ev
 // typedef ThreadData pThreadData;
 
 
-//线程池
-ThreadPool::ThreadPool(int defaultNum /*= 3*/)
+ThreadPool ThreadPool::pool;
+ThreadPool* ThreadPool::Instance()
 {
-	for (int i = 0; i < defaultNum;i++)
-	{
-		threads.push_back(new ThreadObject());
-	}
+	return &pool;
+}
+
+//线程池
+ThreadPool::ThreadPool()
+{
+// 	for (int i = 0; i < defaultNum;i++)
+// 	{
+// 		threads.push_back(new ThreadObject());
+// 	}
 }
 
 ThreadPool::~ThreadPool()
@@ -128,8 +134,7 @@ ThreadPool::~ThreadPool()
 	}
 	threads.clear();
 }
-
-void ThreadPool::Bind(ThreadTask *task)
+void ThreadPool::SetTask(ThreadTask *task, bool IsRelease, ThreadNotifition *event)
 {
 	c_cris.Locked();
 	std::vector<void*>::iterator it = threads.begin();
@@ -138,13 +143,13 @@ void ThreadPool::Bind(ThreadTask *task)
 		ThreadObject *temp = static_cast<ThreadObject*>(*it);
 		if (!temp->IsWorking())
 		{
-			temp->SetTask(task, false, nullptr);
+			temp->SetTask(task, IsRelease, event);
 			return;
 		}
 	}
 
 	ThreadObject *temp = new ThreadObject();
-	temp->SetTask(task, false, nullptr);
+	temp->SetTask(task, IsRelease, event);
 	threads.push_back(temp);
 	c_cris.UnLocked();
 }
