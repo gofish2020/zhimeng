@@ -205,6 +205,7 @@
     </ClCompile>
     <ClCompile Include="Stream.cpp" />
     <ClCompile Include="Thread.cpp" />
+    <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="XString.cpp" />
     <ClCompile Include="XVariant.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="..\include\Snowflake.h" />
     <ClInclude Include="..\include\Stream.h" />
     <ClInclude Include="..\include\Thread.h" />
+    <ClInclude Include="..\include\ThreadPool.h" />
     <ClInclude Include="..\include\utils.h" />
     <ClInclude Include="..\include\XString.h" />
     <ClInclude Include="..\include\XVariant.h" />

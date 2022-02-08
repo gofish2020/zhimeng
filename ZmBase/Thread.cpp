@@ -55,11 +55,12 @@ void Thread::Resume()
 	{
 		return;
 	}
-	c_IsActive = true;
+	
 	isTerminate = false;
 	if (c_WaitEvent != nullptr)
 		::ResetEvent(c_WaitEvent); //无信号状态
 	ResumeThread(c_handle);
+	c_IsActive = true;
 }
 
 void Thread::Suspend()
@@ -71,8 +72,8 @@ void Thread::Suspend()
 void Thread::Terminate()
 {
 	isTerminate = true;
-	if (c_WaitEvent != nullptr)
-		::SetEvent(c_WaitEvent);//有信号状态
+// 	if (c_WaitEvent != nullptr)
+// 		::SetEvent(c_WaitEvent);//有信号状态
 }
 
 bool Thread::IsTerminate()
@@ -80,9 +81,7 @@ bool Thread::IsTerminate()
 	return isTerminate;
 }
 
-
-
-bool Thread::Active()
+bool Thread::IsActive()
 {
 	return c_IsActive;
 }

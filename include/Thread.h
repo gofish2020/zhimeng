@@ -24,7 +24,7 @@ public:
 	void WaitEvent();
 	bool IsTerminate();
 	//!线程是否已经激活
-	bool Active();
+	bool IsActive();
 protected:
 	virtual void OnExecute() = 0;
 	virtual UnicodeString ClassName() = 0;
