@@ -207,6 +207,7 @@
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ThreadPool.cpp" />
     <ClCompile Include="utils.cpp" />
+    <ClCompile Include="XEvent.cpp" />
     <ClCompile Include="XString.cpp" />
     <ClCompile Include="XVariant.cpp" />
     <ClCompile Include="ZmBase.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="..\include\Thread.h" />
     <ClInclude Include="..\include\ThreadPool.h" />
     <ClInclude Include="..\include\utils.h" />
+    <ClInclude Include="..\include\XEvent.h" />
     <ClInclude Include="..\include\XString.h" />
     <ClInclude Include="..\include\XVariant.h" />
     <ClInclude Include="Resource.h" />
