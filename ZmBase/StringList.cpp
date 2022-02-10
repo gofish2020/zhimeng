@@ -14,11 +14,11 @@ StringList::~StringList()
 
 void StringList::LoadFromStream(Stream& stream)
 {
-	UnicodeString str;
+	string str;
 	size_t size = stream.GetSize();
 	if (size == 0)
 		return;
-	str.resize(size/2);
+	str.resize(size);
 	stream.SetCursor(0);
 	stream.Read((char*)str.c_str(), size);
 }

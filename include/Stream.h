@@ -24,7 +24,7 @@ enum SeekDirection
 class AFX_EXT_CLASS MemoryStream :public Stream
 {
 public:
-	MemoryStream(size_t step = 1 << 12 ); // ²½³¤:4KBµİÔö
+	MemoryStream(size_t step = 1 << 12); // ²½³¤:4KBµİÔö
 	virtual ~MemoryStream();
 
 	void Free(); //ÊÍ·Å¿Õ¼ä
@@ -39,7 +39,26 @@ public:
 
 	size_t Write(_In_ void* src, size_t count);
 	size_t Read(_Out_ void* dest, size_t count);
-	
+	//×Ö·û±àÂëGB2312
+	MemoryStream &operator <<(const string& src)
+	{
+		size_t count = src.length();//×Ö½ÚÊı
+		Write((char*)src.c_str(), count);
+		return *this;
+	};
+
+	MemoryStream &operator >> (string& src)
+	{
+		size_t count = src.length();
+		if (count == 0)
+		{
+			src = "";
+			return *this;
+		}
+		Read((char*)src.c_str(), count);
+		return *this;
+	};
+	//×Ö·û±àÂëUTF-16
 	MemoryStream& operator<<(const UnicodeString& src)
 	{
 		size_t count = src.Len() * 2;
@@ -125,8 +144,14 @@ public:
 	virtual size_t Write(_In_ void* src, size_t count);
 	virtual size_t Read(_Out_ void* dest, size_t count);
 
+	//×Ö·û±àÂëUTF-16
 	FileStream& operator<< (const UnicodeString& wstr);
 	FileStream& operator>> (UnicodeString& wstr);
+
+	//×Ö·û±àÂëGB2312
+	FileStream& operator <<(const string& src);
+	FileStream& operator >>(string& src);
+
 private:
 	fstream* pfstream;
 	int _mode;

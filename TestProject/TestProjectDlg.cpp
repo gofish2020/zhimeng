@@ -529,25 +529,19 @@ public:
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
-// 	string nash_s = "a1中过";
-// 	wstring ww = L"a1中过";
-// 	size_t nash_www = ww.length();
-// 	size_t nash_size = nash_s.size();
-// 	size_t nash_len = strlen(nash_s.c_str());
 
-// 	MemoryStream ms1;
-// 	UnicodeString us = L"a1中国";
-// 	ms1 << us;
-// 	ms1.SetCursor(0);
-// 
-// 	UnicodeString uuus(4,  L' ');
-// 	ms1 >> uuus;
-	UnicodeString ressss(4, L' ');
-	FileStream ffs(L"d:\\1.txt", fmOpenReadWrite);
-	//ffs << L"a1中国";
-	ffs.SetCursor(0);
-	ffs >> ressss;
-	ffs.Close();
+// 	UnicodeString ressss(4, L' ');
+// 	FileStream ffs(L"d:\\1.txt", fmOpenReadWrite);
+// 	ffs << L"a1中国";
+// 	ffs.SetCursor(0);
+// 	ffs >> ressss;
+// 	ffs.Close();
+
+	FileStream fstr(L"D:\\2.txt", fmOpenReadWrite);
+	fstr << string("a1中国");
+	fstr.SetCursor(0);
+	string ressss1(fstr.GetSize(),'\0');
+	fstr >> ressss1;
 	return;
 
 

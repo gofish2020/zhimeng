@@ -201,7 +201,7 @@ size_t FileStream::Write(_In_ void* src, size_t count)
 
 size_t FileStream::Read(_Out_ void* dest, size_t count)
 {
-	if (Filein == _mode & Filein  ) //包含读属性
+	if (int(Filein) == int(_mode & Filein)  ) //包含读属性
 	{
 		int res = pfstream->read((char*)dest, count).gcount();
 		if (pfstream->eof())
@@ -224,10 +224,26 @@ FileStream& FileStream::operator>>(UnicodeString& wstr)
 	{
 		return *this;
 	}
-	Read()
+	Read((char*)wstr.c_str(), wstr.size() * 2);
 // 	string temp;
 // 	std::getline(*pfstream, temp);
 // 	wstr.utf8(temp.c_str());
+	return *this;
+}
+
+FileStream& FileStream::operator >> (string& src)
+{
+	if (src.size() == 0)
+	{
+		return *this;
+	}
+	Read((char*)src.c_str(), src.size());
+	return *this;
+}
+
+FileStream& FileStream::operator<<(const string& src)
+{
+	Write((char*)src.c_str(), src.size());
 	return *this;
 }
 
