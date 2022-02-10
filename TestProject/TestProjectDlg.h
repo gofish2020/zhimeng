@@ -140,7 +140,9 @@ public:
 	int m;
 	int n;
 	//virtual void Sub(int x) {};
-	virtual void Sum(int x) {};
+	void Sum(int x) {
+	
+	};
 
 	void real() {
 		Sum(1);

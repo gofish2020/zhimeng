@@ -103,13 +103,6 @@ char* MemoryStream::Memory()
 }
 
 
-
-
-
-
-
-
-
 size_t MemoryStream::Write(_In_ void* src, size_t count)
 {
 	size_t maxSize = GetCursor() + count;//写入数据
@@ -198,7 +191,7 @@ void FileStream::SetSize(size_t size)
 
 size_t FileStream::Write(_In_ void* src, size_t count)
 {
-	if (Fileout == _mode & Fileout) //包含写属性
+	if (int(Fileout) == int(_mode & Fileout)) //包含写属性
 	{
 		pfstream->write((char*)src, count);
 		return count;
@@ -220,15 +213,21 @@ size_t FileStream::Read(_Out_ void* dest, size_t count)
 
 FileStream& FileStream::operator<<( const UnicodeString& wstr)
 {
-	*pfstream << wstr.Toutf8().c_str();
+	Write((char*)wstr.c_str(), wstr.size() * 2);
+	//*pfstream << wstr.Toutf8().c_str();
 	return *this;
 }
 
 FileStream& FileStream::operator>>(UnicodeString& wstr)
 {
-	string temp;
-	std::getline(*pfstream, temp);
-	wstr.utf8(temp.c_str());
+	if (wstr.size() == 0)
+	{
+		return *this;
+	}
+	Read()
+// 	string temp;
+// 	std::getline(*pfstream, temp);
+// 	wstr.utf8(temp.c_str());
 	return *this;
 }
 

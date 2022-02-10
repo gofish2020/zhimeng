@@ -63,6 +63,9 @@
     <ClCompile Include="XEvent.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="StringList.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ZmBase.def">
@@ -122,6 +125,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\XEvent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StringList.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
