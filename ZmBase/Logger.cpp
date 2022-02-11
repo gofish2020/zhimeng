@@ -22,7 +22,8 @@ void Logger::SaveLogs()
 	{
 		LogData *d = c_logs[i]; //打开日志文件，写入数据
 		UnicodeString temp = UnicodeString(d->Level) + L"," + d->Time + L"," + UnicodeString(d->ProcessId) + L"," + UnicodeString(d->ThreadId) + L"," + d->Source + L"," + d->Message + L"\n";
-		fs << temp;
+		//fs << temp.Toutf8();
+		fs.WriteStringUTF8(temp);
 	}
 	c_logs.clear();
 }

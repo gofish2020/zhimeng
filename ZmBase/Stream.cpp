@@ -211,10 +211,21 @@ size_t FileStream::Read(_Out_ void* dest, size_t count)
 	return count;
 }
 
+void FileStream::WriteStringUTF8(const UnicodeString& wstr)
+{
+	*pfstream << wstr.Toutf8().c_str();
+}
+
+void FileStream::ReadStringUTF8(UnicodeString& wstr)
+{
+	string temp;
+	std::getline(*pfstream, temp);
+	wstr.utf8(temp.c_str());
+}
+
 FileStream& FileStream::operator<<( const UnicodeString& wstr)
 {
 	Write((char*)wstr.c_str(), wstr.size() * 2);
-	//*pfstream << wstr.Toutf8().c_str();
 	return *this;
 }
 
@@ -225,9 +236,7 @@ FileStream& FileStream::operator>>(UnicodeString& wstr)
 		return *this;
 	}
 	Read((char*)wstr.c_str(), wstr.size() * 2);
-// 	string temp;
-// 	std::getline(*pfstream, temp);
-// 	wstr.utf8(temp.c_str());
+
 	return *this;
 }
 

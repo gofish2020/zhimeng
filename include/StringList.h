@@ -13,14 +13,33 @@ public:
 	void LoadFromFile(const UnicodeString& fileName);
 
 	void Clear();
+	void Add(const UnicodeString &wstr);
+	void SetText(const UnicodeString &wstr); //°´ÕÕ \n ·Ö¸î×Ö·û´®
 private:
 
-	bool IsSplit;
-	typedef struct _Data {
+	struct stringData {
 		UnicodeString str;
 		UnicodeString key;
 		UnicodeString value;
-	} stringData;
+		bool Splited;
+
+		stringData(const UnicodeString& wstr)
+		{
+			str = wstr;
+			Splited = false;
+		};
+
+		void Split()
+		{
+			size_t pos = str.find(L'=', 0);
+			if (pos != wstring::npos)
+			{
+				key = str.SubString(0, pos);
+				value = str.substr(pos + 1, str.Len() - pos - 1);
+			}
+			Splited = true;
+		};
+	};
 
 	std::vector<stringData> datas;
 };

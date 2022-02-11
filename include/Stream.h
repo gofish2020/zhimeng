@@ -144,6 +144,10 @@ public:
 	virtual size_t Write(_In_ void* src, size_t count);
 	virtual size_t Read(_Out_ void* dest, size_t count);
 
+
+	//×Ö·û±àÂëUTF-8
+	void WriteStringUTF8(const UnicodeString& wstr);
+	void ReadStringUTF8(UnicodeString& wstr);
 	//×Ö·û±àÂëUTF-16
 	FileStream& operator<< (const UnicodeString& wstr);
 	FileStream& operator>> (UnicodeString& wstr);

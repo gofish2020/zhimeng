@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "TestProject.h"
+#include <xstring>
 #include "TestProjectDlg.h"
 #include "afxdialogex.h"
 #include "..\include\XString.h"
@@ -14,6 +15,8 @@
 #include "..\include\XVariant.h"
 #include "..\include\ProcessChan.h"
 #include "..\include\ThreadPool.h"
+#include "..\include\StringList.h"
+using namespace std;
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -529,7 +532,22 @@ public:
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	StringList sl;
+	sl.LoadFromFile(L"D:\\HL7Config.ini");
 
+// 	string sstr = "a1中国";
+// 	int ssize = sstr.length();
+
+	UnicodeString ustring;
+	ustring = L"a1中国";
+	UnicodeString sssdfsdf = ustring.SubString(9, -1);
+	size_t pos = ustring.find(L'a',6);
+	if ( pos == -1)
+	{
+		ustring = L"a1中国";
+	}
+	//int si = ustring.Len();
+	return;
 // 	UnicodeString ressss(4, L' ');
 // 	FileStream ffs(L"d:\\1.txt", fmOpenReadWrite);
 // 	ffs << L"a1中国";
