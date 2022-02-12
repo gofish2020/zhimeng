@@ -2,7 +2,7 @@
 #include "..\include\StringList.h"
 #include "..\include\utils.h"
 
-StringList::StringList()
+StringList::StringList():IsSplit(false)
 {
 }
 
@@ -10,6 +10,15 @@ StringList::StringList()
 StringList::~StringList()
 {
 	Clear();
+}
+
+void StringList::SetSplit()
+{
+	IsSplit = true;
+	for (int i = 0; i < datas.size(); i++)
+	{
+		datas[i].Split();
+	}
 }
 
 void StringList::LoadFromStream(Stream& stream)
@@ -35,6 +44,21 @@ void StringList::LoadFromFile(const UnicodeString& fileName)
 	LoadFromStream(fs);
 }
 
+void StringList::SaveToStream(Stream& stream)
+{
+	for (int i =0;i<datas.size();i++)
+	{
+		string temp = string(datas[i].str+L"\n");
+		stream.Write((char*)temp.c_str(), temp.size());
+	}
+}
+
+void StringList::SaveToFile(const UnicodeString& fileName)
+{
+	FileStream fs(fileName, fmOpenReadWrite);
+	SaveToStream(fs);
+}
+
 void StringList::Clear()
 {
 	datas.clear();
@@ -43,7 +67,8 @@ void StringList::Clear()
 void StringList::Add(const UnicodeString &wstr)
 {
 	stringData d(wstr);
-	d.Split();
+	if (IsSplit)
+		d.Split();
 	datas.push_back(d);
 }
 
@@ -97,4 +122,71 @@ void StringList::SetText(const UnicodeString &wstr)
 			first = pos + 1;
 		}
 	}
+}
+
+UnicodeString StringList::Text()
+{
+	UnicodeString result = L"";
+	for (int i = 0;i<datas.size();i++)
+	{
+		result += datas[i].str+ L"\r\n";
+	}
+	return result;
+}
+
+int StringList::Update(int index, const UnicodeString &wstr)
+{
+	if (index >= datas.size())
+	{
+		return -1;
+	}
+	datas[index].str = wstr;
+	if (IsSplit)
+		datas[index].Split();
+
+}
+
+int StringList::Delete(int index)
+{
+	if (index >= datas.size())
+	{
+		return -1;
+	}
+	datas.erase(datas.begin() + index);
+}
+
+int StringList::Insert(int index, const UnicodeString& wstr)
+{
+	if (index >= datas.size())
+	{
+		return -1;
+	}
+	stringData d(wstr);
+	if (IsSplit)
+		d.Split();
+	datas.insert(datas.begin() + index, d);
+}
+
+StringList& StringList::operator=(const StringList& data)
+{
+	if (this != &data)
+	{
+		datas.assign(data.datas.begin(), data.datas.end());
+	}
+
+	return *this;
+}
+
+UnicodeString StringList::operator[](int index)
+{
+	if (datas.size() == 0 || index >= datas.size())
+	{
+		return L"";
+	}
+	return datas[index].str;
+}
+
+int StringList::Size()
+{
+	return datas.size();
 }

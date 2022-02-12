@@ -535,6 +535,7 @@ void CTestProjectDlg::OnBnClickedButton6()
 	StringList sl;
 	sl.LoadFromFile(L"D:\\HL7Config.ini");
 
+	sl.SaveToFile(L"D:\\hh.ini");
 // 	string sstr = "a1ÖÐ¹ú";
 // 	int ssize = sstr.length();
 

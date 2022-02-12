@@ -147,7 +147,7 @@ public:
 
 	//字符编码UTF-8
 	void WriteStringUTF8(const UnicodeString& wstr);
-	void ReadStringUTF8(UnicodeString& wstr);
+	void ReadStringUTF8(UnicodeString& wstr);//读取一行记录
 	//字符编码UTF-16
 	FileStream& operator<< (const UnicodeString& wstr);
 	FileStream& operator>> (UnicodeString& wstr);
