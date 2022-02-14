@@ -531,7 +531,9 @@ public:
 
 void CTestProjectDlg::OnBnClickedButton6()
 {
+	FileStream fs(L"D:\\hh.ini", fmOpenNew);
 
+	return;
 	StringList sl;
 	sl.LoadFromFile(L"D:\\HL7Config.ini");
 

@@ -57,8 +57,8 @@ public:
 	UnicodeString operator+(const UnicodeString &);
 
 	//字符集转换
-	operator char();
-	operator string(); //unicode 2 mutil-byte
+	operator char() const;
+	operator string() const; //unicode 2 mutil-byte
 	string Toutf8() const;// unicode 2 utf8
 	void utf8(const char * str); //utf8 2 unicode
 
@@ -93,10 +93,30 @@ extern AFX_EXT_CLASS UnicodeString Join(vector<UnicodeString> elems, UnicodeStri
 extern AFX_EXT_CLASS UnicodeString operator+(const char* src,const UnicodeString& dest);
 extern AFX_EXT_CLASS UnicodeString operator+(const wchar_t* src, const UnicodeString& dest);
 
+//多字节
 class AFX_EXT_CLASS MultiString :public string
 {
 
 public:
 	MultiString();
 	virtual ~MultiString();
+};
+
+// Case Insesitive Unicode String 大小写不敏感的字符串,统一转成小写即可
+class AFX_EXT_CLASS CaseIString
+{
+public:
+	CaseIString(const UnicodeString& wstr);
+	CaseIString(const string& str);
+	CaseIString();//默认构造函数
+	CaseIString(const CaseIString& caseString);//拷贝构造函数
+	CaseIString& operator=(const CaseIString& caseString);//赋值函数
+	bool operator<(const CaseIString& caseString) const; //比较函数
+	bool operator==(const CaseIString& caseString) const;
+	operator UnicodeString() const;
+	~CaseIString();
+	int Len();
+private:
+	UnicodeString c_lowerwstr; //转小写
+	UnicodeString c_wstr;//原始的字符串
 };

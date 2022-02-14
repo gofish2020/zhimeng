@@ -18,7 +18,7 @@ public:
 
 	void Clear();
 	
-	void SetText(const UnicodeString &wstr); //按照 \n 分割字符串,覆盖现有datas
+	void SetText(const UnicodeString& wstr); //按照 \n 分割字符串,覆盖现有datas
 	UnicodeString Text();
 
 	void Add(const UnicodeString &wstr);
@@ -26,6 +26,8 @@ public:
 	int Delete(int index);
 	int Insert(int index, const UnicodeString& wstr);
 
+	UnicodeString Keys(int index);
+	UnicodeString Values(int index);
 
 	StringList& operator=(const StringList& data);
 	UnicodeString operator[](int index);

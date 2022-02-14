@@ -193,6 +193,7 @@
   <ItemGroup>
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="DateTime.cpp" />
+    <ClCompile Include="IniConfig.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Mutex.cpp" />
     <ClCompile Include="ProcessChan.cpp" />
@@ -216,6 +217,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\CriticalSection.h" />
     <ClInclude Include="..\include\DateTime.h" />
+    <ClInclude Include="..\include\IniConfig.h" />
     <ClInclude Include="..\include\Logger.h" />
     <ClInclude Include="..\include\Mutex.h" />
     <ClInclude Include="..\include\ProcessChan.h" />

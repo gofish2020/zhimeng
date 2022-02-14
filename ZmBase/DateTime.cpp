@@ -57,6 +57,7 @@ DateTime::DateTime(const UnicodeString& Src)
 	if (Src.Trim() == L"")
 	{
 		*this = DateTime();
+		return;
 	}
 	if (!ParseDateTime(Src.c_str()))
 	{

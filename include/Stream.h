@@ -113,7 +113,7 @@ enum FileMode
 	Filebinary = _IOSbinary//二进制打开文件
 };
 
-static const int fmOpenNew = Fileout; //创建新文件，游标位于首部
+static const int fmOpenNew = Fileout; //创建新文件，游标位于首部;【如果存在，直接覆盖】
 static const int fmOpenRead = Filein | Fileapp ;//不存在创建文件，存在直接打开文件，游标位于首部，【只能读取】
 static const int fmOpenWrite = Fileout | Fileapp | Fileate; // 不存在创建文件，存在直接打开文件，游标位于尾部，【只能写入】
 static const int fmOpenReadWrite = Filein | Fileout | Fileapp | Fileate; // 不存在创建、存在打开文件，游标位于尾部【可在任意的位置写入和读取】

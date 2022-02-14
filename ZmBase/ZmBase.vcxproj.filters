@@ -66,6 +66,9 @@
     <ClCompile Include="StringList.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="IniConfig.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ZmBase.def">
@@ -128,6 +131,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\StringList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\IniConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

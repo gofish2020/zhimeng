@@ -25,7 +25,7 @@ UnicodeString::UnicodeString(unsigned short us)
 	uprintf_s(L"%hu", us);
 }
 
-UnicodeString::operator string()
+UnicodeString::operator string() const
 {
 
 	string result = "";
@@ -398,7 +398,7 @@ UnicodeString UnicodeString::Right(int count) const
 	return SubString(Len() - count, count);
 }
 
-UnicodeString::operator char()
+UnicodeString::operator char() const
 {
 	if (IsEmpty())
 	{
@@ -518,3 +518,75 @@ MultiString::~MultiString()
 {
 
  }
+
+////////////大小写不敏感字符串//////////////////
+CaseIString::CaseIString():c_wstr(L""),c_lowerwstr(L"")
+{
+
+}
+
+CaseIString::CaseIString(const UnicodeString& wstr)
+{
+	c_wstr = wstr;
+	c_lowerwstr = wstr.ToLower();
+}
+
+CaseIString::CaseIString(const string& str)
+{
+
+	c_wstr = UnicodeString(str);
+	c_lowerwstr = c_wstr.ToLower();
+}
+
+CaseIString::CaseIString(const CaseIString& caseString)
+{
+	if (this != &caseString)
+	{
+		c_wstr = caseString.c_wstr;
+		c_lowerwstr = caseString.c_lowerwstr;
+	}
+}
+
+CaseIString::operator UnicodeString() const
+{
+	return c_wstr;
+}
+
+CaseIString::~CaseIString()
+{
+
+}
+
+int CaseIString::Len()
+{
+	return c_lowerwstr.Len();
+}
+
+bool CaseIString::operator<(const CaseIString& caseString) const
+{
+	if (c_lowerwstr < caseString.c_lowerwstr)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CaseIString::operator==(const CaseIString& caseString) const
+{
+	if (c_lowerwstr == caseString.c_lowerwstr)
+	{
+		return true;
+	}
+	return false;
+}
+
+CaseIString& CaseIString::operator=(const CaseIString& caseString)
+{
+
+	if (this != &caseString)
+	{
+		c_wstr = caseString.c_wstr;
+		c_lowerwstr = caseString.c_lowerwstr;
+	}
+	return *this;
+}

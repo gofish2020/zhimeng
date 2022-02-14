@@ -167,6 +167,24 @@ int StringList::Insert(int index, const UnicodeString& wstr)
 	datas.insert(datas.begin() + index, d);
 }
 
+UnicodeString StringList::Keys(int index)
+{
+	if (index >= datas.size())
+	{
+		return L"";
+	}
+	return datas[index].key;
+}
+
+UnicodeString StringList::Values(int index)
+{
+	if (index >= datas.size())
+	{
+		return L"";
+	}
+	return datas[index].value;
+}
+
 StringList& StringList::operator=(const StringList& data)
 {
 	if (this != &data)
