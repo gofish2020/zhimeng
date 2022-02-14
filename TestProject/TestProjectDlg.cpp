@@ -16,6 +16,7 @@
 #include "..\include\ProcessChan.h"
 #include "..\include\ThreadPool.h"
 #include "..\include\StringList.h"
+#include "..\include\IniConfig.h"
 using namespace std;
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -531,7 +532,16 @@ public:
 
 void CTestProjectDlg::OnBnClickedButton6()
 {
-	FileStream fs(L"D:\\hh.ini", fmOpenNew);
+
+
+	IniConfig ini(L"D:\\hh.ini");
+
+	bool v2 = ini.ReadBool(L"Version", L"v2", false);
+	double v1 = ini.ReadFloat(L"Version", L"v1", 0);
+	UnicodeString v3 = ini.ReadString(L"Version", L"v3", false);
+
+	ini.SaveToFile(L"D:\\12.ini");
+	//FileStream fs(L"D:\\hh.ini", fmOpenNew);
 
 	return;
 	StringList sl;

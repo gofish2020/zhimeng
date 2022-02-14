@@ -9,7 +9,7 @@ IniConfig::IniConfig():c_event(nullptr), c_IsModify(false), c_FileName(L"")
 
 IniConfig::IniConfig(const UnicodeString& fileName): c_FileName(fileName),c_event(nullptr),c_IsModify(false)
 {
-
+	LoadFromFile(fileName);
 }
 
 IniConfig::IniConfig(Stream& stream):c_FileName(L""),c_event(nullptr),c_IsModify(false)
@@ -21,7 +21,7 @@ IniConfig::~IniConfig()
 {
 	if (c_IsModify && !c_FileName.IsEmpty())
 	{
-		
+		SaveToFile(c_FileName);
 	}
 }
 
