@@ -28,6 +28,7 @@ public:
 	virtual ~SelectSocket();
 	void Open(SockSetting& sockSetting);
 	void Close();
+
 	SelectSocket* Accept();
 
 	SOCKET Handle();
