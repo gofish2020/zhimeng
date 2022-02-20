@@ -16,10 +16,25 @@ extern AFX_EXT_CLASS UnicodeString CreateGUIDStr()
 	return UnicodeString(CreateGUID());
 }
 
-extern AFX_EXT_CLASS void ThrowError(UnicodeString err)
+extern AFX_EXT_CLASS void ThrowError(const UnicodeString& err)
 {
 	throw std::exception(string(err).c_str());
 }
+
+
+UnicodeString SysErrorMessage(int ErrorCode)
+{
+
+	LPTSTR lpBuffer;
+	FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, ErrorCode, 0, (LPTSTR)&lpBuffer, MAX_PATH, NULL);
+	UnicodeString buffer(lpBuffer);
+	LocalFree(lpBuffer);
+
+	if (ErrorCode == 0)
+		return "";
+	return L"¡¾" + UnicodeString(ErrorCode) +L"|"+ buffer + L"¡¿";
+}
+
 
 extern AFX_EXT_CLASS UnicodeString GetLastErrorStr(UnicodeString funcname,UnicodeString desc)
 {

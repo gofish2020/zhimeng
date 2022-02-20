@@ -6,9 +6,9 @@
 extern AFX_EXT_CLASS INT64 CreateGUID();
 extern AFX_EXT_CLASS UnicodeString CreateGUIDStr();
 
-extern AFX_EXT_CLASS void ThrowError(UnicodeString err);
+extern AFX_EXT_CLASS void ThrowError(const UnicodeString& err);
 extern AFX_EXT_CLASS UnicodeString GetLastErrorStr(UnicodeString funcname, UnicodeString desc = L"");
-
+extern AFX_EXT_CLASS UnicodeString SysErrorMessage(int ErrorCode);
 
 //文件是否存在
 extern AFX_EXT_CLASS bool FileExist(const UnicodeString& file);

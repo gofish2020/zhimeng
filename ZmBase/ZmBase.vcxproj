@@ -191,6 +191,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseSocket.cpp" />
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="DateTime.cpp" />
     <ClCompile Include="IniConfig.cpp" />
@@ -215,6 +216,7 @@
     <ClCompile Include="ZmBase.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\BaseSocket.h" />
     <ClInclude Include="..\include\CriticalSection.h" />
     <ClInclude Include="..\include\DateTime.h" />
     <ClInclude Include="..\include\IniConfig.h" />

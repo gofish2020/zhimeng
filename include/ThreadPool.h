@@ -18,7 +18,7 @@ public:
 	virtual UnicodeString TaskName() = 0;
 };
 
-
+//里面的线程处于一直运行的状态，通过SetTask，将回调对象传递给（空闲）线程，执行任务
 class AFX_EXT_CLASS ThreadPool
 {
 
