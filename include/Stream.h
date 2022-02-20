@@ -1,6 +1,8 @@
 #pragma once
 #include "..\include\XString.h"
 #include <fstream>
+#include <queue>
+#include <vector>
 using namespace std;
 
 class AFX_EXT_CLASS Stream
@@ -196,5 +198,37 @@ private:
 	char* pMemory;
 	bool c_IsCreator;
 	UnicodeString c_ShareName;
+
+};
+
+
+
+//队列流,目的实现从头部读取流，从尾部写入流，读取后的数据空间，会自动释放掉。单个Stream的大小为1MB
+//写入数据，会不断的增加空间，存储数据
+//读取数据，会不断的减少空间，释放数据
+class AFX_EXT_CLASS QueueStream : public Stream
+{
+
+public:
+	QueueStream();
+	virtual ~QueueStream();
+	virtual size_t Write(_In_ void* src, size_t count);
+	virtual size_t Read(_Out_ void* dest, size_t count);
+	virtual size_t GetSize();
+	virtual void SetCursor(size_t Pos) {};
+
+	char* AllocateSize(size_t &count);//返回一块能写入的空间指针，以及空间大小
+	void UpdateSize(size_t count);//但是实际写入的量，用该函数更新内部
+private:
+	char* ReadMemory();
+	char* WriteMemory();
+	void AddQueue();
+	void SubQueue();
+	static size_t gc_streamSize; //1MB
+	size_t headPos;
+	size_t tailPos;
+	size_t c_Size;
+	queue<MemoryStream*>data;
+	queue<MemoryStream*>cache;
 
 };

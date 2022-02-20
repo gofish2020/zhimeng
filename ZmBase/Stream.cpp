@@ -402,3 +402,173 @@ UnicodeString ShareMemoryStream::ShareName()
 {
 	return c_ShareName;
 }
+
+
+void QueueStream::AddQueue()
+{
+	MemoryStream *temp = nullptr;
+	if (!cache.empty())
+	{
+		temp = cache.front();
+		cache.pop();
+	}
+	else
+	{
+		temp = new MemoryStream;
+		temp->SetSize(gc_streamSize);
+	}
+	data.push(temp);
+	tailPos = 0;
+}
+
+void QueueStream::SubQueue()
+{
+	MemoryStream* temp = data.front();
+	data.pop();
+	if (cache.size() < 4)
+		cache.push(temp);
+	else
+		delete temp;
+	headPos = 0;
+}
+
+size_t QueueStream::gc_streamSize = 1024 * 1024;
+QueueStream::QueueStream()
+{
+	MemoryStream *temp = new MemoryStream;
+	temp->SetSize(gc_streamSize);
+	data.push(temp);
+	headPos = 0;
+	tailPos = 0;
+	c_Size = 0;
+}
+
+
+
+QueueStream::~QueueStream()
+{
+	while (cache.empty())
+	{
+		delete (MemoryStream*)(cache.front());
+		cache.pop();
+	}
+	while (data.empty())
+	{
+		delete (MemoryStream*)(data.front());
+		data.pop();
+	}
+}
+
+//
+size_t QueueStream::Write(_In_ void* src, size_t count)
+{
+	size_t size = count;
+	size_t pos = 0;
+	while (1)
+	{
+		if (size > (gc_streamSize - tailPos))
+		{
+			memcpy(WriteMemory(), (char*)src + pos, gc_streamSize - tailPos);
+			size = size - gc_streamSize + tailPos; //剩余的待copy的数据量
+			pos = pos + gc_streamSize - tailPos;//待copy数据指针位置
+			AddQueue();
+		}
+		else
+		{
+			memcpy(WriteMemory(), (char*)src + pos, size);
+			tailPos += size;
+			if (tailPos >= gc_streamSize)
+			{
+				AddQueue();
+			}
+			break;
+		}
+	}
+	c_Size += count;
+	return count;
+}
+
+size_t QueueStream::Read(_Out_ void* dest, size_t count)
+{
+	if (count > c_Size)
+	{
+		Painc("out of stream size");
+	}
+	size_t size = count;
+	size_t pos = 0;
+	while (1)
+	{
+		if (data.size() == 1)
+		{
+			memcpy((char*)dest + pos, ReadMemory(), size);
+			pos += size;//已经写入的数据偏移
+			c_Size -= size; //剩余数据量
+			headPos += size;//头指针偏移量
+			if (headPos >= gc_streamSize)
+			{
+				SubQueue();
+			}
+			break;
+		}
+		else
+		{
+			size_t tempSize = gc_streamSize - headPos;
+			if (size > tempSize) //不够,全部读完
+			{
+				memcpy((char*)dest + pos, ReadMemory(), tempSize);
+				size -= tempSize;//还需要读取的数量
+				c_Size -= tempSize;
+				pos += tempSize;
+				SubQueue();//这个块读完了，不要了
+			}
+			else //够了、正好读取
+			{
+				//size < = tempSize
+				memcpy((char*)dest + pos, ReadMemory(), size);
+				pos += size;//已经写入的数据偏移
+				c_Size -= size; //剩余数据量
+				headPos += size;//头指针偏移量
+				if (headPos >= gc_streamSize)
+				{
+					SubQueue();
+				}
+				break;
+			}
+		}
+	}
+	return count;
+}
+
+size_t QueueStream::GetSize()
+{
+	return c_Size;
+}
+
+char* QueueStream::AllocateSize(size_t &count)
+{
+	if (gc_streamSize - tailPos < count)
+	{
+		count = gc_streamSize - tailPos;
+	}
+	return WriteMemory();
+}
+
+void QueueStream::UpdateSize(size_t count)
+{
+	c_Size += count;
+	tailPos += count;
+	if (tailPos >= gc_streamSize)
+	{
+		AddQueue();
+	}
+}
+
+char* QueueStream::ReadMemory()
+{
+	return (char*)((MemoryStream*)(data.front())->Memory()) + headPos;
+}
+
+char* QueueStream::WriteMemory()
+{
+	return (char*)((MemoryStream*)(data.back())->Memory()) + tailPos;
+}

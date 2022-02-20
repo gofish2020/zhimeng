@@ -533,7 +533,19 @@ public:
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+	char ns[3] = { 'a','b','c' };
+	char ns22[3] = { 'c','d','e' };
 
+	char nbbb[4] = {};
+	char nbb1b[4] = {};
+	char nbb2b[4] = {};
+	QueueStream qs;
+	qs.Write(ns, 1);
+	qs.Write(ns22, 1);
+	qs.Read(nbbb, 1);
+	qs.Read(nbb1b, 1);
+	qs.Read(nbb2b, 1);
+	return;
 	IniConfig ini(L"D:\\hh.ini");
 
 	bool v2 = ini.ReadBool(L"Version", L"v2", false);
