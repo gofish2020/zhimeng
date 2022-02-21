@@ -7,6 +7,11 @@ StringList::StringList():IsSplit(false)
 }
 
 
+StringList::StringList(const StringList& s)
+{
+	datas.assign(s.datas.begin(), s.datas.end());
+}
+
 StringList::~StringList()
 {
 	Clear();
@@ -165,6 +170,18 @@ int StringList::Insert(int index, const UnicodeString& wstr)
 	if (IsSplit)
 		d.Split();
 	datas.insert(datas.begin() + index, d);
+}
+
+bool StringList::IsExist(const UnicodeString& wstr)
+{
+	for (int i = 0;i<datas.size();i++)
+	{
+		if (datas[i].str == wstr)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 UnicodeString StringList::Keys(int index)

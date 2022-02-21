@@ -1,7 +1,7 @@
 #pragma once
 #include "..\include\XString.h"
 #include <winsock2.h>
-
+#include "..\include\StringList.h"
 
 extern AFX_EXT_CLASS void  InitSocket();
 #define INITSOCK() InitSocket()
@@ -29,15 +29,26 @@ public:
 	void Open(SockSetting& sockSetting);
 	void Close();
 
-
-	SelectSocket* Accept();
+	SelectSocket* Accept(); //返回客户端的一个连接
 	SOCKET Handle();
 
 
+	static UnicodeString GetHostName();
+	static StringList GetHostByName(const UnicodeString& name);
+	static StringList GetLocalAddr();
+	static bool IsLocalIPAddr(const UnicodeString& ip);
+	static UnicodeString Dns(const UnicodeString& domain);
 private:
+	//
+	SelectSocket(SockSetting &s, SOCKET sock);
 	//!创建(未绑定地址的)套接字：（服务器端和客户端）
 	void Create(); 
 	
+
+	//接收数据
+	void RecvFrom(void *buf, size_t len);
+	//发送数据
+	void SendTo(void *buf, size_t len);
 private:
 	SOCKET c_socket;
 	SockSetting c_socksetting;

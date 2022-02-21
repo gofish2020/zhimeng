@@ -6,6 +6,7 @@ class AFX_EXT_CLASS StringList
 {
 public:
 	StringList();
+	StringList(const StringList& s);
 	virtual ~StringList();
 
 	void SetSplit();
@@ -25,6 +26,7 @@ public:
 	int Update(int index, const UnicodeString &wstr);//修改制定位置的数据
 	int Delete(int index);
 	int Insert(int index, const UnicodeString& wstr);
+	bool IsExist(const UnicodeString& wstr);
 
 	UnicodeString Keys(int index);
 	UnicodeString Values(int index);
@@ -32,7 +34,6 @@ public:
 	StringList& operator=(const StringList& data);
 	UnicodeString operator[](int index);
 
-	
 	int Size();
 private:
 
