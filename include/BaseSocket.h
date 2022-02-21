@@ -20,7 +20,7 @@ struct AFX_EXT_CLASS SockSetting
 	SockSetting& operator=(const SockSetting& sock);
 };
 
-//!Select Socket 模型
+//!Select Socket 模型 https://blog.csdn.net/guo8113/article/details/26448011
 class AFX_EXT_CLASS SelectSocket
 {
 public:
@@ -29,9 +29,14 @@ public:
 	void Open(SockSetting& sockSetting);
 	void Close();
 
-	SelectSocket* Accept();
 
+	SelectSocket* Accept();
 	SOCKET Handle();
+
+private:
+	//!创建(未绑定地址的)套接字：（服务器端和客户端）
+	void Create(); 
+	
 private:
 	SOCKET c_socket;
 	SockSetting c_socksetting;
