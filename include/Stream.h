@@ -5,6 +5,14 @@
 #include <vector>
 using namespace std;
 
+enum StreamType
+{
+	stMemory,
+	stFile,
+	stShare,
+	stQueue
+};
+
 class AFX_EXT_CLASS Stream
 {
 public:
@@ -14,6 +22,9 @@ public:
 	virtual size_t Read(_Out_ void* dest, size_t count)= 0;
 	virtual size_t GetSize() = 0;
 	virtual void SetCursor(size_t Pos) = 0;
+	virtual size_t GetCursor() = 0;
+
+	virtual StreamType Type() = 0;
 };
 
 
@@ -29,6 +40,8 @@ public:
 	MemoryStream(size_t step = 1 << 12); // 步长:4KB递增
 	virtual ~MemoryStream();
 
+
+	StreamType Type() { return stMemory; }
 	void Free(); //释放空间
 	void Zero(); //分配的空间初始化为0
 	void Seek(size_t offset, SeekDirection& direction);
@@ -135,6 +148,7 @@ public:
 	FileStream(UnicodeString fileName, int mode,int prot = _SH_DENYNO);
 	virtual ~FileStream();
 
+	StreamType Type() { return stFile; }
 	void Open(UnicodeString fileName, int mode, int prot = _SH_DENYNO);
 	void Close();
 	void Seek(size_t offset, SeekDirection direction);
@@ -175,7 +189,7 @@ public:
 	virtual size_t Write(_In_ void* src, size_t count);
 	virtual size_t Read(_Out_ void* dest, size_t count);
 
-
+	StreamType Type() { return stShare; }
 	ShareMemoryStream& operator<<(const UnicodeString& wstr);
 	/*
 		这里的wstr必须要先分配存储空间 
@@ -216,10 +230,12 @@ public:
 	virtual size_t Read(_Out_ void* dest, size_t count);
 	virtual size_t GetSize();
 	virtual void SetCursor(size_t Pos) {};
-
+	virtual size_t GetCursor() { return 0; };
+	StreamType Type() { return stQueue; }
 	char* AllocateSize(size_t &count);//返回一块能写入的空间指针，以及空间大小
 	void UpdateSize(size_t count);//但是实际写入的量，用该函数更新内部
 
+	void SaveToStream(Stream& stream, int count);
 	template<typename T>
 	QueueStream& operator >>(T& data)
 	{

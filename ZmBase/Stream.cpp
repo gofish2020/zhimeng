@@ -505,10 +505,10 @@ size_t QueueStream::Read(_Out_ void* dest, size_t count)
 			pos += size;//已经写入的数据偏移
 			c_Size -= size; //剩余数据量
 			headPos += size;//头指针偏移量
-			if (headPos >= gc_streamSize)
-			{
-				SubQueue();
-			}
+// 			if (headPos >= gc_streamSize)
+// 			{
+// 				SubQueue();
+// 			}
 			break;
 		}
 		else
@@ -561,6 +561,53 @@ void QueueStream::UpdateSize(size_t count)
 	if (tailPos >= gc_streamSize)
 	{
 		AddQueue();
+	}
+}
+
+void QueueStream::SaveToStream(Stream& stream, int count)
+{
+	if (count > c_Size)
+	{
+		Painc("QueueStream::SaveToStream -->> out of stream size");
+	}
+	size_t size = count;
+	
+	while (1)
+	{
+		if (data.size() == 1)//只有一个，说明没有填充满 也就四tailPos不会>=gc_streamSize
+		{
+			stream.Write(ReadMemory(), size);
+			c_Size -= size; //剩余数据量
+			headPos += size;//头指针偏移量
+// 			if (headPos >= gc_streamSize) //这里不会执行到
+// 			{
+// 				SubQueue();
+// 			}
+			break;
+		}
+		else
+		{
+			size_t tempSize = gc_streamSize - headPos;
+			if (size > tempSize) //不够,全部读完
+			{
+				stream.Write(ReadMemory(), tempSize);
+				size -= tempSize;//还需要读取的数量
+				c_Size -= tempSize;
+				SubQueue();//这个块读完了，不要了
+			}
+			else //够了、正好读取
+			{
+				//size < = tempSize
+				stream.Write(ReadMemory(), size);
+				c_Size -= size; //剩余数据量
+				headPos += size;//头指针偏移量
+				if (headPos >= gc_streamSize)
+				{
+					SubQueue();
+				}
+				break;
+			}
+		}
 	}
 }
 

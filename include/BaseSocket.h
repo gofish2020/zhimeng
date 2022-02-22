@@ -32,7 +32,7 @@ public:
 	SelectSocket* Accept(); //返回客户端的一个连接
 	SOCKET Handle();
 
-
+	//通用的函数
 	static UnicodeString GetHostName();
 	static StringList GetHostByName(const UnicodeString& name);
 	static StringList GetLocalAddr();
@@ -46,17 +46,12 @@ public:
 	void SendChar(char c);
 	void SendStream(Stream& stream);
 	
-
-// 	string RecvString(size_t length);
-// 	int RecvInteger();
-// 	char RecvChar();
-
-
-
+	//接收数据
 	void RecvFrom(void* buf, int len);
 	char RecvChar();
 	string RecvString(size_t len);
 	int RecvInteger();
+	void RecvStream(Stream& stream, int len = 0);
 
 private:
 	//
@@ -65,10 +60,10 @@ private:
 	void Create(); 
 
 	//接收数据
-	void RecvFrom(size_t len);
+	void RecvByLen(size_t len);
 
-	void sendPacket(void *buf, size_t len);
-	void recvPacket(void *buf, size_t& len);
+	void sendPacket(void *buf, size_t len); //send
+	void recvPacket(void *buf, size_t& len);//recv
 private:
 	SOCKET c_socket;
 	SockSetting c_socksetting;

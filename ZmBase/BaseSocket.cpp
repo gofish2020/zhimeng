@@ -253,9 +253,46 @@ void SelectSocket::SendChar(char c)
 	SendTo(&c, sizeof(c));
 }
 
+static const int gc_MaxPacketSize = 30 * 1024 * 1024;
 void SelectSocket::SendStream(Stream& stream)
 {
-	
+	StreamType st = stream.Type();
+	if (st == stMemory)
+	{
+		MemoryStream *temp = (MemoryStream*)&stream;
+		SendTo(temp->Memory() + temp->GetCursor(), temp->GetSize() - temp->GetCursor());
+		temp->SetCursor(temp->GetSize());
+	}
+	else
+	{
+		
+		int streamSize = stream.GetSize();
+		int streamPos = stream.GetCursor();
+		streamSize -= streamPos;//待发送的数据量
+		MemoryStream mstream;
+		mstream.SetSize(gc_MaxPacketSize);
+		while (true)
+		{
+			if (streamSize > gc_MaxPacketSize)
+			{
+				stream.Read(mstream.Memory(), gc_MaxPacketSize);
+				SendTo(mstream.Memory(), gc_MaxPacketSize);
+			}
+			else
+			{
+				stream.Read(mstream.Memory(), streamSize);
+				SendTo(mstream.Memory(), streamSize);
+				break;
+			}
+			streamSize -= gc_MaxPacketSize;
+		}
+	}
+}
+
+void SelectSocket::RecvFrom(void* buf, int len)
+{
+	RecvByLen(len);
+	qstream.Read(buf, len);
 }
 
 void SelectSocket::Create() 
@@ -405,13 +442,13 @@ void SelectSocket::SendTo(void *buf, size_t len)
 
 
 
-void SelectSocket::RecvFrom(size_t len)
+void SelectSocket::RecvByLen(size_t len)
 {
 	size_t packetLen = 0;
 	while (qstream.GetSize() < len)
 	{
 		packetLen = 6* 1024 * 1024; //读取6M的数据
-		char* c = qstream.AllocateSize(packetLen); //分配空间
+		char* c = qstream.AllocateSize(packetLen); //拥有的可写入空间
 		recvPacket(c, packetLen); //实际读取成功的记录数量
 		if (packetLen == 0) 
 		{
@@ -427,7 +464,7 @@ void SelectSocket::RecvFrom(size_t len)
 char SelectSocket::RecvChar()
 {
 	char c;
-	RecvFrom(1);
+	RecvByLen(1);
 	qstream >> c;
 	return c;
 }
@@ -436,7 +473,7 @@ std::string SelectSocket::RecvString(size_t len)
 {
 	string resStr;
 	resStr.assign(len, '\0');
-	RecvFrom(len);
+	RecvByLen(len);
 	qstream >> resStr;
 	return resStr;
 }
@@ -444,8 +481,29 @@ std::string SelectSocket::RecvString(size_t len)
 int SelectSocket::RecvInteger()
 {
 	int nRes;
-	RecvFrom(sizeof(int));
+	RecvByLen(sizeof(int));
 	qstream >> nRes;
 	nRes = ntohs(nRes);
 	return nRes;
+}
+
+void SelectSocket::RecvStream(Stream& stream,int len)
+{
+	if (len == 0)
+		len = stream.GetSize() - stream.GetCursor();
+	while (true)
+	{
+		if (len > gc_MaxPacketSize)
+		{
+			RecvByLen(gc_MaxPacketSize);
+			qstream.SaveToStream(stream, gc_MaxPacketSize);
+		}
+		else
+		{
+			RecvByLen(len);
+			qstream.SaveToStream(stream, len);
+			break;
+		}
+		len -= gc_MaxPacketSize;
+	}
 }
