@@ -237,6 +237,27 @@ UnicodeString SelectSocket::Dns(const UnicodeString& domain)
 	}
 }
 
+void SelectSocket::SendString(const string& wstr)
+{
+	SendTo((char*)wstr.c_str(), wstr.size());
+}
+
+void SelectSocket::SendInteger(int& integer)
+{
+	integer = htons(integer);
+	SendTo((char*)&integer, sizeof(integer));
+}
+
+void SelectSocket::SendChar(char c)
+{
+	SendTo(&c, sizeof(c));
+}
+
+void SelectSocket::SendStream(Stream& stream)
+{
+	
+}
+
 void SelectSocket::Create() 
 {
 	if (c_socket != INVALID_SOCKET)
@@ -252,23 +273,179 @@ void SelectSocket::Create()
 	}
 }
 
+void SelectSocket::recvPacket(void *buf, size_t& len)
+{
+	clock_t begin = clock();
+	while (1)
+	{
+		fd_set fd;
+		FD_ZERO(&fd);
+		FD_SET(c_socket, &fd);
+		timeval time;
+		time.tv_sec = 1;
+		time.tv_usec = 0;
+		int nResult = ::select(c_socket + 1, &fd, NULL, NULL, &time);
+		if (nResult == SOCKET_ERROR)
+		{
+			UnicodeString msg;
+			msg.uprintf_s(L"RecvFrom select() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
+			Painc(msg);
+		}
+		else if (nResult == 0)
+		{
+			long duration = clock() - begin;
+			if (duration >= c_socksetting.ReadTimeOut || duration < 0)
+			{
+				UnicodeString msg;
+				msg.uprintf_s(L"RecvFrom select() time expired : %d", c_socksetting.ReadTimeOut);
+				Painc(msg);
+			}
+		}
+		else
+		{
+			if (FD_ISSET(c_socket,&fd))
+			{
+				len = recv(c_socket, (char*)buf, len, 0);
+				if (len == 0) //正常关闭
+				{
+					return;
+				}
+				else if (len == SOCKET_ERROR)
+				{
+					UnicodeString msg;
+					msg.uprintf_s(L"RecvFrom recv() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
+					Painc(msg);
+				}
+				break;
+			}
+		}
+	}
+}
+
+
+
+void SelectSocket::sendPacket(void *buf, size_t len)
+{
+	size_t tempSize = 0;
+	clock_t begin = clock();
+	//发送一个数据包
+	while (1)
+	{
+		fd_set fd;
+		FD_ZERO(&fd);
+		FD_SET(c_socket, &fd);
+		timeval time;
+		time.tv_sec = 1;
+		time.tv_usec = 0;
+		int nResult = ::select(c_socket + 1, NULL, &fd, NULL, &time);
+		if (nResult == SOCKET_ERROR)
+		{
+			UnicodeString msg;
+			msg.uprintf_s(L"SendTo select() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
+			Painc(msg);
+		}
+		else if (nResult == 0)//timeout
+		{
+			long duration = clock() - begin;
+			if (duration >= c_socksetting.WriteTimeOut || duration < 0)
+			{
+				UnicodeString msg;
+				msg.uprintf_s(L"SendTo select() time expired : %d", c_socksetting.WriteTimeOut);
+				Painc(msg);
+			}
+		}
+		else
+		{ //因为这里只有一个c_socket ,所以走到这里，一定是走的下边的这个send
+			if (FD_ISSET(c_socket, &fd))
+			{
+				//表示可以写入
+				int sendSize = ::send(c_socket, (char*)buf + tempSize, len - tempSize, 0);
+				if (sendSize == SOCKET_ERROR)
+				{
+					//错误处理
+					UnicodeString msg;
+					msg.uprintf_s(L"send() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
+					Painc(msg);
+				}
+				tempSize += sendSize;
+				if (tempSize == len)
+				{
+					break;
+				}
+				begin = clock(); //重新计时
+			}
+		}
+	}
+}
+
 void SelectSocket::SendTo(void *buf, size_t len)
 {
-	fd_set fd;
-	FD_ZERO(&fd);
-	FD_SET(c_socket, &fd);
-	timeval time;
-	time.tv_sec = 1;
-	time.tv_usec = 0;
-	int nResult = ::select(c_socket + 1, NULL, &fd, NULL, &time);
-	if (nResult == SOCKET_ERROR)
-	{
-		UnicodeString msg;
-		msg.uprintf_s(L"SendTo select() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
-		Painc(msg);
-	}
-	else if (nResult == 0)//timeout
+	int maxSize = 0;
+	int maxSizeLen = sizeof(maxSize);
+	getsockopt(c_socket, SOL_SOCKET, SO_MAX_MSG_SIZE, (char*)&maxSize, &maxSizeLen);
+
+	size_t lastSize = len;
+	size_t pos = 0;
+	while (1)
 	{
 
+		if (lastSize > c_socksetting.SendBufferSize)
+		{
+			sendPacket((char*)buf + pos, c_socksetting.SendBufferSize);
+		}
+		else
+		{
+			sendPacket((char*)buf + pos, lastSize);
+			break;
+		}
+		pos += c_socksetting.SendBufferSize;
+		lastSize -= c_socksetting.SendBufferSize;
 	}
+}
+
+
+
+void SelectSocket::RecvFrom(size_t len)
+{
+	size_t packetLen = 0;
+	while (qstream.GetSize() < len)
+	{
+		packetLen = 6* 1024 * 1024; //读取6M的数据
+		char* c = qstream.AllocateSize(packetLen); //分配空间
+		recvPacket(c, packetLen); //实际读取成功的记录数量
+		if (packetLen == 0) 
+		{
+			Painc(SysErrorMessage(WSAGetLastError()));
+		}
+		else
+		{
+			qstream.UpdateSize(packetLen);
+		}
+	}
+}
+
+char SelectSocket::RecvChar()
+{
+	char c;
+	RecvFrom(1);
+	qstream >> c;
+	return c;
+}
+
+std::string SelectSocket::RecvString(size_t len)
+{
+	string resStr;
+	resStr.assign(len, '\0');
+	RecvFrom(len);
+	qstream >> resStr;
+	return resStr;
+}
+
+int SelectSocket::RecvInteger()
+{
+	int nRes;
+	RecvFrom(sizeof(int));
+	qstream >> nRes;
+	nRes = ntohs(nRes);
+	return nRes;
 }

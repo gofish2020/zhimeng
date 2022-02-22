@@ -2,7 +2,7 @@
 #include "..\include\XString.h"
 #include <winsock2.h>
 #include "..\include\StringList.h"
-
+#include "..\include\Stream.h"
 extern AFX_EXT_CLASS void  InitSocket();
 #define INITSOCK() InitSocket()
 
@@ -38,20 +38,42 @@ public:
 	static StringList GetLocalAddr();
 	static bool IsLocalIPAddr(const UnicodeString& ip);
 	static UnicodeString Dns(const UnicodeString& domain);
+
+	//发送数据 
+	void SendTo(void *buf, size_t len);
+	void SendString(const string& wstr);
+	void SendInteger(int& integer);
+	void SendChar(char c);
+	void SendStream(Stream& stream);
+	
+
+// 	string RecvString(size_t length);
+// 	int RecvInteger();
+// 	char RecvChar();
+
+
+
+	void RecvFrom(void* buf, int len);
+	char RecvChar();
+	string RecvString(size_t len);
+	int RecvInteger();
+
 private:
 	//
 	SelectSocket(SockSetting &s, SOCKET sock);
 	//!创建(未绑定地址的)套接字：（服务器端和客户端）
 	void Create(); 
-	
 
 	//接收数据
-	void RecvFrom(void *buf, size_t len);
-	//发送数据
-	void SendTo(void *buf, size_t len);
+	void RecvFrom(size_t len);
+
+	void sendPacket(void *buf, size_t len);
+	void recvPacket(void *buf, size_t& len);
 private:
 	SOCKET c_socket;
 	SockSetting c_socksetting;
+
+	QueueStream qstream;
 };
 
 

@@ -432,9 +432,10 @@ void QueueStream::SubQueue()
 	headPos = 0;
 }
 
-size_t QueueStream::gc_streamSize = 1024 * 1024;
-QueueStream::QueueStream()
+
+QueueStream::QueueStream(int size)
 {
+	gc_streamSize = size;
 	MemoryStream *temp = new MemoryStream;
 	temp->SetSize(gc_streamSize);
 	data.push(temp);
@@ -561,6 +562,12 @@ void QueueStream::UpdateSize(size_t count)
 	{
 		AddQueue();
 	}
+}
+
+QueueStream& QueueStream::operator>>(string& str)
+{
+	Read((char*)str.c_str(), str.length());
+	return *this;
 }
 
 char* QueueStream::ReadMemory()
