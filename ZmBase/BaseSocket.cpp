@@ -491,6 +491,14 @@ void SelectSocket::RecvStream(Stream& stream,int len)
 {
 	if (len == 0)
 		len = stream.GetSize() - stream.GetCursor();
+	else
+	{
+		if (stream.Type() == stMemory)
+		{
+			int count = stream.GetSize() - stream.GetCursor();
+			len = (len > count) ? count : len;
+		}
+	}
 	while (true)
 	{
 		if (len > gc_MaxPacketSize)
