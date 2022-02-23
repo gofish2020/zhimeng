@@ -194,6 +194,7 @@
     <ClCompile Include="BaseSocket.cpp" />
     <ClCompile Include="CriticalSection.cpp" />
     <ClCompile Include="DateTime.cpp" />
+    <ClCompile Include="DSPServer.cpp" />
     <ClCompile Include="IniConfig.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="Mutex.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="..\include\BaseSocket.h" />
     <ClInclude Include="..\include\CriticalSection.h" />
     <ClInclude Include="..\include\DateTime.h" />
+    <ClInclude Include="..\include\DSPServer.h" />
     <ClInclude Include="..\include\IniConfig.h" />
     <ClInclude Include="..\include\Logger.h" />
     <ClInclude Include="..\include\Mutex.h" />
