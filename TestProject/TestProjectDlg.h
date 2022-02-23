@@ -42,6 +42,7 @@ public:
 	afx_msg void OnBnClickedButton6();
 	CEdit m_edit1;
 	Mutex mu;
+	afx_msg void OnBnClickedButton9();
 };
 
 
@@ -148,3 +149,6 @@ public:
 		Sum(1);
 	};
 };
+
+
+

@@ -39,4 +39,4 @@
 #include <afxsock.h>            // MFC Ì×½Ó×ÖÀ©Õ¹
 
 #pragma comment (lib,"Shlwapi.lib")
-#pragma comment(lib,"WS2_32.lib")
+#pragma comment(lib,"Ws2_32.lib")

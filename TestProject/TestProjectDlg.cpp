@@ -17,6 +17,7 @@
 #include "..\include\ThreadPool.h"
 #include "..\include\StringList.h"
 #include "..\include\IniConfig.h"
+#include "..\include\BaseSocket.h"
 using namespace std;
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -82,6 +83,7 @@ BEGIN_MESSAGE_MAP(CTestProjectDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON4, &CTestProjectDlg::OnBnClickedButton4)
 	ON_BN_CLICKED(IDC_BUTTON5, &CTestProjectDlg::OnBnClickedButton5)
 	ON_BN_CLICKED(IDC_BUTTON6, &CTestProjectDlg::OnBnClickedButton6)
+	ON_BN_CLICKED(IDC_BUTTON9, &CTestProjectDlg::OnBnClickedButton9)
 END_MESSAGE_MAP()
 
 
@@ -533,6 +535,10 @@ public:
 void CTestProjectDlg::OnBnClickedButton6()
 {
 
+
+
+	bool ipIsOk = SelectSocket::IsLocalIPAddr(L"");
+	return;
 	char ns[3] = { 'a','b','c' };
 	char ns22[3] = { 'c','d','e' };
 
@@ -852,3 +858,76 @@ void CTestProjectDlg::OnBnClickedButton6()
 	
 }
 
+
+class XAcceptThread :public Thread
+{
+public:
+	XAcceptThread(SelectSocket *handle);
+	~XAcceptThread() {};
+
+	void OnExecute();
+	virtual UnicodeString ClassName() { return L""; };
+private:
+	SelectSocket * c_handle;
+};
+
+XAcceptThread::XAcceptThread(SelectSocket *handle)
+{
+	c_handle = handle;
+}
+
+void XAcceptThread::OnExecute()
+{
+	while(!IsTerminate())
+	{ 
+		MemoryStream ms;
+		ms.SetSize(10);
+		c_handle->RecvStream(ms, 10);
+		Sleep(20);
+	}
+}
+
+
+class XListerThread :public Thread
+{
+public:
+	XListerThread(const SockSetting& s);
+	~XListerThread() {};
+
+	void OnExecute();
+	virtual UnicodeString ClassName() { return L""; };
+private:
+	SockSetting c_s;
+	SelectSocket sock;
+};
+
+XListerThread::XListerThread(const SockSetting& s)
+{
+	c_s = s;
+	sock.Open(c_s);
+}
+
+void XListerThread::OnExecute()
+{
+	while (!IsTerminate())
+	{
+		SelectSocket*handle = sock.Accept();
+		Thread * temp = new XAcceptThread(handle);
+		temp->Resume();
+	}
+}
+
+XListerThread * listen1 = nullptr;
+void CTestProjectDlg::OnBnClickedButton9()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	SockSetting s;
+	s.IpAddr = L"127.0.0.1";
+	s.Port = 3000;
+	if (listen1 == nullptr)
+	{
+		listen1 = new XListerThread(s);
+		listen1->Resume();
+	}
+		
+}

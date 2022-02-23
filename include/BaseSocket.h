@@ -24,7 +24,7 @@ struct AFX_EXT_CLASS SockSetting
 class AFX_EXT_CLASS SelectSocket
 {
 public:
-	SelectSocket();
+	SelectSocket(bool needBuf = false);
 	virtual ~SelectSocket();
 	void Open(SockSetting& sockSetting);
 	void Close();
@@ -54,21 +54,20 @@ public:
 	void RecvStream(Stream& stream, int len = 0);
 
 private:
-	//
+	//内部调用，生成socket
 	SelectSocket(SockSetting &s, SOCKET sock);
 	//!创建(未绑定地址的)套接字：（服务器端和客户端）
 	void Create(); 
 
 	//接收数据
 	void RecvByLen(size_t len);
-
 	void sendPacket(void *buf, size_t len); //send
 	void recvPacket(void *buf, size_t& len);//recv
 private:
 	SOCKET c_socket;
 	SockSetting c_socksetting;
 
-	QueueStream qstream;
+	QueueStream *qstream;
 };
 
 

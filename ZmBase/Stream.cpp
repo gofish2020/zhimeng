@@ -448,12 +448,12 @@ QueueStream::QueueStream(int size)
 
 QueueStream::~QueueStream()
 {
-	while (cache.empty())
+	while (!cache.empty())
 	{
 		delete (MemoryStream*)(cache.front());
 		cache.pop();
 	}
-	while (data.empty())
+	while (!data.empty())
 	{
 		delete (MemoryStream*)(data.front());
 		data.pop();

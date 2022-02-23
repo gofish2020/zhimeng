@@ -49,15 +49,19 @@ extern AFX_EXT_CLASS void InitSocket()
 
 
 
-SelectSocket::SelectSocket():c_socket(INVALID_SOCKET)
+SelectSocket::SelectSocket(bool needBuf):c_socket(INVALID_SOCKET)
 {
+	qstream = nullptr;
 	INITSOCK();
+	if (needBuf)
+		qstream = new QueueStream;
 }
 
 SelectSocket::SelectSocket(SockSetting &s, SOCKET sock)
 {
 	c_socksetting = s;
 	c_socket = sock;
+	qstream = new QueueStream;
 }
 
 SelectSocket::~SelectSocket()
@@ -72,7 +76,8 @@ void SelectSocket::Open(SockSetting& sockSetting)
 	Create();
 	sockaddr_in serAddr;
 	serAddr.sin_family = AF_INET;
-	serAddr.sin_addr.s_addr = inet_addr(string(c_socksetting.IpAddr).c_str());
+	//serAddr.sin_addr.s_addr = inet_addr(string(c_socksetting.IpAddr).c_str());
+	InetPton(AF_INET, c_socksetting.IpAddr.c_str(), &serAddr.sin_addr.s_addr);
 	serAddr.sin_port = htons(c_socksetting.Port);
 	//将socket绑定到Ip地址上
 	if (::bind(c_socket, (PSOCKADDR)&serAddr, sizeof(serAddr)) == SOCKET_ERROR)
@@ -140,9 +145,9 @@ void SelectSocket::Close()
 
 SelectSocket* SelectSocket::Accept()
 {
-	sockaddr_in addr;
+	sockaddr_in clientAddr;
 	int addrlen = sizeof(sockaddr_in);
-	SOCKET clientSock = ::accept(c_socket, (sockaddr*)&addr, &addrlen);
+	SOCKET clientSock = ::accept(c_socket, (sockaddr*)&clientAddr, &addrlen);
 	if (clientSock == INVALID_SOCKET)
 	{
 		UnicodeString msg;
@@ -151,8 +156,11 @@ SelectSocket* SelectSocket::Accept()
 		return NULL;
 	}
 	SockSetting s = c_socksetting;
-	s.IpAddr = inet_ntoa(addr.sin_addr);
-	s.Port = ntohs(addr.sin_port);
+	//s.IpAddr = inet_ntoa(clientAddr.sin_addr);
+	TCHAR buf[16];
+	InetNtop(AF_INET, &clientAddr.sin_addr, buf,16 );
+	s.IpAddr = buf;
+	s.Port = ntohs(clientAddr.sin_port);
 	return new SelectSocket(s,clientSock);
 }
 
@@ -165,7 +173,8 @@ UnicodeString SelectSocket::GetHostName()
 {
 	INITSOCK();
 	char cHostName[256];
-	memset(cHostName, 0, 256);
+	ZeroMemory(cHostName, 0, 256);
+	
 	if (gethostname(cHostName, 255) == SOCKET_ERROR)
 	{
 		//错误处理
@@ -179,28 +188,21 @@ UnicodeString SelectSocket::GetHostName()
 StringList SelectSocket::GetHostByName(const UnicodeString& name)
 {
 	StringList sRes;
-	hostent *phe = gethostbyname(string(name).c_str());
-	if (phe == nullptr)
+	ADDRINFOT aiHints;
+	ZeroMemory(&aiHints, sizeof(aiHints));
+	aiHints.ai_family = AF_INET;
+	ADDRINFOT *pAiLinkedList = NULL;//指向链表的指针必须初始化为NULL
+	GetAddrInfo(name.c_str(), nullptr, &aiHints, &pAiLinkedList);
+	ADDRINFOT *pAi = nullptr;
+	for (pAi = pAiLinkedList; pAi != NULL; pAi = pAi->ai_next)
 	{
-		//错误处理
-		UnicodeString msg;
-		msg.uprintf_s(L"gethostbyname() occurs error %s", SysErrorMessage(WSAGetLastError()).c_str());
-		LOGERROR("SelectSocket::GetHostByName()", msg);
-	}
-	else
-	{
-		struct in_addr addr;
-		if (phe->h_addrtype == AF_INET)
-		{
-			int i = 0;
-			while (phe->h_addr_list[i] != 0) 
-			{
-				addr.s_addr = *(u_long *)phe->h_addr_list[i++];
-				UnicodeString ip = inet_ntoa(addr);
-				if (!sRes.IsExist(ip))
-					sRes.Add(ip);
-			}
-		}
+		struct sockaddr_in* pAddr = (struct sockaddr_in *)pAi->ai_addr;
+		TCHAR buf[16];
+		InetNtop(AF_INET, &pAddr->sin_addr, buf, 16);
+		UnicodeString ip = buf;
+
+		if (!sRes.IsExist(ip))
+			sRes.Add(ip);
 	}
 	return sRes;
 }
@@ -223,18 +225,14 @@ bool SelectSocket::IsLocalIPAddr(const UnicodeString& ip)
 
 UnicodeString SelectSocket::Dns(const UnicodeString& domain)
 {
-	PHOSTENT phe = gethostbyname(string(domain).c_str()); //如果domain就是ip4地址，这个返回的是ip4地址的二进制形式
-	if (phe == NULL)
+
+	StringList r = GetHostByName(domain);
+	if (r.Size() == 0)
 	{
 		return L"";
 	}
 	else
-	{
-		struct in_addr addr;
-		addr.s_addr = *(u_long *)phe->h_addr_list[0];
-		UnicodeString IPAddr = inet_ntoa(addr);
-		return IPAddr;
-	}
+		return r[0];
 }
 
 void SelectSocket::SendString(const string& wstr)
