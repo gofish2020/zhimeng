@@ -66,6 +66,12 @@ SelectSocket::SelectSocket(SockSetting &s, SOCKET sock)
 
 SelectSocket::~SelectSocket()
 {
+	if (qstream != nullptr)
+	{
+		delete qstream;
+	}
+
+	Close();
 }
 
 void SelectSocket::Open(SockSetting& sockSetting)
@@ -125,7 +131,7 @@ void SelectSocket::Close()
 {
 	try
 	{
-		if (closesocket(c_socket) == SOCKET_ERROR)
+		if (c_socket != 0 && closesocket(c_socket) == SOCKET_ERROR)
 		{
 			UnicodeString msg;
 			msg.uprintf_s(L"closesocket() occurs error:%s", SysErrorMessage(WSAGetLastError()));

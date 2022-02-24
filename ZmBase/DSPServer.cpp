@@ -2,8 +2,24 @@
 #include "..\include\DSPServer.h"
 
 
+class HandleThread : public Thread
+{
+public:
+	HandleThread(SelectSocket *clientSocket) { c_clientSocket = clientSocket;  };
+	~HandleThread() {};
+
+	void OnExecute() {};
+	UnicodeString ClassName() { return L"HandleThread"; }
+
+private:
+	SelectSocket *c_clientSocket;
+};
 
 
+
+
+///////////////////////////////////////////////
+// AcceptThread 监听线程 
 class AcceptThread : public Thread
 {
 public:
@@ -14,13 +30,13 @@ public:
 	UnicodeString ClassName() { return L"AcceptThread"; }
 
 private:
+	std::vector<Thread*>threads;
 	SelectSocket * c_socket;
 };
 
 AcceptThread::AcceptThread(SelectSocket *socket)
 {
 	c_socket = socket;
-	
 }
 
 void AcceptThread::OnExecute()
@@ -30,8 +46,19 @@ void AcceptThread::OnExecute()
 		try
 		{
 			SelectSocket *clientSocket = c_socket->Accept(); //监听客户端的连接
+			if (clientSocket != nullptr)
+			{
+				//接收或发送，数据的线程
+				Thread *temp = new HandleThread(clientSocket);
+				temp->Resume();
+				threads.push_back(temp);
+			}
 		}
-		catch (const std::exception&)
+		catch (const std::exception&e)
+		{
+
+		}
+		catch (...)
 		{
 
 		}
@@ -50,10 +77,12 @@ DSPServer::DSPServer(const SockSetting& s)
 	c_sockSetting = s;
 	c_socket = nullptr;
 	c_running = false;
+	c_thread = nullptr;
 }
 
 DSPServer::~DSPServer()
 {
+	Close();
 }
 
 bool DSPServer::Start()
@@ -86,11 +115,16 @@ bool DSPServer::Start()
 
 void DSPServer::Close()
 {
+	if (c_thread != nullptr)
+	{
+		c_thread->Terminate();
+		c_thread = nullptr;
+	}
 	if (c_socket != nullptr)
 	{
 		delete c_socket;
+		c_socket = nullptr;
 	}
-	c_socket = nullptr;
 	c_running = false;
 }
 
