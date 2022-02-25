@@ -31,6 +31,7 @@ public:
 
 	SelectSocket* Accept(); //返回客户端的一个连接
 	SOCKET Handle();
+	bool IsNull();
 
 	//通用的函数
 	static UnicodeString GetHostName();
