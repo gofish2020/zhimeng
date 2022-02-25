@@ -18,23 +18,39 @@ private:
 
 HandleThread::HandleThread(SelectSocket *clientSocket, LNetServerNotifyEvent *event)
 {
-	c_clientSocket = clientSocket;
-	c_event = event;
-	if (c_event != nullptr)
+	try
 	{
-		c_event->OnConnect(c_clientSocket);
+		c_clientSocket = clientSocket;
+		c_event = event;
+		if (c_event != nullptr && c_clientSocket != nullptr)
+		{
+			c_event->OnConnect(c_clientSocket);
+		}
 	}
+	catch (...)
+	{
+
+	}
+	
 }
 
 HandleThread::~HandleThread()
 {
-	if (c_event != nullptr)
+	try
 	{
-		c_event->OnDisconnect(c_clientSocket);
+		if (c_event != nullptr && c_clientSocket != nullptr)
+		{
+			c_event->OnDisconnect(c_clientSocket);
+		}
+		if (c_clientSocket != nullptr)
+			delete c_clientSocket;
+		c_clientSocket = nullptr;
 	}
-	if (c_clientSocket != nullptr)
-		delete c_clientSocket;
-	c_clientSocket = nullptr;
+	catch (...)
+	{
+
+	}
+	
 }
 
 void HandleThread::OnExecute()
@@ -43,7 +59,7 @@ void HandleThread::OnExecute()
 	{
 		try
 		{
-			if (c_event != nullptr && c_clientSocket != nullptr)
+			if (c_event != nullptr && c_clientSocket != nullptr )
 			{
 				c_event->OnExecute(c_clientSocket);
 			}

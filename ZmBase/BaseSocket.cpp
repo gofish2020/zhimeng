@@ -175,6 +175,11 @@ SOCKET SelectSocket::Handle()
 	return c_socket;
 }
 
+bool SelectSocket::IsNull()
+{
+	return (c_socket == INVALID_SOCKET);
+}
+
 UnicodeString SelectSocket::GetHostName()
 {
 	INITSOCK();
