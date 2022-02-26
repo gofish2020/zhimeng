@@ -60,6 +60,16 @@ void Logger::LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg)
 }
 
 
+void Logger::SetDebugLevel(DebugLevel dLevel)
+{
+	c_DebugLevel = dLevel;
+}
+
+DebugLevel Logger::GetDebugLevel()
+{
+	return c_DebugLevel;
+}
+
 Logger::Logger()
 {
 	UnicodeString fileName = ExtractFileName(GetApplicationFullName(), true);
@@ -93,4 +103,14 @@ void LogException(const std::exception & e, const char * file /*= 0*/, int line 
 		LogEvent(LLERROR, "Exception", e.what());
 	else
 		LogEvent(LLERROR, "Exception", UnicodeString(file) + ":"  + UnicodeString(line) +  e.what());
+}
+
+extern AFX_EXT_CLASS DebugLevel GetDebugLevel()
+{
+	return Logger::Instance()->GetDebugLevel();
+}
+
+extern AFX_EXT_CLASS void SetDebugLevel(DebugLevel dlevel)
+{
+	Logger::Instance()->SetDebugLevel(dlevel);
 }

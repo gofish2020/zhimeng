@@ -203,8 +203,8 @@ bool DSPServer::Start()
 	try
 	{
 		//启动监听线程
-		c_thread = new ListenThread(c_sockSetting,c_event);
-		c_thread->RegisterNotifition(this);
+		c_thread = new ListenThread(c_sockSetting,this); 
+		c_thread->RegisterNotifition(this); //线程通知
 		c_thread->Resume();
 		c_running = true;
 		return true;
@@ -238,12 +238,74 @@ bool DSPServer::Running()
 	return c_running;
 }
 
-void DSPServer::RegisterNetServerNotifyEvent(LNetServerNotifyEvent *event)
-{
-	c_event = event;
-}
-
 void DSPServer::OnTerminate(Thread *thread)
 {
 	Close();
+}
+
+
+void DSPServer::OnConnect(SelectSocket *Handle)
+{
+	UnicodeString ip = Handle->SocketInfo()->IpAddr;
+	int port = Handle->SocketInfo()->Port;
+	LOGINFO(L"ServerChannel::OnConnect", L"Connecting Ip <" + ip + L":" + UnicodeString(port) + L">");
+}
+
+void DSPServer::OnExecute(SelectSocket *Handle) //从handle 中获取数据
+{
+	ServerChannle ch(Handle);
+	ch.OnExecute();
+}
+
+void DSPServer::OnDisconnect(SelectSocket *Handle)
+{
+	UnicodeString ip = Handle->SocketInfo()->IpAddr;
+	int port = Handle->SocketInfo()->Port;
+	LOGINFO(L"ServerChannel::OnDisconnect", L"Disconnect Ip <" + ip + L":" + UnicodeString(port) + L">");
+}
+
+ServerChannle::ServerChannle(SelectSocket *handle)
+{
+	c_socket = handle;
+}
+
+ServerChannle::~ServerChannle()
+{
+
+}
+
+void ServerChannle::OnExecute()
+{
+	Upload();
+}
+
+void ServerChannle::Upload()
+{
+	try
+	{
+		clock_t begin = clock();
+		if (mstream.GetSize() != 0)
+		{
+			mstream.SetCursor(0);
+			c_socket->SendStream(mstream);
+			if (GetDebugLevel() > DebugLevel::dlGeneralDebug)
+			{
+				clock_t diff = clock() - begin;
+				UnicodeString logs;
+				UnicodeString val;
+				val.
+				logs.uprintf_s(L"数据传输时间(毫秒):%d,大小(字节):%s", diff, val.c_str());
+				LOGMESSAGE(gc_DataChannelLog, log);
+			}
+		}
+		mstream.Free();
+	}
+	catch (const std::exception& e)
+	{
+		LOGEXCEPTION(e);
+	}
+	catch (...)
+	{
+		LOGERROR(L"ServerChannle::Upload()", L"发生未知的异常错误");
+	}
 }

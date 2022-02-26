@@ -5,6 +5,14 @@
 #include "..\include\DateTime.h"
 using namespace std;
 
+enum DebugLevel
+{
+	dlNoDebug = 0,
+	dlGeneralDebug = 1,
+	dlDetailDebug = 2,
+	dlFullDebug = 3
+};
+
 enum LogLevel	{ LLINFO, LLERROR,LLWARN };
 
 //! 日志数据结构
@@ -23,6 +31,9 @@ class AFX_EXT_CLASS Logger
 public:
 	static Logger* Instance();
 	void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg);
+
+	void SetDebugLevel(DebugLevel dLevel);
+	DebugLevel GetDebugLevel();
 private:
 	void SaveLogs();
 private:
@@ -32,11 +43,14 @@ private:
 	Logger();
 	virtual ~Logger();
 	UnicodeString logPath;
+	DebugLevel c_DebugLevel;
 };
 
 
 extern AFX_EXT_CLASS void LogEvent(LogLevel ll, UnicodeString src, UnicodeString msg);
 extern AFX_EXT_CLASS void LogException(const std::exception & e, const char * file = 0, int line = 0);
+extern AFX_EXT_CLASS DebugLevel GetDebugLevel();
+extern AFX_EXT_CLASS void SetDebugLevel(DebugLevel dlevel);
 
 //外部实际调用函数
 #define LOGEXCEPTION(e) LogException(e,__FILE__,__LINE__)

@@ -149,6 +149,11 @@ void SelectSocket::Close()
 	c_socket = INVALID_SOCKET;
 }
 
+SockSetting * SelectSocket::SocketInfo()
+{
+	return &c_socksetting;
+}
+
 SelectSocket* SelectSocket::Accept()
 {
 	sockaddr_in clientAddr;
@@ -301,7 +306,7 @@ void SelectSocket::SendStream(Stream& stream)
 void SelectSocket::RecvFrom(void* buf, int len)
 {
 	RecvByLen(len);
-	qstream.Read(buf, len);
+	qstream->Read(buf, len);
 }
 
 void SelectSocket::Create() 
@@ -454,10 +459,10 @@ void SelectSocket::SendTo(void *buf, size_t len)
 void SelectSocket::RecvByLen(size_t len)
 {
 	size_t packetLen = 0;
-	while (qstream.GetSize() < len)
+	while (qstream->GetSize() < len)
 	{
 		packetLen = 6* 1024 * 1024; //读取6M的数据
-		char* c = qstream.AllocateSize(packetLen); //拥有的可写入空间
+		char* c = qstream->AllocateSize(packetLen); //拥有的可写入空间
 		recvPacket(c, packetLen); //实际读取成功的记录数量
 		if (packetLen == 0) 
 		{
@@ -465,7 +470,7 @@ void SelectSocket::RecvByLen(size_t len)
 		}
 		else
 		{
-			qstream.UpdateSize(packetLen);
+			qstream->UpdateSize(packetLen);
 		}
 	}
 }
@@ -513,12 +518,12 @@ void SelectSocket::RecvStream(Stream& stream,int len)
 		if (len > gc_MaxPacketSize)
 		{
 			RecvByLen(gc_MaxPacketSize);
-			qstream.SaveToStream(stream, gc_MaxPacketSize);
+			qstream->SaveToStream(stream, gc_MaxPacketSize);
 		}
 		else
 		{
 			RecvByLen(len);
-			qstream.SaveToStream(stream, len);
+			qstream->SaveToStream(stream, len);
 			break;
 		}
 		len -= gc_MaxPacketSize;

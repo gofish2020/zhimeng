@@ -29,6 +29,8 @@ public:
 	void Open(SockSetting& sockSetting);
 	void Close();
 
+	SockSetting *SocketInfo();
+
 	SelectSocket* Accept(); //返回客户端的一个连接
 	SOCKET Handle();
 	bool IsNull();

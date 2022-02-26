@@ -76,6 +76,8 @@ public:
 	UnicodeString Left(int count) const;
 	UnicodeString Right(int count) const;
 
+	UnicodeString Int2FormatStr(UnicodeString intStr);
+
 	int ToInt(int _Base = 10) const;
  	unsigned int ToUInt(int _Base = 10) const;
  	__int64 ToInt64(int _Base = 10) const;

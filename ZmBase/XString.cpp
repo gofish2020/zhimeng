@@ -398,6 +398,14 @@ UnicodeString UnicodeString::Right(int count) const
 	return SubString(Len() - count, count);
 }
 
+UnicodeString UnicodeString::Int2FormatStr(UnicodeString intStr)
+{
+	int length = intStr.length();
+	if (length < 3)
+	{
+	}
+}
+
 UnicodeString::operator char() const
 {
 	if (IsEmpty())
