@@ -920,6 +920,10 @@ void XListerThread::OnExecute()
 XListerThread * listen1 = nullptr;
 void CTestProjectDlg::OnBnClickedButton9()
 {
+
+	UnicodeString dfd = UnicodeString::Int2FormatStr(UnicodeString(1233297893127));
+
+	UnicodeString dfd1 = UnicodeString::Int2FormatStr(UnicodeString(-123456));
 	// TODO: 在此添加控件通知处理程序代码
 	SockSetting s;
 	s.IpAddr = L"127.0.0.1";

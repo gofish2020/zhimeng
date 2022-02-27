@@ -369,11 +369,10 @@ void SelectSocket::recvPacket(void *buf, size_t& len)
 				}
 				break;
 			}
+			begin = clock();
 		}
 	}
 }
-
-
 
 void SelectSocket::sendPacket(void *buf, size_t len)
 {
@@ -423,8 +422,8 @@ void SelectSocket::sendPacket(void *buf, size_t len)
 				{
 					break;
 				}
-				begin = clock(); //重新计时
 			}
+			begin = clock(); //重新计时
 		}
 	}
 }
@@ -479,7 +478,7 @@ char SelectSocket::RecvChar()
 {
 	char c;
 	RecvByLen(1);
-	qstream >> c;
+	*qstream >> c;
 	return c;
 }
 
@@ -488,7 +487,7 @@ std::string SelectSocket::RecvString(size_t len)
 	string resStr;
 	resStr.assign(len, '\0');
 	RecvByLen(len);
-	qstream >> resStr;
+	*qstream >> resStr;
 	return resStr;
 }
 
@@ -496,7 +495,7 @@ int SelectSocket::RecvInteger()
 {
 	int nRes;
 	RecvByLen(sizeof(int));
-	qstream >> nRes;
+	*qstream >> nRes;
 	nRes = ntohs(nRes);
 	return nRes;
 }

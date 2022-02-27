@@ -9,6 +9,7 @@ desc:数据存储协议 Date Store Pro
 #include "..\include\BaseSocket.h"
 #include "..\include\Logger.h"
 #include "..\include\Thread.h"
+#include "..\include\MsgHeader.h"
 
 class AFX_EXT_CLASS LNetServerNotifyEvent
 {
@@ -46,7 +47,7 @@ private:
 };
 
 
-
+//一个基于socket的（根据自定义的协议）数据传输通道，收发数据
 class AFX_EXT_CLASS ServerChannle 
 {
 public:
@@ -55,8 +56,8 @@ public:
 
 	void OnExecute();
 protected:
-	void ReadHeader();
-	void SendHeader();
+	void ReadHeader(unsigned char &type, unsigned char &code, unsigned char &error);
+	void SendHeader(unsigned char type, unsigned char code, unsigned char error);
 
 	void ReadParams();
 	void SendParams();
@@ -65,7 +66,6 @@ private:
 
 	void Upload();
 	SelectSocket *c_socket;
-
 	MemoryStream mstream;
 
 };

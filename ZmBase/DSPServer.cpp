@@ -277,6 +277,44 @@ ServerChannle::~ServerChannle()
 void ServerChannle::OnExecute()
 {
 	Upload();
+	BYTE type = 0, code = 0, error = 0;
+	ReadHeader(type, code, error);
+	if (error != 0x00)
+	{
+		SendHeader();
+		return;
+	}
+}
+
+void ServerChannle::ReadHeader(unsigned char &type, unsigned char &code, unsigned char &error)
+{
+	MsgHeader mHeader;
+	c_socket->RecvFrom(&mHeader, sizeof(mHeader));
+	if (mHeader.Flag != MSG_HEADER_FLAG)
+	{
+		error = MSG_HEADER_ERROR_FLAG;
+		LOGERROR(L"ServerChannle::ReadHeader()", L"消息头标记错误");
+		return;
+	}
+	type = mHeader.Type;
+	code = mHeader.MsgCode;
+	if (mHeader.Version != MSG_HEADER_VERSION)
+	{
+		error = MSG_HEADER_ERROR_VERSION;
+		LOGERROR(L"ServerChannle::ReadHeader()", L"消息版本错误");
+		return;
+	}
+	error = mHeader.ErrorCode;
+	return;
+}
+
+void ServerChannle::SendHeader(unsigned char type, unsigned char code, unsigned char error)
+{
+	MsgHeader mHeader;
+	mHeader.MsgCode = code;
+	mHeader.Type = type;
+	mHeader.ErrorCode = error;
+	mstream.Write(&mHeader, sizeof(mHeader));
 }
 
 void ServerChannle::Upload()
@@ -284,7 +322,8 @@ void ServerChannle::Upload()
 	try
 	{
 		clock_t begin = clock();
-		if (mstream.GetSize() != 0)
+		int size = mstream.GetSize();
+		if (size != 0)
 		{
 			mstream.SetCursor(0);
 			c_socket->SendStream(mstream);
@@ -292,10 +331,8 @@ void ServerChannle::Upload()
 			{
 				clock_t diff = clock() - begin;
 				UnicodeString logs;
-				UnicodeString val;
-				val.
-				logs.uprintf_s(L"数据传输时间(毫秒):%d,大小(字节):%s", diff, val.c_str());
-				LOGMESSAGE(gc_DataChannelLog, log);
+				logs.uprintf_s(L"数据传输时间(毫秒):%d,大小(字节):%s", diff, UnicodeString::Int2FormatStr(size));
+				LOGINFO(L"ServerChannle::Upload()", logs);
 			}
 		}
 		mstream.Free();

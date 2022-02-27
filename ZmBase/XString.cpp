@@ -400,10 +400,53 @@ UnicodeString UnicodeString::Right(int count) const
 
 UnicodeString UnicodeString::Int2FormatStr(UnicodeString intStr)
 {
-	int length = intStr.length();
-	if (length < 3)
+	if (intStr.IsEmpty())
 	{
+		return L"";
 	}
+	int length = intStr.length();
+	wchar_t firstChar = intStr[0];
+	if (firstChar == L'-' || firstChar == L'+') //¸ºÊý
+	{
+		length -= 1;
+		intStr = intStr.SubString(1, intStr.length() - 1);
+	}
+	else 
+	{
+		firstChar = L'\0';
+	}
+
+	if (length <= 3)
+	{
+		if (firstChar != L'\0')
+			return firstChar + intStr;
+		else
+			return intStr;
+		
+	}
+	UnicodeString Result = L"";
+	//²ð·Ö
+	for (;;)
+	{
+		UnicodeString temp = intStr.Right(3);
+		if (Result.IsEmpty())
+			Result = temp;
+		else
+		{
+			Result = temp  + L"," + Result;
+		}
+		
+		intStr = intStr.SubString(0, intStr.length() - 3);
+		if (intStr.length() <= 3)
+		{
+			break;
+		}
+		
+	}
+	if (firstChar != L'\0')
+		return  firstChar + intStr + L"," + Result;
+	else
+		return intStr + L"," + Result;
 }
 
 UnicodeString::operator char() const
