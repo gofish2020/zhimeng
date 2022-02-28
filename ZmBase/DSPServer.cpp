@@ -59,18 +59,22 @@ void HandleThread::OnExecute()
 	{
 		try
 		{
-			if (c_event != nullptr && c_clientSocket != nullptr )
+			if (c_event != nullptr && c_clientSocket != nullptr && !c_clientSocket->IsNull() )
 			{
 				c_event->OnExecute(c_clientSocket);
 			}
 		}
-		catch (const std::exception&)
+		catch (const std::exception& e)
 		{
 			Terminate();
 		}
 		catch (...)
 		{
 			Terminate();
+		}
+		if (c_clientSocket->IsNull())
+		{
+			break;
 		}
 	}
 }
@@ -281,9 +285,40 @@ void ServerChannle::OnExecute()
 	ReadHeader(type, code, error);
 	if (error != 0x00)
 	{
-		SendHeader();
+		SendHeader(MSG_HEADER_TYPE_CONTROL, MSG_HEADER_CODE_FAIL,error);
+		Upload();
 		return;
 	}
+	switch (type)
+	{
+	case MSG_HEADER_TYPE_CONTROL:
+	{
+		switch (code)
+		{
+		case MSG_HEADER_CODE_TEST:
+			SendHeader(MSG_HEADER_TYPE_CONTROL, MSG_HEADER_CODE_TEST_OK);
+			break;
+		case MSG_HEADER_CODE_DISCONNECT://¶Ï¿ªÁ¬½Ó
+			c_socket->Close();
+			break;
+		case MSG_HEADER_CODE_CONNECT:
+			SendHeader(MSG_HEADER_TYPE_CONTROL, MSG_HEADER_CODE_ACCEPT);
+			break;
+		}
+		break;
+	}
+	case MSG_HEADER_TYPE_GET_FILE:
+	{
+
+		break;
+	}
+	case MSG_HEADER_TYPE_PUT_FILE:
+	{
+		break;
+	}
+
+	}
+	Upload();
 }
 
 void ServerChannle::ReadHeader(unsigned char &type, unsigned char &code, unsigned char &error)
@@ -315,6 +350,27 @@ void ServerChannle::SendHeader(unsigned char type, unsigned char code, unsigned 
 	mHeader.Type = type;
 	mHeader.ErrorCode = error;
 	mstream.Write(&mHeader, sizeof(mHeader));
+}
+
+void ServerChannle::ReadParams(int &Command, char& Accessory, std::vector<XVariant>&value)
+{
+	MsgParameter mParameter;
+	c_socket->RecvFrom(&mParameter, sizeof(mParameter));
+	Command = mParameter.Command;
+	Accessory = mParameter.Accessory;
+	int paramSize = mParameter.ParameterSize;
+	if (paramSize != 0)
+	{
+		MemoryStream stream;
+		stream.SetSize(paramSize);
+		c_socket->RecvFrom(stream.Memory(), paramSize);
+		XVariant::StreamToVrArray(stream, value);
+	}
+}
+
+void ServerChannle::DoGetFile()
+{
+
 }
 
 void ServerChannle::Upload()

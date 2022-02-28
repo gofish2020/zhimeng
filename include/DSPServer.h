@@ -10,7 +10,7 @@ desc:数据存储协议 Date Store Pro
 #include "..\include\Logger.h"
 #include "..\include\Thread.h"
 #include "..\include\MsgHeader.h"
-
+#include "..\include\XVariant.h"
 class AFX_EXT_CLASS LNetServerNotifyEvent
 {
 public:
@@ -57,13 +57,15 @@ public:
 	void OnExecute();
 protected:
 	void ReadHeader(unsigned char &type, unsigned char &code, unsigned char &error);
-	void SendHeader(unsigned char type, unsigned char code, unsigned char error);
+	void SendHeader(unsigned char type, unsigned char code, unsigned char error = 0);
 
-	void ReadParams();
+	void ReadParams(int &Command,char& Accessory,std::vector<XVariant>&value);
 	void SendParams();
 
 private:
 
+	void DoGetFile();
+	void DoPutFile();
 	void Upload();
 	SelectSocket *c_socket;
 	MemoryStream mstream;
